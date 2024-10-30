@@ -112,7 +112,7 @@
             </div>
     HTML;
         
-    }else{
+    }elseif(!$isLoggedIn){
         $header .= <<<HTML
                 <a href="signupChoices.php" class="btn">S'inscrire</a>
                 <a href="login.php" class="btn btn-neutral">Se connecter</a>
