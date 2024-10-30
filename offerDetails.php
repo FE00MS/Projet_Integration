@@ -62,29 +62,6 @@ $content = <<<HTML
 
     <h2 class="text-2xl font-bold mt-6 mb-2">Description</h2>
     <p class="text-gray-700">{$description}</p>
-
-    <form method="post" action="addReport.php">
-        <input type="hidden" name="IdReported" value="{$offer['IdC']}">
-        <input type="hidden" name="IdSender" value="{$employeeId}">
-        <input type="hidden" name="offerId" value="{$offerId}">
-
-        <label for="ReportType" class="block text-lg font-semibold mt-4">Type de Signalement :</label>
-        <select name="ReportType" id="ReportType" required class="border border-gray-300 rounded px-3 py-2">
-            <option value="" disabled selected>Sélectionner le type de signalement</option>
-            <option value="Spam">Spam</option>
-            <option value="Fake">Fausse offre</option>
-            <option value="Inappropriate">Contenu inapproprié</option>
-        </select>
-
-        <label for="Reason" class="block text-lg font-semibold mt-4">Raison du signalement :</label>
-        <textarea name="Reason" id="Reason" required class="border border-gray-300 rounded px-3 py-2 w-full" rows="3" placeholder="Décrivez la raison du signalement"></textarea>
-
-        <div class="flex justify-end mt-4">
-            <button type="submit" class="bg-red-500 text-white py-1 px-3 rounded-lg">
-                <span class="text-lg font-bold">Signaler</span>
-            </button>
-        </div>
-    </form>
 HTML;
 
 if ($hasApplied) {
@@ -159,6 +136,28 @@ HTML;
 }
 
 $content .= <<<HTML
+<form method="post" action="addReport.php">
+        <input type="hidden" name="IdReported" value="{$offer['IdC']}">
+        <input type="hidden" name="IdSender" value="{$employeeId}">
+        <input type="hidden" name="offerId" value="{$offerId}">
+
+        <label for="ReportType" class="block text-lg font-semibold mt-4">Type de Signalement :</label>
+        <select name="ReportType" id="ReportType" required class="border border-gray-300 rounded px-3 py-2">
+            <option value="" disabled selected>Sélectionner le type de signalement</option>
+            <option value="Spam">Spam</option>
+            <option value="Fake">Fausse offre</option>
+            <option value="Inappropriate">Contenu inapproprié</option>
+        </select>
+
+        <label for="Reason" class="block text-lg font-semibold mt-4">Raison du signalement :</label>
+        <textarea name="Reason" id="Reason" required class="border border-gray-300 rounded px-3 py-2 w-full" rows="3" placeholder="Décrivez la raison du signalement"></textarea>
+
+        <div class="flex justify-end mt-4">
+            <button type="submit" class="bg-red-500 text-white py-1 px-3 rounded-lg">
+                <span class="text-lg font-bold">Signaler</span>
+            </button>
+        </div>
+    </form>
 </div>
 HTML;
 

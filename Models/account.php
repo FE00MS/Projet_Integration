@@ -10,6 +10,16 @@ class Account
         $db = new Database();
         $this->conn = $db->getConnection();
     }
+    public function deleteAccount($id){
+        try{
+            $sql = $this->conn->prepare("EXEC delete_account @id = :id");
+            $sql->bindParam(':id', $id, PDO::PARAM_INT);
+            $sql->execute();
+            return "Attachement deleted successfully.";
+        } catch(PDOException $e){
+            throw new Exception("Erreur lors de la suppression du compte : " . $e->getMessage());
+        }
+    }
 
     public function GetAccount($email, $password)
     {

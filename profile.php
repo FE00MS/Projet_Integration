@@ -108,6 +108,9 @@ if ($type === 'company') {
         <p class="break-words"><strong>Invitation par default:</strong>$customInvite</p>
         <button class="btn btn-neutral mt-4" onclick="window.location.href='logout.php'">Déconnexion</button>
         <button class="btn btn-primary mt-4" onclick="document.getElementById('modal-update-info').showModal()">Modifier</button>
+        <form method="POST" action="deleteAccountAction">
+            <button class="btn btn-neutral mt-4 bg-red-">Supprimer</button>
+        </form>
     </div>
 
     </div>
@@ -606,6 +609,9 @@ HTML;
         <p><strong>Mot de passe: </strong>$hiddenPassword</p>
         <button class="btn btn-neutral mt-4" onclick="window.location.href='logout.php'">Déconnexion</button>
         <button class="btn btn-primary mt-4" onclick="document.getElementById('modal-update-info').showModal()">Modifier</button>
+        <form method="POST" action="deleteAccountAction.php">
+            <button class="btn btn-neutral mt-4 bg-red-">Supprimer</button>
+        </form>
     </div>
 
 </div>

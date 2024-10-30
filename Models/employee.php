@@ -46,9 +46,10 @@ class Employee
         }
     }
     public function getCandidates($offerId) {
-        $sql = "SELECT e.Id as EmployeeId, e.Name as CandidateName
+        $sql = "SELECT e.Id as EmployeeId, e.Name as CandidateName, e.LastName as CandidateLastName, c.Email as CandidateEmail
                 FROM Application a
                 JOIN Employee e ON a.IdEmp = e.Id
+                JOIN Compte c ON e.Id = c.Id
                 WHERE a.IdOffer = :offerId";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':offerId', $offerId);
