@@ -1,6 +1,7 @@
 <?php 
 require_once 'Models/employee.php';  
-require_once 'Models/offer.php';    
+require_once 'Models/offer.php';  
+require_once 'Models/company.php';     
 require_once 'BD/BD.php';            
 include 'Utilities/sessionManager.php';  
 
@@ -13,7 +14,7 @@ $employeeId = $_SESSION['currentUser']['Id'];
 
 $employeeModel = new Employee();
 $applications = $employeeModel->getApplications($employeeId); 
-
+$companyModel = new Company();
 $offerModel = new Offer();
 
 $content = <<<HTML
@@ -40,13 +41,14 @@ HTML;
             $hours = htmlspecialchars($offer['Hours']);
             $shortDescription = htmlspecialchars(substr($offer['Description'], 0, 100)) . '...';
             $offerId = $offer['Id'];
+            $companyName = $companyModel->GetCompanyById($offer['Id'])['CName']; 
 
             $content .= <<<HTML
             <div class="card bg-white shadow-xl rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-300 ease-in-out">
                 <div class="card-body">
                     <h2 class="card-title text-xl font-semibold text-gray-800 mb-2">{$jobTitle}</h2>
                     <p class="text-sm font-medium text-gray-500 mb-1">
-                        <span class="text-gray-700 font-semibold">Entreprise:</span> temp
+                        <span class="text-gray-700 font-semibold">Entreprise:</span> {$companyName}
                     </p>
                     <p class="text-sm font-medium text-gray-500 mb-1">
                         <span class="text-gray-700 font-semibold">Emplacement:</span> {$location}

@@ -16,7 +16,7 @@ if(!isset($_SESSION['currentUser'])){
 $content = <<<HTML
 <div class="px-4 sm:px-6 md:px-8 lg:px-12 max-w-screen-lg mx-auto">
     <div class="flex items-center gap-2 mb-8">
-        <select id="searchCriteria" class="input input-bordered">
+        <select id="searchCriteria" class="input input-bordered" onchange="filterOffers()">
             <option value="job-title">Offre</option>
             <option value="company-name">Nom</option>
             <option value="salary">Salaire</option>
@@ -71,42 +71,49 @@ $content .= <<<HTML
 
 <script>
     function filterOffers() {
-    const searchInput = document.getElementById('searchInput').value.toLowerCase();
-    const searchCriteria = document.getElementById('searchCriteria').value;
-    const offers = document.querySelectorAll('.job-offer');
+        const searchInput = document.getElementById('searchInput').value.toLowerCase();
+        const searchCriteria = document.getElementById('searchCriteria').value;
+        const offers = document.querySelectorAll('.job-offer');
 
-    offers.forEach(offer => {
-        let textToSearch = '';
-        let showOffer = false;
+        offers.forEach(offer => {
+            let textToSearch = '';
+            let showOffer = false;
 
-        if (searchCriteria === 'job-title') {
-            textToSearch = offer.querySelector('.job-title').textContent.toLowerCase();
-            showOffer = textToSearch.startsWith(searchInput);
-        } else if (searchCriteria === 'salary') {
-            textToSearch = offer.querySelector('.salary').textContent.toLowerCase();
-            const salaryValue = parseFloat(textToSearch.replace(/[^0-9.]/g, ''));
-            const searchValue = parseFloat(searchInput);
-            showOffer = !isNaN(salaryValue) && !isNaN(searchValue) && salaryValue >= searchValue;
-        } else if (searchCriteria === 'location') {
-            textToSearch = offer.querySelector('.location').textContent.toLowerCase();
-            showOffer = textToSearch.startsWith(searchInput);
-        } else if (searchCriteria === 'hours') {
-            textToSearch = offer.querySelector('.hours').textContent.toLowerCase();
-            const hoursValue = parseFloat(textToSearch.replace(/[^0-9.]/g, ''));
-            const searchValue = parseFloat(searchInput);
-            showOffer = !isNaN(hoursValue) && !isNaN(searchValue) && hoursValue >= searchValue;
-        } else if (searchCriteria === 'company') {
-            textToSearch = offer.querySelector('.company').textContent.toLowerCase();
-            showOffer = textToSearch.startsWith(searchInput);
-        }
+            if (searchInput === '' || searchCriteria === '') {
+                showOffer = true;
+            } else if (searchCriteria === 'job-title') {
+                textToSearch = offer.querySelector('.job-title').textContent.toLowerCase();
+                showOffer = textToSearch.startsWith(searchInput);
+            } else if (searchCriteria === 'salary') {
+                textToSearch = offer.querySelector('.salary').textContent.toLowerCase();
+                const salaryValue = parseFloat(textToSearch.replace(/[^0-9.]/g, ''));
+                const searchValue = parseFloat(searchInput);
+                showOffer = !isNaN(salaryValue) && !isNaN(searchValue) && salaryValue >= searchValue;
+            } else if (searchCriteria === 'location') {
+                textToSearch = offer.querySelector('.location').textContent.toLowerCase();
+                showOffer = textToSearch.startsWith(searchInput);
+            } else if (searchCriteria === 'hours') {
+                textToSearch = offer.querySelector('.hours').textContent.toLowerCase();
+                const hoursValue = parseFloat(textToSearch.replace(/[^0-9.]/g, ''));
+                const searchValue = parseFloat(searchInput);
+                showOffer = !isNaN(hoursValue) && !isNaN(searchValue) && hoursValue >= searchValue;
+            } else if (searchCriteria === 'company-name') {
+                textToSearch = offer.querySelector('.company-name').textContent.toLowerCase();
+                showOffer = textToSearch.startsWith(searchInput);
+            }
 
-        if (showOffer) {
-            offer.style.display = 'block';
-        } else {
-            offer.style.display = 'none';
-        }
+            if (showOffer) {
+                offer.style.display = 'block';
+            } else {
+                offer.style.display = 'none';
+            }
+        });
+    }
+
+    document.getElementById('searchCriteria').addEventListener('change', () => {
+        document.getElementById('searchInput').value = '';
+        filterOffers();
     });
-}
 </script>
 HTML;
 

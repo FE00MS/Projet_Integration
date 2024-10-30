@@ -11,7 +11,7 @@ if (isset($_POST['offerId'], $_POST['job'], $_POST['location'], $_POST['salary']
     $location = htmlspecialchars($_POST['location']);
     $salary = htmlspecialchars($_POST['salary']);
     $description = htmlspecialchars($_POST['description']);
-    $hours = htmlspecialchars($_POST['offerId']);
+    $hours = htmlspecialchars($_POST['hours']);
     
     $offerModel = new Offer();
         
