@@ -2,10 +2,9 @@
     $isLoggedIn = isset($_SESSION['currentUser']);
     $accountType = $_SESSION["accountType"] ?? null;
 
-    //dropdown quand page reduite
     if($accountType === "company"){
         $header = <<< HTML
-            <div class="navbar bg-base-100 w-full sticky top-0 shadow-md z-50">
+            <div class="navbar bg-base-100 w-full sticky top-0 shadow-md z-50 mb-6">
                 <div class="navbar-start">
                     <div class="dropdown">
                         <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
@@ -20,13 +19,16 @@
                             <li><a href="myCandidates.php">Mes candidats</a></li>
                         </ul>
                     </div>
-                    <a href="homepage.php" class="btn btn-ghost text-xl">Jobfinder</a>
+                    <a href="homepage.php" class="btn btn-ghost text-xl flex items-center gap-2">
+                        <img src="images/compass.png" alt="Compass Icon" class="h-6 w-6">
+                        La boussole à emploi
+                    </a>
                 </div>
                 <div class="navbar-center hidden lg:flex">
         HTML;
-    }else{
+    } else {
         $header = <<< HTML
-            <div class="navbar bg-base-100 w-full sticky top-0 shadow-md z-50">
+            <div class="navbar bg-base-100 w-full sticky top-0 shadow-md z-50 mb-6">
                 <div class="navbar-start">
                     <div class="dropdown">
                         <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
@@ -36,11 +38,14 @@
                         </div>
                         <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
                             <li><a>Page d'acceuil</a></li>
-                            <li><a href="myApplications.php">Mes emplois</a></li>
+                            <li><a href="myApplications.php">Mes applications</a></li>
                             <li><a>A propos</a></li>
                         </ul>
                     </div>
-                    <a href="homepage.php" class="btn btn-ghost text-xl">Jobfinder</a>
+                    <a href="homepage.php" class="btn btn-ghost text-xl flex items-center gap-2">
+                        <img src="images/compass.png" alt="Compass Icon" class="h-6 w-6">
+                        La boussole à emploi
+                    </a>
                 </div>
                 <div class="navbar-center hidden lg:flex">
         HTML;
@@ -61,7 +66,7 @@
         $header .= <<<HTML
         <ul class="menu menu-horizontal px-1">
                     <li><a href="homepage.php">Page d'accueil</a></li>
-                    <li><a href="myApplications.php">Mes emplois</a></li>
+                    <li><a href="myApplications.php">Mes applications</a></li>
                     <li><a>A propos</a></li>
                 </ul>
             </div>
@@ -83,7 +88,7 @@
         $header .= <<<HTML
         <ul class="menu menu-horizontal px-1">
                     <li><a href="homepage.php">Page d'accueil</a></li>
-                    <li><a href="myApplications.php">Mes emplois</a></li>
+                    <li><a href="myApplications.php">Mes applications</a></li>
                     <li><a>A propos</a></li>
                 </ul>
             </div>
