@@ -38,7 +38,7 @@ $content .= <<<HTML
 <div class="flex flex-col sm:flex-row max-sm:gap-5 items-center justify-center mb-5">
     <ul class="flex items-center gap-5">
         <li> 
-            <a href="javascript:;" class="flex items-center gap-2 cursor-pointer group active" data-tab="home"> 
+            <a href="javascript:;" class="flex items-center gap-2 cursor-pointer group " data-tab="home"> 
                 <span class="font-medium text-base leading-7 text-gray-400">Home</span>
             </a>
         </li>
@@ -599,7 +599,7 @@ HTML;
     
     $content .= <<<HTML
 
-<div class="tab-content" id="home" style="display: block;">
+<div class="tab-content" id="home" style="display: none;">
     <div class="p-4 border rounded-lg shadow-md mb-8 max-w-lg mx-auto">
         <h2 class="text-xl font-semibold mb-2">Informations Personnelles</h2>
         <p><strong>Prénom:</strong> $name</p>
@@ -827,8 +827,19 @@ include "Views/master.php";
         document.getElementById('profile').style.display = 'none';
         document.getElementById('note').style.display = 'none';
         document.getElementById(tabId).style.display = 'block';
+
+        localStorage.setItem('activeTab', tabId);
     }
 
+    const activeTab = localStorage.getItem('activeTab') || 'home';
+    switchTab(activeTab);
+    document.querySelector(`a[data-tab="${activeTab}"]`).classList.add('active');
+
+    document.querySelectorAll('.tab-content').forEach(content => {
+        content.style.display = 'none';
+    });
+    document.getElementById(activeTab).style.display = 'block';
+    
     document.querySelectorAll('a[data-tab]').forEach(function (tab) {
         tab.addEventListener('click', function () {
             document.querySelectorAll('a[data-tab]').forEach(function (tab) {
@@ -854,7 +865,9 @@ include "Views/master.php";
         color: black;
 
     }
-
+    .tab-content {
+        display: none;
+    }
     .page {
   position: relative;
   box-sizing: border-box;
