@@ -14,6 +14,7 @@ $companyId = $_SESSION['currentUser']['Id'];
 $offersModel = new Offer();
 $employeeModel = new Employee();
 $editProfile = new Profile();
+$defaultInv = $_SESSION['currentUser']['CustomInvite'];
 
 function getExperiencesForProfile($userId) {
     $profile = new Profile();
@@ -156,7 +157,7 @@ HTML;
             
                 $content .= <<<HTML
                     <div class="w-full md:w-1/4 flex flex-col items-center justify-center space-y-2">
-                        <button onclick="openMailModal('$candidateName $candidateLastName', '$candidateEmail')" class="btn btn-primary w-full">Contacter le candidat</button>                    
+                        <button onclick="openMailModal('$candidateName $candidateLastName', '$candidateEmail', '$defaultInv', '$jobTitle')" class="btn btn-primary w-full">Contacter le candidat</button>                    
                         <button onclick="openRemoveModal('$employeeId', '$offerId')" class="btn btn-neutral w-full">Pas intéressé</button>
                     </div>
                 </div>
@@ -203,9 +204,10 @@ $content .= <<<HTML
         <div class="modal-box">
             <h3 class="text-lg font-bold mb-4">Envoyer un Message à <span id="modalCandidateName"></span></h3>
             <form action="sendEmail.php" method="POST">
-                <label class="block mb-2 font-semibold" for="subject">Sujet</label>
-                <input type="text" name="subject" id="subject" placeholder="Objet du message" class="input input-bordered w-full mb-4" required>
+                <label class="block mb-2 font-semibold" id='poste'>Poste : <span id="posteValue"></span></label>
 
+                <input type="hidden" name="jobTitle" id="jobTitle">
+            
                 <label class="block mb-2 font-semibold" for="content">Message</label>
                 <textarea name="content" id="content" placeholder="Rédigez votre message ici..." class="textarea textarea-bordered w-full h-48 mb-4" required></textarea>
 
@@ -222,9 +224,14 @@ $content .= <<<HTML
 include "Views/master.php";
 ?>
 <script>
-    function openMailModal(name, email) {
+    function openMailModal(name, email, defaultInv, poste) {
+        var posteLabel = document.getElementById('posteValue');
+
         document.getElementById('modalCandidateName').innerText = name;
         document.getElementById('modalCandidateEmail').value = email;
+        document.getElementById('content').innerText = defaultInv;
+        posteLabel.innerText = poste; 
+        document.getElementById('jobTitle').value = poste;
         document.getElementById('mailModal').showModal();
     }
     function openRemoveModal(employeeId, offerId) {
