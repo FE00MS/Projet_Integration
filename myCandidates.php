@@ -157,7 +157,7 @@ HTML;
             
                 $content .= <<<HTML
                     <div class="w-full md:w-1/4 flex flex-col items-center justify-center space-y-2">
-                        <button onclick="openMailModal('$candidateName $candidateLastName', '$candidateEmail', '$defaultInv', '$jobTitle')" class="btn btn-primary w-full">Contacter le candidat</button>                    
+                        <button onclick="openMailModal('$candidateName $candidateLastName', '$candidateEmail', '$defaultInv', '$jobTitle', '$employeeId')" class="btn btn-primary w-full">Contacter le candidat</button>                    
                         <button onclick="openRemoveModal('$employeeId', '$offerId')" class="btn btn-neutral w-full">Pas intéressé</button>
                     </div>
                 </div>
@@ -207,6 +207,7 @@ $content .= <<<HTML
                 <label class="block mb-2 font-semibold" id='poste'>Poste : <span id="posteValue"></span></label>
 
                 <input type="hidden" name="jobTitle" id="jobTitle">
+                <input type="hidden" name="employeeId" id="employeeId">
             
                 <label class="block mb-2 font-semibold" for="content">Message</label>
                 <textarea name="content" id="content" placeholder="Rédigez votre message ici..." class="textarea textarea-bordered w-full h-48 mb-4" required></textarea>
@@ -224,9 +225,10 @@ $content .= <<<HTML
 include "Views/master.php";
 ?>
 <script>
-    function openMailModal(name, email, defaultInv, poste) {
+    function openMailModal(name, email, defaultInv, poste, idemp) {
         var posteLabel = document.getElementById('posteValue');
 
+        document.getElementById('employeeId').value = idemp;
         document.getElementById('modalCandidateName').innerText = name;
         document.getElementById('modalCandidateEmail').value = email;
         document.getElementById('content').innerText = defaultInv;

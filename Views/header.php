@@ -1,5 +1,13 @@
 <?php
+require_once 'Models/account.php';
+
+    $accountModel = new Account();
     $isLoggedIn = isset($_SESSION['currentUser']);
+    if($isLoggedIn)
+    {
+        $userId = $_SESSION['currentUser']['Id'];
+        $notifications = $accountModel->GetNotifications($userId);
+    }
     $accountType = $_SESSION["accountType"] ?? null;
 
     if($accountType === "company"){
@@ -102,27 +110,51 @@
     }
 
     if ($isLoggedIn && $accountType != "admin") {
-            $header .= <<<HTML
-                    <a href="profile.php" class="btn btn-ghost">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                        </svg>      
-                    </a>
-                    <a href="#" class="btn btn-ghost">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3a2.032 2.032 0 01-.595 1.595L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                        </svg>
-                    </a>
-                    <a href="#" class="btn btn-ghost">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 0 1 1.037-.443 48.282 48.282 0 0 0 5.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
-                        </svg>      
-                    </a>
+        $header .= <<<HTML
+            <a href="profile.php" class="btn btn-ghost">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                </svg>      
+            </a>
+            <div class="relative">
+                <a onclick="toggleNotifications()" class="btn btn-ghost">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3a2.032 2.032 0 01-.595 1.595L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg>
+                </a>
+                <div id="notificationsBox" class="absolute right-0 mt-2 w-64 bg-white border border-gray-300 rounded-lg shadow-lg p-3 hidden">
+                    <h3 class="font-bold text-lg mb-2">Notifications</h3>
+                    <div id="notificationsContent" class="text-sm text-gray-600">
+        HTML;
+    
+        if (!empty($notifications)) {
+            foreach ($notifications as $notification) {
+                $id = $notification['Id'];
+                $header .= <<<HTML
+                    <div id="notification-$id" class="notification-item mb-3 p-2 border border-gray-400 rounded-lg">
+                        <button onclick="deleteNotif($id)" class="btn btn-sm btn-circle btn-ghost">✕</button>
+                        <strong class="text-sm text-gray-800 btn btn-ghost">{$notification['Title']}</strong><br>
+                    </div>
+        HTML;
+            }
+        } else {
+            $header .= "<div>Aucune notifications</div>";
+        }
+    
+        $header .= <<<HTML
+                        </div>
+                    </div>
                 </div>
+                <a href="logout.php" class="btn btn-ghost">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25" />
+                    </svg>
+                </a>
             </div>
-    HTML;
-        
-    }elseif(!$isLoggedIn){
+            </div>
+        </div>
+        HTML;
+    } else{
         $header .= <<<HTML
                 <a href="signupChoices.php" class="btn">S'inscrire</a>
                 <a href="login.php" class="btn btn-neutral">Se connecter</a>
@@ -130,3 +162,26 @@
         </div>
     HTML;
     }
+    ?>
+     <script>
+        function toggleNotifications() {
+            var notifBox = document.getElementById("notificationsBox");
+            notifBox.classList.toggle("hidden");
+        }
+        function deleteNotif(id) {
+            console.log(id);
+            
+            $.ajax({
+                url: 'deleteNotification.php',
+                type: 'POST',
+                data: { id: id },
+                success: function(response) {
+                    console.log(response);
+                    $('#notification-' + id).remove();
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error deleting notification:", error);
+                }
+            });
+        }
+    </script>

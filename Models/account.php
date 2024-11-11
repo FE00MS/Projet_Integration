@@ -55,5 +55,43 @@ class Account
             throw new Exception("Erreur lors de la récupération des données : " . $e->getMessage());
         }
     }
+    public function GetNotifications($idR)
+    {
+        try {
+            $sql = $this->conn->prepare("EXEC GetMyNotification @IdR = :idR");
+            $sql->bindParam(':idR', $idR, PDO::PARAM_INT);
+            $sql->execute();
+            $notifications = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+            return $notifications;
+        } catch (PDOException $e) {
+            throw new Exception("Erreur lors de la récupération des notifications : " . $e->getMessage());
+        }
+    }
+    public function AddNotification($idS, $idR, $message, $title)
+    {
+        try {
+            $sql = $this->conn->prepare("EXEC AddNotification @idS = :idS, @idR = :idR, @message = :message, @title = :title");
+            $sql->bindParam(':idS', $idS, PDO::PARAM_INT);
+            $sql->bindParam(':idR', $idR, PDO::PARAM_INT);
+            $sql->bindParam(':message', $message, PDO::PARAM_STR);
+            $sql->bindParam(':title', $title, PDO::PARAM_STR);
+            $sql->execute();
+            return "Notification added successfully.";
+        } catch (PDOException $e) {
+            throw new Exception("Erreur lors de l'ajout de la notification : " . $e->getMessage());
+        }
+    }
+    public function DeleteNotification($idN)
+    {
+        try {
+            $sql = $this->conn->prepare("EXEC DeleteNotification @idN = :idN");
+            $sql->bindParam(':idN', $idN, PDO::PARAM_INT);
+            $sql->execute();
+            return "Notification deleted successfully.";
+        } catch (PDOException $e) {
+            throw new Exception("Erreur lors de la suppression de la notification : " . $e->getMessage());
+        }
+    }
 }
 
