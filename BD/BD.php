@@ -56,27 +56,29 @@ class Database
                     $sql = $this->conn->prepare("EXEC GetMyExperience @idemp = :id");
                     $sql->bindParam(':id', $currentUserId, PDO::PARAM_INT);
                     $sql->execute();
-                    $myExperience = $sql->fetch(PDO::FETCH_ASSOC);
+                    $myExperience = $sql->fetchAll(PDO::FETCH_ASSOC);
                     $sql = $this->conn->prepare("EXEC GetMyLanguage @idemp = :id");
                     $sql->bindParam(':id', $currentUserId, PDO::PARAM_INT);
                     $sql->execute();
                     $myLanguage = $sql->fetchAll(PDO::FETCH_ASSOC);
+                    $newOfferList = array();
                     foreach($allOffers as $offer){
-                        $offerPrerequisite = [];
-                        $offerLanguage = [];
+                        $offerPrerequisite = array();
+                        $offerLanguage = array();
                         foreach($allPrerequisite as $prerequisite){
                             if($prerequisite['OId'] == $offer['Id']){
-                                $offerPrerequisite.array_push($prerequisite);
+                                array_push($offerPrerequisite,$prerequisite);
                             }
                         }
                         foreach($offersLanguages as $language){
                             if($language['OId'] == $offer['Id']){
-                                $offerPrerequisite.array_push($language);
+                                array_push($offerLanguage, $language);
                             }
                         }
-                        $offer['Ponderation'] = $this->ponderateOffer($offerPrerequisite, $myExperience, $myLanguage, $offerLanguage);
+                        $offer['Ponderation'] = round($this->ponderateOffer($offerPrerequisite, $myExperience, $myLanguage, $offerLanguage),0);
+                        array_push($newOfferList,$offer);
                     }
-                    return $allOffers;
+                    return $this->orderOffers($newOfferList);
                 }
                 //possibilité d'ajouter des tri differents que pondéré
                 elseif($critere == "comp"){
@@ -95,7 +97,7 @@ class Database
         foreach($offerLanguages as $offerlanguage){
             $totalPonderation += 6;
             foreach($myLanguages as $language){
-                if($offerlanguage['Lid'] == $language['Lid']){
+                if($offerlanguage['LId'] == $language['LId']){
                     if($language['Niveau'] == 'Rudimentaire'){
                         $actualPonderation += 2;
                     }
@@ -111,7 +113,7 @@ class Database
         foreach($offerPrerequisite as $prerequisite){
             $totalPonderation += $prerequisite['Ponderation'];
             foreach($myExperience as $experience){
-                if($experience['Type'] == $prerequisite['Type']){
+                if($experience['TypeExp'] == $prerequisite['Type']){
                     if($experience['FieldType'] == $prerequisite['FieldType'] || $prerequisite['FieldType'] == 'Au'){
                         if($experience['Complete'] == $prerequisite['Complete'] || $prerequisite['Complete'] != 1){
                             if($experience['Duration'] >= $prerequisite['Duration']){
@@ -127,5 +129,12 @@ class Database
             }
         }
         return ($actualPonderation / $totalPonderation) * 100;
+    }
+    public function orderOffers($offerList){
+        $ponderation = array_map(function ($offer) {
+            return $offer['Ponderation'];
+        }, $offerList);
+        array_multisort($ponderation, SORT_DESC, $offerList);
+        return $offerList;
     }
 }

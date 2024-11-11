@@ -10,7 +10,7 @@ $company = new Company();
 if(!isset($_SESSION['currentUser'])){
     $allOffers = $offers->GetAllOffers('comp');
 }else{
-    $allOffers = $offers->GetAllOffers();
+    $allOffers = $offers->GetAllOffers('pond');
 }
 
 $content = <<<HTML
@@ -36,6 +36,13 @@ $content = <<<HTML
 HTML;
 
 foreach ($allOffers as $offer) {
+    if(isset($offer['Ponderation'])){
+        $ponderation = htmlspecialchars($offer['Ponderation']);
+    }
+    else{
+        $ponderation = 'Na';
+    }
+    
     $jobTitle = htmlspecialchars($offer['Job']);
     $companyName = htmlspecialchars($offer['CName']); 
     $location = htmlspecialchars($offer['Location']);
@@ -52,7 +59,7 @@ $content .= <<<HTML
         <a href="{$offerLink}" class="card bg-base-100 shadow-lg rounded-lg overflow-hidden hover:shadow-xl hover:scale-105 transition-transform duration-200 job-offer relative">
             <div class="p-4">
                 <div class="absolute top-2 right-2 bg-red-500 text-white rounded-full h-10 w-10 flex items-center justify-center text-sm">
-                    <p>100</p>
+                    <p>{$ponderation}</p>
                 </div>
                 <h2 class="text-xl font-semibold job-title">{$jobTitle}</h2>
                 <p class="font-medium text-gray-500 company-name">{$companyName}</p>
