@@ -33,9 +33,26 @@ $content = <<<HTML
 </section>
 HTML;
 
-
-$content .= <<<HTML
+if( ($type === 'company')){
+    $content .= <<<HTML
+    <div class="flex flex-col sm:flex-row max-sm:gap-5 items-center justify-center mb-5">
+        <div id="c"> </div>
+        <ul class="flex items-center gap-5">
+            <li> 
+                <a href="javascript:;" class="flex items-center gap-2 cursor-pointer group " data-tab="home"> 
+                    <span class="font-medium text-base leading-7 text-gray-400">Home</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    
+    HTML;
+}
+else{
+    $content .= <<<HTML
 <div class="flex flex-col sm:flex-row max-sm:gap-5 items-center justify-center mb-5">
+<div id="e"> </div>
+
     <ul class="flex items-center gap-5">
         <li> 
             <a href="javascript:;" class="flex items-center gap-2 cursor-pointer group " data-tab="home"> 
@@ -63,6 +80,7 @@ $content .= <<<HTML
 </div>
 
 HTML;
+}
 
 
 
@@ -82,48 +100,49 @@ if ($type === 'company') {
     if ($attachemnts != null) {
         foreach ($attachemnts as $attachemnt) {
             $attachemntDiv .= '
-          <div class="p-4 border rounded-lg  mb-8">
-        <p><strong>Liens: </strong></p>
-        <a href="' . $attachemnt['Link'] . '" target="_blank">"' . $attachemnt["Name"] . '"</a>
-        <br>
-        <form method="POST" action="deleteLink.php" style="display:inline;">
-            <input type="hidden" name="AttachementId" value="' . $attachemnt['Id'] . '">
-            <button type="submit" class="btn btn-danger" onclick="return confirm(\'Êtes-vous sûr de vouloir supprimer ce lien ?\')">Supprimer</button>
-        </form>
-        </div>
-      ';
+            <div class="p-4 mb-8">
+                <a class="link-blue" href="' . $attachemnt['Link'] . '" target="_blank"> • ' . $attachemnt["Name"] . '</a>
+                
+                <form method="POST" action="deleteLink.php" style="display:inline; margin-left: 8px;">
+                    <input type="hidden" name="AttachementId" value="' . $attachemnt['Id'] . '">
+                    <button type="submit" style="background: none; border: none; color: red; font-weight: bold; cursor: pointer;" onclick="return confirm(\'Êtes-vous sûr de vouloir supprimer ce lien ?\')">
+                        &times;
+                    </button>
+                </form>
+            </div>
+        ';
+        
         }
     }
 
 
     $content .= <<<HTML
     <div class="tab-content" id="home" style="display: block;">
-    <div class="p-4 border rounded-lg shadow-md mb-8 max-w-lg mx-auto">
-        <h2 class="text-xl font-semibold mb-2">Informations Personnelles</h2>
-        <p><strong>Nom de compagnie:</strong> $companyName</p>
-        <p><strong>Lieu:</strong> $location</p>
-        <p><strong>Courriel:</strong> $email</p>
-        <p><strong>Mot de passe:</strong> $password</p>
-        <p><strong>Description:</strong> $description</p>
-        <p class="break-words"><strong>Invitation par default:</strong>$customInvite</p>
-        <button class="btn btn-neutral mt-4" onclick="window.location.href='logout.php'">Déconnexion</button>
-        <button class="btn btn-primary mt-4" onclick="document.getElementById('modal-update-info').showModal()">Modifier</button>
-        <form method="POST" action="deleteAccountAction">
-            <button class="btn btn-neutral mt-4 bg-red-">Supprimer</button>
-        </form>
-    </div>
-
-    </div>
-    <div class="tab-content" id="profile" style="display: none;">
-    <div class="p-4 border rounded-lg shadow-md flex flex-col justify-between h-full">
-        <h2 class="text-xl font-semibold mb-2 flex justify-center items-center">Liens utils</h2>
-        <div class="grid grid-cols-3 gap-4">
-            $attachemntDiv
+        <div class="p-4 border rounded-lg shadow-md mb-8 max-w-lg mx-auto">
+            <h2 class="text-xl font-semibold mb-2">Informations Personnelles</h2>
+            <p><strong>Nom de compagnie:</strong> $companyName</p>
+            <p><strong>Lieu:</strong> $location</p>
+            <p><strong>Courriel:</strong> $email</p>
+            <p><strong>Mot de passe:</strong> $password</p>
+            <p><strong>Description:</strong> $description</p>
+            <p class="break-words"><strong>Invitation par default:</strong>$customInvite</p>
+            <button class="btn btn-neutral mt-4" onclick="window.location.href='logout.php'">Déconnexion</button>
+            <button class="btn btn-primary mt-4" onclick="document.getElementById('modal-update-info').showModal()">Modifier</button>
+            <form method="POST" action="deleteAccountAction">
+                <button class="btn btn-neutral mt-4 bg-red-">Supprimer</button>
+            </form>
         </div>
-        <button class="btn btn-neutral mt-auto" onclick="document.getElementById('modal-add-link').showModal()">Ajouter un lien</button>
+
+        
+        <div class="p-4 border rounded-lg shadow-md mb-8 max-w-lg mx-auto">
+            <h2 class="text-xl font-semibold mb-2 flex justify-center items-center">Liens utils</h2>
+            <div class="grid grid-cols-3 gap-4">
+                $attachemntDiv
+            </div>
+            <button class="btn btn-neutral mt-auto" onclick="document.getElementById('modal-add-link').showModal()">Ajouter un lien</button>
+        </div>
     </div>
 
-    </div>
 HTML;
 } else {
     $name = $currentUser['Name'];
@@ -555,18 +574,18 @@ HTML;
     if ($attachemnts != null) {
         foreach ($attachemnts as $attachemnt) {
             $attachemntDiv .= '
-           <div class="p-4 border rounded-lg  mb-8">
-         <p><strong>Liens: </strong></p>
-         <a href="' . $attachemnt['Link'] . '" target="_blank">"' . $attachemnt["Name"] . '"</a>
-         <br>
-         <form method="POST" action="deleteLink.php" style="display:inline;">
-             <input type="hidden" name="AttachementId" value="' . $attachemnt['Id'] . '">
-             <button type="submit" class="btn btn-danger" onclick="return confirm(\'Êtes-vous sûr de vouloir supprimer ce lien ?\')">Supprimer</button>
-         </form>
-         </div>
-
-         
-       ';
+            <div class="p-4 mb-8">
+                <a class="link-blue" href="' . $attachemnt['Link'] . '" target="_blank"> • ' . $attachemnt["Name"] . '</a>
+                
+                <form method="POST" action="deleteLink.php" style="display:inline; margin-left: 8px;">
+                    <input type="hidden" name="AttachementId" value="' . $attachemnt['Id'] . '">
+                    <button type="submit" style="background: none; border: none; color: red; font-weight: bold; cursor: pointer;" onclick="return confirm(\'Êtes-vous sûr de vouloir supprimer ce lien ?\')">
+                        &times;
+                    </button>
+                </form>
+            </div>
+        ';
+        
         }
     }
 
@@ -821,43 +840,60 @@ include "Views/master.php";
 ?>
 <script>
    document.addEventListener('DOMContentLoaded', function () {
+       // Obtenez les éléments c et e pour déterminer le type d'utilisateur
+       let c = document.getElementById('c');
+       let e = document.getElementById('e');
+       let activeTab;
 
-    function switchTab(tabId) {
-        document.getElementById('home').style.display = 'none';
-        document.getElementById('profile').style.display = 'none';
-        document.getElementById('note').style.display = 'none';
-        document.getElementById(tabId).style.display = 'block';
+       function switchTab(tabId) {
+           // Masquez tous les onglets
+           document.querySelectorAll('.tab-content').forEach(content => {
+               content.style.display = 'none';
+           });
+           
+           // Affichez l'onglet spécifié
+           document.getElementById(tabId).style.display = 'block';
 
-        localStorage.setItem('activeTab', tabId);
-    }
+           // Sauvegardez l'onglet actif en fonction du type d'utilisateur
+           if (c) {
+               localStorage.setItem('activeTabC', tabId);
+           } else if (e) {
+               localStorage.setItem('activeTabE', tabId);
+           }
+       }
 
-    const activeTab = localStorage.getItem('activeTab') || 'home';
-    switchTab(activeTab);
-    document.querySelector(`a[data-tab="${activeTab}"]`).classList.add('active');
+       // Récupérez l'onglet actif sauvegardé ou définissez par défaut à "home"
+       if (c) {
+           activeTab = localStorage.getItem('activeTabC') || 'home';
+       } else if (e) {
+           activeTab = localStorage.getItem('activeTabE') || 'home';
+       } else {
+           activeTab = 'home'; // Si ni c ni e ne sont définis, par défaut à "home"
+       }
 
-    document.querySelectorAll('.tab-content').forEach(content => {
-        content.style.display = 'none';
-    });
-    document.getElementById(activeTab).style.display = 'block';
-    
-    document.querySelectorAll('a[data-tab]').forEach(function (tab) {
-        tab.addEventListener('click', function () {
-            document.querySelectorAll('a[data-tab]').forEach(function (tab) {
-                tab.classList.remove('active');
-            });
-            tab.classList.add('active');
+       // Activez l'onglet initial
+       switchTab(activeTab);
+       document.querySelector(`a[data-tab="${activeTab}"]`).classList.add('active');
 
-            const tabId = tab.getAttribute('data-tab');
-            switchTab(tabId);
-        });
-    });
+       // Gérer le clic sur chaque onglet
+       document.querySelectorAll('a[data-tab]').forEach(function (tab) {
+           tab.addEventListener('click', function () {
+               // Supprimez la classe active de tous les onglets
+               document.querySelectorAll('a[data-tab]').forEach(function (tab) {
+                   tab.classList.remove('active');
+               });
 
+               // Ajoutez la classe active à l'onglet cliqué
+               tab.classList.add('active');
 
-});
-
-   
-
+               // Basculez vers l'onglet cliqué
+               const tabId = tab.getAttribute('data-tab');
+               switchTab(tabId);
+           });
+       });
+   });
 </script>
+
 
 <style>
     /* Classe pour le bouton actif */
@@ -882,7 +918,10 @@ include "Views/master.php";
   padding: 1.4rem 0.5rem 0.3rem 3rem; /* Réduit le padding à gauche */
   margin-bottom: 20px; /* Ajoute de l'espacement entre chaque note */
 }
-
+.link-blue {
+    color: blue;
+    text-decoration: underline;
+}
 .delete-button {
   position: absolute;
   top: 10px;
