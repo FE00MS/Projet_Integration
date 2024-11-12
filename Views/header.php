@@ -21,8 +21,7 @@ require_once 'Models/account.php';
                             </svg>
                         </div>
                         <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                            <li><a>Page d'acceuil</a></li>
-                            <li><a>Mes offres</a></li>
+                            <li><a href="myOffers.php">Mes offres</a></li>
                             <li><a href="createOffer.php">Créer une offre</a></li>
                             <li><a href="myCandidates.php">Mes candidats</a></li>
                         </ul>

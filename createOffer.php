@@ -64,8 +64,8 @@ $content = <<<HTML
             const newField = document.createElement('div');
             newField.className = 'form-group flex items-center space-x-4';
             newField.innerHTML = `
-                <input type="text" name="` + newTextInputName + `" placeholder="Requis" onkeydown="return false;">
-                <input class = "w-48" type="number" name="` + newNumberInputName + `" placeholder="années" min = "0" max = "50" onkeydown="return false;">
+                <input type="text" name="` + newTextInputName + `" placeholder="Requis" >
+                <input class = "w-48" type="number" name="` + newNumberInputName + `" placeholder="années" min = "0" max = "50" >
                 <svg id="svg` + (form.children.length + 1) + `" width="100" height="100">
                     <circle cx="50" cy="50" r="40" stroke-width="4" stroke="#e0e0e0" fill="none"/>
                     <circle id="` + newFieldId + `" cx="50" cy="50" r="40" stroke-width="4" stroke="#4a90e2" fill="none" stroke-dasharray="62.8" stroke-dashoffset="0" stroke-linecap="round"/>

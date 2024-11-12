@@ -78,6 +78,15 @@ class Offer{
         }
     }
     
+    function getPrerequisites($OId) {
+      
+        $stmt = $this->conn->prepare("EXEC GetPrerequisite :OId");
+        $stmt->bindParam(":OId", $OId, PDO::PARAM_INT);
+        $stmt->execute();
+    
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function GetAllOffers($critere = 'pond')
     {
         $currentUserId = $_SESSION['currentUser']['Id'];

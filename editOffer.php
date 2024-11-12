@@ -8,7 +8,7 @@ if (isset($_GET['id'])) {
 
     $offerModel = new Offer();
     $offerDetails = $offerModel->getOffer($offerId);
-    
+    $prerequisites = $offerModel->getPrerequisites($offerId);
     if ($offerDetails) {
         $jobTitle = htmlspecialchars($offerDetails['Job']); 
         $location = htmlspecialchars($offerDetails['Location']);
@@ -57,8 +57,137 @@ $content = <<<HTML
                     <button type="submit" class="btn btn-neutral w-full">Mettre à jour l'offre</button>
             </div>
             <div id="dynamicForm" class="pl-16 border-indigo-500">
+            <p><button type="button" onclick="addField()">Ajouter</button></p>
+                <div>Somme des cercles : <span id="sommeAffichee">0</span></div>
+                <div id="errorMessage" style="color: red; display: none;">La somme des cercles ne doit pas dépasser 100.</div>
+
+        
+HTML;
+
+foreach ($prerequisites as $index => $prerequisite) {
+    $type = htmlspecialchars($prerequisite['Type']);
+    $duration = htmlspecialchars($prerequisite['Duration']);
+    $ponderation = htmlspecialchars($prerequisite['Ponderation']);
+    $content .= <<<HTML
+                <div class="form-group flex items-center space-x-4">
+                    <input type="text" name="textInput$index" value="$type" placeholder="Requis">
+                    <input class="w-48" type="number" name="numberInput$index" value="$duration" placeholder="années d'expériences" min="0" max="50">
+                    <svg id="svg$index" width="100" height="100">
+                        <circle cx="50" cy="50" r="40" stroke-width="4" stroke="#e0e0e0" fill="none"/>
+                        <circle id="circle$index" cx="50" cy="50" r="40" stroke-width="4" stroke="#4a90e2" fill="none" stroke-dasharray="62.8" stroke-dashoffset="0" stroke-linecap="round"/>
+                        <text id="text$index" x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#000" font-size="15" font-family="Arial">$ponderation</text>
+                    </svg>
+                    <input type="range" min="0" max="100" value="$ponderation" id="input$index" class="slider" oninput="updateCircle('circle$index', this.value)">
+                    <button type="button" onclick="removeField(this)">Supprimer</button>
+                </div>
+HTML;
+}
+
+$content .= <<<HTML
             </div>
+        </div>
     </form>
+
+
+    <script>
+        function addField() {
+            const form = document.getElementById('dynamicForm');
+            const newFieldId = 'circle' + (form.children.length + 1);
+            const newTextId = 'text' + (form.children.length + 1);
+            const newInputId = 'input' + (form.children.length + 1);
+            const newTextInputName = 'textInput' + (form.children.length + 1);
+            const newNumberInputName = 'numberInput' + (form.children.length + 1);
+            const newField = document.createElement('div');
+            newField.className = 'form-group flex items-center space-x-4';
+            newField.innerHTML = `
+                <input type="text" name="` + newTextInputName + `" placeholder="Requis" >
+                <input class = "w-48" type="number" name="` + newNumberInputName + `" placeholder="années" min = "0" max = "50" >
+                <svg id="svg` + (form.children.length + 1) + `" width="100" height="100">
+                    <circle cx="50" cy="50" r="40" stroke-width="4" stroke="#e0e0e0" fill="none"/>
+                    <circle id="` + newFieldId + `" cx="50" cy="50" r="40" stroke-width="4" stroke="#4a90e2" fill="none" stroke-dasharray="62.8" stroke-dashoffset="0" stroke-linecap="round"/>
+                    <text id="` + newTextId + `" x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#000" font-size="15" font-family="Arial">0</text>
+                </svg>
+                <input type="range" min="0" max="100" value="0" id="` + newInputId + `" class="slider" oninput="updateCircle('` + newFieldId + `', this.value)">
+                <button type="button" onclick="removeField(this)">Supprimer</button>
+            `;
+            form.appendChild(newField);
+
+            calculerCercle();
+            updateCircle();
+        }
+
+        function removeField(button) {
+            const formGroup = button.closest('.form-group');
+            formGroup.remove();
+            calculerCercle();
+            validateSum();
+        }
+
+        function updateCircle(circleId, value) {
+            const circle = document.getElementById(circleId);
+            const radius = 40;
+            const circumference = 2 * Math.PI * radius;
+
+            const offset = circumference * (1 - value / 100);
+            circle.style.strokeDashoffset = offset;
+            circle.style.strokeDasharray = circumference;
+
+            const textId = 'text' + circleId.match(/\d+/)[0]; 
+            const textElement = document.getElementById(textId);
+            textElement.textContent = value; 
+
+            const somme = calculerCercle();
+            validateSum(somme);
+
+            // Adjust the max attribute of all inputs based on the remaining value
+            const inputs = document.querySelectorAll('#dynamicForm .slider');
+            const remainingValue = 100 - somme;
+            inputs.forEach(input => {
+                const currentValue = parseInt(input.value, 10);
+                input.max = currentValue + remainingValue;
+            });
+        }
+
+        function roundToTwo(num) {
+            return +(Math.round(num + "e+2")  + "e-2");
+        }
+
+        function calculerCercle() {
+            const sliders = document.querySelectorAll('#dynamicForm .slider');
+            const tab = Array.from(sliders); 
+
+            let somme = 0;
+
+            tab.forEach(slider => {
+                somme += parseInt(slider.value, 10);
+            });
+
+            const temp = tab.length > 0 ? somme / tab.length : 0;
+
+            const moyenne = roundToTwo(temp)
+
+            document.getElementById('sommeAffichee').textContent = "Somme: " + somme + ", Moyenne: " + moyenne;
+
+            return somme;
+        }
+
+        function validateSum(somme) {
+            const errorMessage = document.getElementById('errorMessage');
+
+            if (somme > 100) {
+                errorMessage.style.display = 'block';
+                return false;
+            } else {
+                errorMessage.style.display = 'none';
+                return true;
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            updateCircle('circle1', document.getElementById('input1').value);
+            calculerCercle();
+        });
+    </script>
 HTML;
 
 include "Views/master.php";
