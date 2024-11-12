@@ -10,6 +10,18 @@ if (!isset($_SESSION['currentUser'])) {
     exit();
 }
 
+if(!isset($_SESSION['currentLanguage']))
+    {
+        $_SESSION['currentLanguage'] = "FR";
+    }
+$lang = $_SESSION['currentLanguage'];
+
+$jsonFile = ($lang === "FR") ? "fr.json" : "en.json";
+
+$jsonData = file_get_contents($jsonFile);
+
+$translations = json_decode($jsonData, true);
+
 $companyId = $_SESSION['currentUser']['Id'];
 $offersModel = new Offer();
 $employeeModel = new Employee();
@@ -50,12 +62,12 @@ $offers = $offersModel->GetOfferByCompagny($companyId);
 
 $content = <<<HTML
 <div class="px-4 sm:px-6 md:px-8 lg:px-12 max-w-screen-lg mx-auto">
-    <h1 class="text-3xl font-bold mb-6">Mes Candidats</h1>
+    <h1 class="text-3xl font-bold mb-6">{$translations['headerCandidate']}</h1>
 HTML;
 
 if (empty($offers)) {
     $content .= <<<HTML
-    <p class="text-lg text-gray-700">Aucune offre disponible.</p>
+    <p class="text-lg text-gray-700">{$translations['noOffers']}</p>
 HTML;
 } else {
     foreach ($offers as $offer) {
@@ -68,15 +80,15 @@ HTML;
         $content .= <<<HTML
         <div class="mb-8">
             <h2 class="text-2xl font-semibold">{$jobTitle}</h2>
-            <p class="text-lg text-gray-600">Emplacement: {$location} | Salary: {$salary} $/hr | Hours: {$hours} hours/week</p>
-            <h3 class="text-xl font-bold mt-4 mb-2">Candidats</h3>
+            <p class="text-lg text-gray-600">{$translations['location']}: {$location} | {$translations['salary']}: {$salary} $/hr | {$translations['hours']}: {$hours} hours/week</p>
+            <h3 class="text-xl font-bold mt-4 mb-2">{$translations['candidates']}</h3>
 HTML;
 
         $offerCandidates = $employeeModel->getCandidates($offer['Id']);
 
         if (empty($offerCandidates)) {
             $content .= <<<HTML
-            <p class="text-lg text-gray-700">Aucun candidat pour cette offre.</p>
+            <p class="text-lg text-gray-700">{$translations['noCandidates']}</p>
 HTML;
         } else {
             foreach ($offerCandidates as $application) {
@@ -118,7 +130,7 @@ HTML;
                         $expCounter++;
                     }
                 } else {
-                    $content .= '<p class="text-sm text-gray-600">Aucune expérience.</p>';
+                    $content .= "<p>{$translations['noExp']}</p>";
                 }
             
                 $content .= <<<HTML
@@ -148,7 +160,7 @@ HTML;
                         $formCounter++;
                     }
                 } else {
-                    $content .= '<p class="text-sm text-gray-600">Aucune formation.</p>';
+                    $content .= "<p>{$translations['noForm']}</p>";
                 }
             
                 $content .= <<<HTML
@@ -157,8 +169,8 @@ HTML;
             
                 $content .= <<<HTML
                     <div class="w-full md:w-1/4 flex flex-col items-center justify-center space-y-2">
-                        <button onclick="openMailModal('$candidateName $candidateLastName', '$candidateEmail', '$defaultInv', '$jobTitle', '$employeeId')" class="btn btn-primary w-full">Contacter le candidat</button>                    
-                        <button onclick="openRemoveModal('$employeeId', '$offerId')" class="btn btn-neutral w-full">Pas intéressé</button>
+                        <button onclick="openMailModal('$candidateName $candidateLastName', '$candidateEmail', '$defaultInv', '$jobTitle', '$employeeId')" class="btn btn-primary w-full">{$translations['contactCandidate']}</button>                    
+                        <button onclick="openRemoveModal('$employeeId', '$offerId')" class="btn btn-neutral w-full">{$translations['notInterested']}</button>
                     </div>
                 </div>
             </div>

@@ -3,6 +3,19 @@ include 'Utilities/sessionManager.php';
 require_once 'BD/BD.php';
 include 'Models/offer.php';
 
+if(!isset($_SESSION['currentLanguage']))
+{
+    $_SESSION['currentLanguage'] = "FR";
+}
+$lang = $_SESSION['currentLanguage'];
+
+$jsonFile = ($lang === "FR") ? "fr.json" : "en.json";
+
+$jsonData = file_get_contents($jsonFile);
+
+$translations = json_decode($jsonData, true);
+
+
 if (isset($_GET['id'])) {
     $offerId = intval($_GET['id']);  
 
@@ -26,7 +39,7 @@ if (isset($_GET['id'])) {
 
 $content = <<<HTML
     <div class="flex justify-between items-center pt-12">
-        <h1 class="text-4xl font-bold pl-56">Édition d’offre</h1>
+        <h1 class="text-4xl font-bold pl-56">{$translations['editOffer']}</h1>
         <button class="text-3xl pr-56">✕</button>
     </div>
 
@@ -35,15 +48,15 @@ $content = <<<HTML
         <div class="flex justify-center items-start mt-8">
             <div class="w-1/3 space-y-4 border-r-4 pr-48 border-indigo-500">
                     <div>
-                        <label class="block text-sm font-medium">Titre d'emploi</label>
+                        <label class="block text-sm font-medium">{$translations['offerName']}</label>
                         <input type="text" name="job" class="mt-1 w-full border border-gray-300 rounded p-2" value="$jobTitle" placeholder="Titre d'emploi" required>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium">Emplacement</label>
+                        <label class="block text-sm font-medium">{$translations['location']}</label>
                         <input type="text" name="location" class="mt-1 w-full border border-gray-300 rounded p-2" value="$location" placeholder="Emplacement" required>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium">Salaire (range)</label>
+                        <label class="block text-sm font-medium">{$translations['salary']} (range)</label>
                         <input type="number" name="salary" class="mt-1 w-full border border-gray-300 rounded p-2" value="$salary" placeholder="Salaire" required min="0">
                     </div>
                     <div>
@@ -51,10 +64,10 @@ $content = <<<HTML
                         <textarea name="description" class="mt-1 w-full border border-gray-300 rounded p-2" placeholder="Description" required>$description</textarea>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium">Heures</label>
+                        <label class="block text-sm font-medium">{$translations['hours']}</label>
                         <input type="number" name="hours" class="mt-1 w-full border border-gray-300 rounded p-2" value="$hours" placeholder="Heures" required min="0">
                     </div>
-                    <button type="submit" class="btn btn-neutral w-full">Mettre à jour l'offre</button>
+                    <button type="submit" class="btn btn-neutral w-full">{$translations['updateOffer']}</button>
             </div>
             <div id="dynamicForm" class="pl-16 border-indigo-500">
             <p><button type="button" onclick="addField()">Ajouter</button></p>

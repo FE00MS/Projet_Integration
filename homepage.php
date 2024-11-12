@@ -13,16 +13,28 @@ if(!isset($_SESSION['currentUser'])){
     $allOffers = $offers->GetAllOffers('pond');
 }
 
+if(!isset($_SESSION['currentLanguage']))
+    {
+        $_SESSION['currentLanguage'] = "FR";
+    }
+$lang = $_SESSION['currentLanguage'];
+
+$jsonFile = ($lang === "FR") ? "fr.json" : "en.json";
+
+$jsonData = file_get_contents($jsonFile);
+
+$translations = json_decode($jsonData, true);
+
 $content = <<<HTML
 <div class="px-4 sm:px-6 md:px-8 lg:px-12 max-w-screen-lg mx-auto">
     <div class="flex items-center gap-2 mb-8">
         <select id="searchCriteria" class="input input-bordered" onchange="filterOffers()">
-            <option value="job-title">Offre</option>
-            <option value="company-name">Nom</option>
-            <option value="salary">Salaire</option>
-            <option value="location">Localisation</option>
+            <option value="job-title">{$translations['offer']}</option>
+            <option value="company-name">{$translations['offerName']}</option>
+            <option value="salary">{$translations['salary']}</option>
+            <option value="location">{$translations['location']}</option>
         </select>
-        <input type="text" id="searchInput" class="input input-bordered grow" placeholder="Search" oninput="filterOffers()" />
+        <input type="text" id="searchInput" class="input input-bordered grow" placeholder="{$translations['search']}" oninput="filterOffers()" />
         <button>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="h-4 w-4 opacity-70">
                 <path fill-rule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0a3.5 a3.5 0 0 1-7 0Z" clip-rule="evenodd" />
@@ -30,7 +42,7 @@ $content = <<<HTML
         </button>
     </div>
 
-    <h1 class="text-2xl font-bold mb-4">Offres d'emploi</h1>
+    <h1 class="text-2xl font-bold mb-4">{$translations['jobOffers']}</h1>
 
     <div id="offersContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
 HTML;

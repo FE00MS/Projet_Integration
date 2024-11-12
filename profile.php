@@ -26,6 +26,18 @@ if (!isset($_SESSION['currentUser'])) {
 $currentUser = $_SESSION['currentUser'];
 $type = $_SESSION["accountType"];
 
+if(!isset($_SESSION['currentLanguage']))
+    {
+        $_SESSION['currentLanguage'] = "FR";
+    }
+$lang = $_SESSION['currentLanguage'];
+
+$jsonFile = ($lang === "FR") ? "fr.json" : "en.json";
+
+$jsonData = file_get_contents($jsonFile);
+
+$translations = json_decode($jsonData, true);
+
 $content = <<<HTML
   <section class="relative pt-40 pb-10">
     <img src="https://pagedone.io/asset/uploads/1705473908.png" alt="cover-image" class="w-full absolute top-0 left-0 z-0 h-40 object-cover">
@@ -119,27 +131,27 @@ if ($type === 'company') {
     $content .= <<<HTML
     <div class="tab-content" id="home" style="display: block;">
         <div class="p-4 border rounded-lg shadow-md mb-8 max-w-lg mx-auto">
-            <h2 class="text-xl font-semibold mb-2">Informations Personnelles</h2>
-            <p><strong>Nom de compagnie:</strong> $companyName</p>
-            <p><strong>Lieu:</strong> $location</p>
-            <p><strong>Courriel:</strong> $email</p>
-            <p><strong>Mot de passe:</strong> $password</p>
+            <h2 class="text-xl font-semibold mb-2">{$translations['personalInfo']}</h2>
+            <p><strong>{$translations['companyName']}:</strong> $companyName</p>
+            <p><strong>{$translations['location']}:</strong> $location</p>
+            <p><strong>{$translations['email']}:</strong> $email</p>
+            <p><strong>{$translations['password']}:</strong> $password</p>
             <p><strong>Description:</strong> $description</p>
-            <p class="break-words"><strong>Invitation par default:</strong>$customInvite</p>
-            <button class="btn btn-neutral mt-4" onclick="window.location.href='logout.php'">Déconnexion</button>
-            <button class="btn btn-primary mt-4" onclick="document.getElementById('modal-update-info').showModal()">Modifier</button>
+            <p class="break-words"><strong>{$translations['defaultInv']}:</strong>$customInvite</p>
+            <button class="btn btn-neutral mt-4" onclick="window.location.href='logout.php'">{$translations['logout']}</button>
+            <button class="btn btn-primary mt-4" onclick="document.getElementById('modal-update-info').showModal()">{$translations['modify']}</button>
             <form method="POST" action="deleteAccountAction">
-                <button class="btn btn-neutral mt-4 bg-red-">Supprimer</button>
+                <button class="btn btn-neutral mt-4 bg-red-">{$translations['deleteAccount']}</button>
             </form>
         </div>
 
         
         <div class="p-4 border rounded-lg shadow-md mb-8 max-w-lg mx-auto">
-            <h2 class="text-xl font-semibold mb-2 flex justify-center items-center">Liens utils</h2>
+            <h2 class="text-xl font-semibold mb-2 flex justify-center items-center">{$translations['links']}</h2>
             <div class="grid grid-cols-3 gap-4">
                 $attachemntDiv
             </div>
-            <button class="btn btn-neutral mt-auto" onclick="document.getElementById('modal-add-link').showModal()">Ajouter un lien</button>
+            <button class="btn btn-neutral mt-auto" onclick="document.getElementById('modal-add-link').showModal()">{$translations['addLinks']}</button>
         </div>
     </div>
 
@@ -500,7 +512,7 @@ HTML;
     //Salary 
     $salarys = $Profile->GetAllSalary(intval($_SESSION['currentUser']['Id']));
     $salaryDiv = '';
-    $SalaryChangeText = 'Ajouter un critère de salaire';
+    $SalaryChangeText = $translations['addCrit'];
     if ($salarys != null) {
         foreach ($salarys as $salary) {
             if ($salary['ExpSalary'] !== '0') {
@@ -533,7 +545,7 @@ HTML;
           </form>
           </div>
           ';
-          $SalaryChangeText = 'Modifier le critère de salaire';
+          $SalaryChangeText = $translations['modifyCrit'];
             } else {
                 $salaryDiv .= '';
             }
@@ -543,7 +555,7 @@ HTML;
     //Schedule
     $schedules = $Profile->GetAllSchedule(intval($_SESSION['currentUser']['Id']));
     $scheduleDiv = '';
-    $scheduleChangeText = 'Ajouter un horaire';
+    $scheduleChangeText = $translations['addSchedule'];
 
     if ($schedules != null) {
         foreach ($schedules as $schedule) {
@@ -563,7 +575,7 @@ HTML;
 
         </div>
         ';
-            $scheduleChangeText = 'Modifier l\'horaire';
+            $scheduleChangeText = $translations['modifySchedule'];
         }
     }
 
@@ -620,16 +632,16 @@ HTML;
 
 <div class="tab-content" id="home" style="display: none;">
     <div class="p-4 border rounded-lg shadow-md mb-8 max-w-lg mx-auto">
-        <h2 class="text-xl font-semibold mb-2">Informations Personnelles</h2>
-        <p><strong>Prénom:</strong> $name</p>
-        <p><strong>Nom:</strong> $lastname</p>
+        <h2 class="text-xl font-semibold mb-2">{$translations['personalInfo']}</h2>
+        <p><strong>{$translations['name']}:</strong> $name</p>
+        <p><strong>{$translations['lastName']}:</strong> $lastname</p>
         <p><strong>Age:</strong> $age</p>
-        <p><strong>Courriel:</strong> $email</p>
-        <p><strong>Mot de passe: </strong>$hiddenPassword</p>
-        <button class="btn btn-neutral mt-4" onclick="window.location.href='logout.php'">Déconnexion</button>
-        <button class="btn btn-primary mt-4" onclick="document.getElementById('modal-update-info').showModal()">Modifier</button>
+        <p><strong>{$translations['email']}:</strong> $email</p>
+        <p><strong>{$translations['password']}: </strong>$hiddenPassword</p>
+        <button class="btn btn-neutral mt-4" onclick="window.location.href='logout.php'">{$translations['logout']}</button>
+        <button class="btn btn-primary mt-4" onclick="document.getElementById('modal-update-info').showModal()">{$translations['modify']}</button>
         <form method="POST" action="deleteAccountAction.php">
-            <button class="btn btn-neutral mt-4 bg-red-">Supprimer</button>
+            <button class="btn btn-neutral mt-4 bg-red-">{$translations['deleteAccount']}</button>
         </form>
     </div>
 
@@ -663,39 +675,39 @@ HTML;
 
 <div class="grid grid-cols-3 gap-4 mb-8 mx-auto">
     <div class="p-4 border rounded-lg shadow-md flex flex-col justify-between h-full">
-        <h2 class="text-xl font-semibold mb-2 flex justify-center items-center">Expériences Professionnelles</h2>
+        <h2 class="text-xl font-semibold mb-2 flex justify-center items-center">{$translations['exp']}</h2>
         <div class="grid grid-cols-2 gap-4">
             $experiencesDiv
         </div>
-        <button class="btn btn-neutral mt-auto" onclick="document.getElementById('modal-add-exp').showModal()">Ajouter une expérience</button>
+        <button class="btn btn-neutral mt-auto" onclick="document.getElementById('modal-add-exp').showModal()">{$translations['addExp']}</button>
     </div>
 
     <div class="p-4 border rounded-lg shadow-md flex flex-col justify-between h-full">
-        <h2 class="text-xl font-semibold mb-2 flex justify-center items-center">Formations</h2>
+        <h2 class="text-xl font-semibold mb-2 flex justify-center items-center">{$translations['formation']}</h2>
         <div class="grid grid-cols-2 gap-4">
             $formationsDiv
         </div>
-        <button class="btn btn-neutral mt-auto" onclick="document.getElementById('modal-add-formation').showModal()">Ajouter une formation</button>
+        <button class="btn btn-neutral mt-auto" onclick="document.getElementById('modal-add-formation').showModal()">{$translations['addFormation']}</button>
     </div>
 
     <div class="p-4 border rounded-lg shadow-md flex flex-col justify-between h-full">
-        <h2 class="text-xl font-semibold mb-2 flex justify-center items-center">Compétences</h2>
+        <h2 class="text-xl font-semibold mb-2 flex justify-center items-center">{$translations['comp']}</h2>
         <div class="grid grid-cols-2 gap-4">
             $abilitysdiv
         </div>
-        <button class="btn btn-neutral mt-auto" onclick="document.getElementById('modal-add-ability').showModal()">Ajouter une compétence</button>
+        <button class="btn btn-neutral mt-auto" onclick="document.getElementById('modal-add-ability').showModal()">{$translations['addComp']}</button>
     </div>
 
     <div class="p-4 border rounded-lg shadow-md flex flex-col justify-between h-full">
-        <h2 class="text-xl font-semibold mb-2 flex justify-center items-center">Langues</h2>
+        <h2 class="text-xl font-semibold mb-2 flex justify-center items-center">{$translations['lang']}</h2>
         <div class="grid grid-cols-2 gap-4">
             $languageEmpdiv
         </div>
-        <button class="btn btn-neutral mt-auto" onclick="document.getElementById('modal-add-language').showModal()">Ajouter une langue</button>
+        <button class="btn btn-neutral mt-auto" onclick="document.getElementById('modal-add-language').showModal()">{$translations['addLang']}</button>
     </div>
 
     <div class="p-4 border rounded-lg shadow-md flex flex-col justify-between h-full">
-        <h2 class="text-xl font-semibold mb-2 flex justify-center items-center">Critères de Salaire</h2>
+        <h2 class="text-xl font-semibold mb-2 flex justify-center items-center">{$translations['crit']}</h2>
         <div class="grid grid-cols-1 gap-4">
             $salaryDiv
         </div>
@@ -703,7 +715,7 @@ HTML;
     </div>
 
     <div class="p-4 border rounded-lg shadow-md flex flex-col justify-between h-full">
-        <h2 class="text-xl font-semibold mb-2 flex justify-center items-center">Horaire</h2>
+        <h2 class="text-xl font-semibold mb-2 flex justify-center items-center">{$translations['schedule']}</h2>
         <div class="grid grid-cols-1 gap-4">
             $scheduleDiv
         </div>
@@ -711,11 +723,11 @@ HTML;
     </div>
 
     <div class="p-4 border rounded-lg shadow-md flex flex-col justify-between h-full">
-        <h2 class="text-xl font-semibold mb-2 flex justify-center items-center">Liens utils</h2>
+        <h2 class="text-xl font-semibold mb-2 flex justify-center items-center">{$translations['links']}</h2>
         <div class="grid grid-cols-3 gap-4">
             $attachemntDiv
         </div>
-        <button class="btn btn-neutral mt-auto" onclick="document.getElementById('modal-add-link').showModal()">Ajouter un lien</button>
+        <button class="btn btn-neutral mt-auto" onclick="document.getElementById('modal-add-link').showModal()">{$translations['addLinks']}</button>
     </div>
 </div>
 </div>
@@ -729,22 +741,22 @@ if ($type === 'company') {
     $content .= <<<HTML
         <dialog id="modal-update-info" class="modal">
         <div class="modal-box">
-            <h3 class="text-lg font-bold">Modifier les Informations Personnelles</h3>
+            <h3 class="text-lg font-bold">{$translations['editInfo']}</h3>
             <form method="POST" action="updateCompany.php">
                 <label class="block mb-2">
-                    <span>Nom de compagnie</span>
+                    <span>{$translations['companyName']}</span>
                     <input type="text" name="CName" value="$companyName" class="input input-bordered mt-1 block w-full">
                 </label>
                 <label class="block mb-2">
-                    <span>Lieu</span>
+                    <span>{$translations['location']}</span>
                     <input type="text" name="Location" value="$location" class="input input-bordered mt-1 block w-full">
                 </label>
                 <label class="block mb-2">
-                    <span>Courriel</span>
+                    <span>{$translations['email']}</span>
                     <input type="email" name="Email" value="$email" class="input input-bordered mt-1 block w-full">
                 </label>
                 <label class="block mb-2">
-                    <span>Mot de passe</span>
+                    <span>{$translations['password']}</span>
                     <input type="password" name="Password" value="$password" class="input input-bordered mt-1 block w-full">
                 </label>
                 <label class="block mb-2">
@@ -752,12 +764,12 @@ if ($type === 'company') {
                     <input type="text" name="Description" value="$description" class="input input-bordered mt-1 block w-full">
                 </label>
                 <label class="block mb-2">
-                    <span>Invitation par default</span>
+                    <span>{$translations['defaultInv']}</span>
                     <textarea name="CustomInvite" rows="15" class="input input-bordered mt-1 block w-full">$customInvite</textarea>
                 </label>
                 <div class="modal-action">
-                    <button type="submit" class="btn btn-primary">Mettre à jour</button>
-                    <button class="btn btn-default" type="button" onclick="document.getElementById('modal-update-info').close()">Annuler</button>
+                    <button type="submit" class="btn btn-primary">{$translations['modify']}</button>
+                    <button class="btn btn-default" type="button" onclick="document.getElementById('modal-update-info').close()">{$translations['cancel']}</button>
                 </div>
             </form>
         </div>
@@ -776,14 +788,14 @@ HTML;
     $content .= <<<HTML
         <dialog id="modal-update-info" class="modal">
         <div class="modal-box">
-            <h3 class="text-lg font-bold">Modifier les Informations Personnelles</h3>
+            <h3 class="text-lg font-bold">{$translations['editInfo']}</h3>
             <form method="POST" action="updateEmployee.php">
                 <label class="block mb-2">
-                    <span>Prénom</span>
+                    <span>{$translations['name']}</span>
                     <input type="text" name="Name" value="$name" class="input input-bordered mt-1 block w-full">
                 </label>
                 <label class="block mb-2">
-                    <span>Nom</span>
+                    <span>{$translations['lastName']}</span>
                     <input type="text" name="LastName" value="$lastname" class="input input-bordered mt-1 block w-full">
                 </label>
                 <label class="block mb-2">
@@ -791,16 +803,16 @@ HTML;
                     <input type="text" name="Age" value="$age" class="input input-bordered mt-1 block w-full">
                 </label>
                 <label class="block mb-2">
-                    <span>Courriel</span>
+                    <span>{$translations['email']}</span>
                     <input type="email" name="Email" value="$email" class="input input-bordered mt-1 block w-full">
                 </label>
                 <label class="block mb-2">
-                    <span>Mot de passe</span>
+                    <span>{$translations['password']}</span>
                     <input type="password" name="Password" value="$password" class="input input-bordered mt-1 block w-full">
                 </label>
                 <div class="modal-action">
-                    <button type="submit" class="btn btn-primary">Mettre à jour</button>
-                    <button class="btn btn-default" type="button" onclick="document.getElementById('modal-update-info').close()">Annuler</button>
+                    <button type="submit" class="btn btn-primary">{$translations['modify']}</button>
+                    <button class="btn btn-default" type="button" onclick="document.getElementById('modal-update-info').close()">{$translations['cancel']}</button>
                 </div>
             </form>
         </div>

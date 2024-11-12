@@ -10,6 +10,18 @@ if (!isset($_SESSION['currentUser'])) {
     exit();
 }
 
+if(!isset($_SESSION['currentLanguage']))
+    {
+        $_SESSION['currentLanguage'] = "FR";
+    }
+$lang = $_SESSION['currentLanguage'];
+
+$jsonFile = ($lang === "FR") ? "fr.json" : "en.json";
+
+$jsonData = file_get_contents($jsonFile);
+
+$translations = json_decode($jsonData, true);
+
 $employeeId = $_SESSION['currentUser']['Id'];
 
 $employeeModel = new Employee();
@@ -19,12 +31,12 @@ $offerModel = new Offer();
 
 $content = <<<HTML
 <div class="px-4 sm:px-6 md:px-8 lg:px-12 max-w-screen-lg mx-auto mt-6">
-    <h1 class="text-3xl font-bold mb-6">Mes Applications</h1>
+    <h1 class="text-3xl font-bold mb-6">{$translations['applicationTitle']}</h1>
 HTML;
 
 if (!$applications) {
     $content .= <<<HTML
-    <p class="text-lg text-gray-700">Vous n'avez pas encore postulé à un emploi.</p>
+    <p class="text-lg text-gray-700">{$translations['noApplications']}</p>
 HTML;
 } else {
     $content .= <<<HTML
@@ -48,21 +60,21 @@ HTML;
                 <div class="card-body">
                     <h2 class="card-title text-xl font-semibold text-gray-800 mb-2">{$jobTitle}</h2>
                     <p class="text-sm font-medium text-gray-500 mb-1">
-                        <span class="text-gray-700 font-semibold">Entreprise:</span> {$companyName}
+                        <span class="text-gray-700 font-semibold">{$translations['company']}:</span> {$companyName}
                     </p>
                     <p class="text-sm font-medium text-gray-500 mb-1">
-                        <span class="text-gray-700 font-semibold">Emplacement:</span> {$location}
+                        <span class="text-gray-700 font-semibold">{$translations['location']}:</span> {$location}
                     </p>
                     <p class="text-sm font-medium text-gray-500 mb-1">
-                        <span class="text-gray-700 font-semibold">Salaire:</span> {$salary} $/hr
+                        <span class="text-gray-700 font-semibold">{$translations['salary']}:</span> {$salary} $/hr
                     </p>
                     <p class="text-sm font-medium text-gray-500 mb-1">
-                        <span class="text-gray-700 font-semibold">Heures:</span> {$hours} hours/week
+                        <span class="text-gray-700 font-semibold">{$translations['hours']}:</span> {$hours} hours/week
                     </p>
                     <p class="text-sm text-gray-600 mt-3">{$shortDescription}</p>
 
                     <div class="card-actions mt-4 flex justify-between">
-                        <button onclick="removeModal.showModal()" class="btn btn-error btn-sm">Retirer ma candidature</button>
+                        <button onclick="removeModal.showModal()" class="btn btn-error btn-sm">{$translations['removeApplication']}</button>
                     </div>
                 </div>
             </div>
@@ -80,17 +92,17 @@ if ($applications) {
     $content .= <<<HTML
         <dialog id="removeModal" class="modal modal-bottom sm:modal-middle">
             <div class="modal-box">
-                <h3 class="text-lg font-bold">Confirmation de Suppression</h3>
-                <p class="py-4">Êtes-vous sûr de vouloir retirer cette candidature ?</p>
+                <h3 class="text-lg font-bold">{$translations['confirmApplication']}</h3>
+                <p class="py-4">{$translations['sureApplication']}</p>
                 <div class="modal-action">
                     <form method="dialog">
-                        <button class="btn">Annuler</button>
+                        <button class="btn">{$translations['cancel']}</button>
                     </form>
 
                     <form action="removeApplication.php" method="POST">
                         <input type="hidden" name="empId" value="{$employeeId}">
                         <input type="hidden" name="offerId" value="{$offerId}">
-                        <button type="submit" class="btn btn-error">Confirmer</button>
+                        <button type="submit" class="btn btn-error">{$translations['confirm']}</button>
                     </form>
                 </div>
             </div>

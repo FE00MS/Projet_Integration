@@ -5,6 +5,17 @@ if(isset($_SESSION['signupError'] )){
     $error = $_SESSION['signupError'];
     $_SESSION['signupError'] = null;
 }
+if(!isset($_SESSION['currentLanguage']))
+{
+    $_SESSION['currentLanguage'] = "FR";
+}
+$lang = $_SESSION['currentLanguage'];
+
+$jsonFile = ($lang === "FR") ? "fr.json" : "en.json";
+
+$jsonData = file_get_contents($jsonFile);
+
+$translations = json_decode($jsonData, true);
 
 $content = <<<HTML
 <div class="px-4 sm:px-6 md:px-8 lg:px-12 max-w-screen-md mx-auto min-h-screen flex flex-col mt-20">
@@ -19,7 +30,7 @@ $content = <<<HTML
                 <path
                     d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
             </svg>
-            <input type="text" name="company_name" class="grow max-w-md" placeholder="Nom de compagnie" required />
+            <input type="text" name="company_name" class="grow max-w-md" placeholder="{$translations['companyName']}" required />
         </label>
         <label class="input input-bordered flex items-center gap-2 max-w-md mx-auto mb-4">
             <svg
@@ -30,7 +41,7 @@ $content = <<<HTML
                 <path
                     d="M8 0C4.686 0 2 3.582 2 7c0 4.418 6 9 6 9s6-4.582 6-9c0-3.418-2.686-7-6-7zm0 10a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
             </svg>
-            <input type="text" name="location" class="grow max-w-md" placeholder="Lieu" required />
+            <input type="text" name="location" class="grow max-w-md" placeholder="{$translations['location']}" required />
         </label>
         <label class="input input-bordered flex items-center gap-2 max-w-md mx-auto mb-4">
             <svg
@@ -43,7 +54,7 @@ $content = <<<HTML
                 <path
                     d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
             </svg>
-            <input type="text" name="email" class="grow max-w-md" placeholder="Courriel" required />
+            <input type="text" name="email" class="grow max-w-md" placeholder="{$translations['email']}" required />
         </label>
         <label class="input input-bordered flex items-center gap-2 max-w-md mx-auto mb-4">
             <svg
@@ -56,11 +67,11 @@ $content = <<<HTML
                     d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z"
                     clip-rule="evenodd" />
             </svg>
-            <input type="password" name="password" class="grow max-w-md" placeholder="Mot de passe" required />
+            <input type="password" name="password" class="grow max-w-md" placeholder="{$translations['password']}" required />
         </label>
         <input type="hidden" name="type" value="company">
         <div class="max-w-md mx-auto">
-            <button type="submit" class="btn btn-neutral w-full">S'inscrire</button>
+            <button type="submit" class="btn btn-neutral w-full">{$translations['signup']}</button>
         </div>
     </form>
 </div>
