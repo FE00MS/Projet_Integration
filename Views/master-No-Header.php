@@ -5,7 +5,7 @@ $scripts = file_get_contents("views/scripts.html");
 
 echo <<<HTML
 <!DOCTYPE html>
-<html data-theme="light"style="background-color: #f0f4f8;">
+<html data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +14,6 @@ echo <<<HTML
     $scripts
 </head>
 <body>
-    $header
     $content
 </body>
 </html>
