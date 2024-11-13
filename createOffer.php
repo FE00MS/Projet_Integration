@@ -2,6 +2,7 @@
 include 'Utilities/sessionManager.php'; 
 require_once 'Models/field.php';
 
+
 if(!isset($_SESSION['currentLanguage']))
 {
     $_SESSION['currentLanguage'] = "FR";
@@ -21,38 +22,46 @@ foreach ($fields as $field) {
     $fieldNames[$field['IdField']] = $field['FieldName'];
     $options .= '<option value="' . $field['IdField'] . '">' . $field['FieldName'] . '</option>';
 }
+
+//Possibilité d'ajouter type de salaire
+
 $content = <<<HTML
     <div class="flex justify-between items-center pt-12">
         <h1 class="text-4xl font-bold pl-56">{$translations['createOffer']}</h1>
-        <button class="text-3xl pr-56">✕</button>
+        <button onclick="window.location.href='myOffers.php'" class="text-3xl pr-56">✕</button>
     </div>
 
     <form id="offerForm" method="POST" action="offerAction.php" class="border-2 border-blue-500 p-6 rounded-lg shadow-lg">
         <div class="flex justify-center items-start mt-8">
             <div class="w-1/3 space-y-4 border-r-4 pr-48 border-indigo-500">
-            <div>
-                    <label class="block text-sm font-medium">{$translations['offerName']}</label>
-                    <input type="text" name="job" class="mt-1 w-full border border-gray-300 rounded p-2" placeholder="Value">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium">{$translations['location']}</label>
-                        <input type="text" name="location" class="mt-1 w-full border border-gray-300 rounded p-2" placeholder="Value">
-                    </div>
-            
-                    <div>
-                        <label class="block text-sm font-medium">{$translations['salary']}</label>
-                        <input type="text" name="salary" class="mt-1 w-full border border-gray-300 rounded p-2" placeholder="Value">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium">Description</label>
-                        <textarea name="description" class="mt-1 w-full border border-gray-300 rounded p-2" placeholder="Value"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium">{$translations['hours']}</label>
-                        <input type="text" name="hours" class="mt-1 w-full border border-gray-300 rounded p-2" placeholder="Value">
-                    </div>
+                <div>
+            <label class="block text-sm font-medium">{$translations['offerName']}</label>
+            <input type="text" name="job" class="mt-1 w-full border border-gray-300 rounded p-2" placeholder="Nom de l'offre" required>
+              </div>
+
+        <div>
+            <label class="block text-sm font-medium">{$translations['location']}</label>
+            <input type="text" name="location" class="mt-1 w-full border border-gray-300 rounded p-2" placeholder="Lieu du poste" required>
+        </div>
+
+        <div>
+            <label class="block text-sm font-medium">{$translations['salary']}</label>
+            <input type="number" min="0" name="salary" class="mt-1 w-full border border-gray-300 rounded p-2" placeholder="Salaire proposé" required>
+        </div>
+
+        <div>
+            <label class="block text-sm font-medium">Description</label>
+            <textarea name="description" class="mt-1 w-full border border-gray-300 rounded p-2" placeholder="Description du poste" required></textarea>
+        </div>
+
+        <div>
+            <label class="block text-sm font-medium">{$translations['hours']}</label>
+            <input type="number" min="0" max="168" name="hours" class="mt-1 w-full border border-gray-300 rounded p-2" placeholder="Heures de travail" required>
+        </div>
+
                     <button type="submit" class="btn btn-neutral w-full">{$translations['create']}</button>
             </div>
+
             <div id="FormDynam" class="pl-16 border-indigo-500 space-y-4">
                 <button type="button" onclick="addField()" class="bg-green-500 text-white py-2 px-4 rounded">Ajouter</button>
                 <div>Somme des cercles : <span id="sommeAffichee">0</span></div>
@@ -75,7 +84,7 @@ $content = <<<HTML
                         <?php echo $options; ?>
                     </select>
                 </label>
-                <input class="w-48 border border-gray-300 rounded p-2" type="number" name="year1" placeholder="années d'expériences" min="0" max="50" required>
+                <input class="w-48 border border-gray-300 rounded p-2" type="number" name="year1" placeholder="Années" min="0" max="50" required>
                 <svg id="svg1" width="120" height="120">
                     <circle cx="60" cy="60" r="40" stroke-width="4" stroke="#e0e0e0" fill="none"/>
                     <circle  id="circle1" cx="60" cy="60" r="40" stroke-width="4" stroke="#4a90e2" fill="none" stroke-dasharray="251.2" stroke-dashoffset="0" stroke-linecap="round"/>
@@ -116,7 +125,7 @@ include "Views/master.php";
                     <input type="radio" name="type${fieldIndex}" value="experience" class="mr-2" required> Expérience
                 </label>
                 <label class="block mb-2">
-                    <input type="radio" name="type${fieldIndex}" value="competence" class="mr-2"> Formation
+                    <input type="radio" name="type${fieldIndex}" value="formation" class="mr-2"> Formation
                 </label>
             </div>
             <input type="hidden" name="complete${fieldIndex}" value="0">
@@ -128,7 +137,7 @@ include "Views/master.php";
                     <?php echo $options; ?>
                 </select>
             </label>
-            <input class="w-48 border border-gray-300 rounded p-2" type="number" name="${newNumberInputName}" placeholder="années d'expériences" min="0" max="50" required>
+            <input class="w-48 border border-gray-300 rounded p-2" type="number" name="${newNumberInputName}" placeholder="Années" min="0" max="50" required>
             <svg id="svg${fieldIndex}" width="120" height="120">
                 <circle cx="60" cy="60" r="40" stroke-width="4" stroke="#e0e0e0" fill="none"/>
                 <circle id="${newFieldId}" cx="60" cy="60" r="40" stroke-width="4" stroke="#4a90e2" fill="none" stroke-dasharray="251.2" stroke-dashoffset="0" stroke-linecap="round"/>

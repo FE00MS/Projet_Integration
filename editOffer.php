@@ -39,10 +39,19 @@ if (isset($_GET['id'])) {
 
 $content = <<<HTML
     
-    <div class="flex justify-between items-center pt-12">
-        <h1 class="text-4xl font-bold pl-56">{$translations['createOffer']}</h1>
-        <button class="text-3xl pr-56">✕</button>
+    <div class="flex justify-between items-center pt-4 px-4">
+    <h1 class="text-3xl font-bold">{$translations['createOffer']}</h1>
+    
+    <div class="flex space-x-4">
+        <button onclick="window.location.href='myOffers.php'" class="text-3xl pr-5">
+            X
+        </button>
+        
+        <button onclick="confirmDeletion()" class="text-lg bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
+            Supprimer l'offre
+        </button>
     </div>
+</div>
 
     <form id="offerForm" method="POST" action="offerAction.php" class="border-2 border-blue-500 p-6 rounded-lg shadow-lg">
         <div class="flex justify-center items-start mt-8">
@@ -62,7 +71,7 @@ $content = <<<HTML
                     </div>
                     <div>
                         <label class="block text-sm font-medium">Description</label>
-                        <textarea name="description" class="mt-1 w-full border border-gray-300 rounded p-2" value="$description"></textarea>
+                        <textarea name="description" class="mt-1 w-full border border-gray-300 rounded p-2" >$description</textarea>
                     </div>
                     <div>
                         <label class="block text-sm font-medium">{$translations['hours']}</label>
@@ -109,6 +118,13 @@ $content .= <<<HTML
 
 
     <script>
+   function confirmDeletion() {
+        if (confirm("Êtes-vous sûr de vouloir supprimer cette offre ? Cette action est irréversible.")) {
+            window.location.href = 'deleteOffer.php'; 
+        }
+    }
+
+
         function addField() {
             const form = document.getElementById('dynamicForm');
             const newFieldId = 'circle' + (form.children.length + 1);

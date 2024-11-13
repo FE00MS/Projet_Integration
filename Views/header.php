@@ -32,6 +32,7 @@ require_once 'Models/account.php';
                             </svg>
                         </div>
                         <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                     
                             <li><a href="myOffers.php">{$translations['headerOffers']}</a></li>
                             <li><a href="createOffer.php">{$translations['headerCreate']}</a></li>
                             <li><a href="myCandidates.php">{$translations['headerCandidate']}</a></li>
@@ -74,6 +75,7 @@ require_once 'Models/account.php';
     if ($accountType === "company") {
         $header .= <<<HTML
         <ul class="menu menu-horizontal px-1">
+        <li><a href="homepage.php">{$translations['headerHomepage']}</a></li>
                     <li><a href="myOffers.php">{$translations['headerOffers']}</a></li>
                     <li><a href="createOffer.php">{$translations['headerCreate']}</a></li>
                     <li><a href="myCandidates.php">{$translations['headerCandidate']}</a></li>
