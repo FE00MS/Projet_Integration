@@ -15,5 +15,5 @@ $idSender = intval($_POST['IdSender']);
 $admin = new Admin();
 $admin->CreateReport($reportType, $reason, $idReported, $idSender, 0); 
 
-header('Location: offerDetails.php?id=' . $_POST['offerId']. '&report=success');
+header('Location: homepage.php?report=success');
 exit();

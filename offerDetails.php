@@ -10,13 +10,9 @@ if (isset($_GET['id'])) {
 } else {
     die("Offer ID is missing.");
 }
-if (isset($_GET['report']) && $_GET['report'] === 'success') {
-    echo '<div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative animate-bounce" role="alert">
-            <strong class="font-bold">Signalement envoyé !</strong>
-            <span class="block sm:inline">Votre signalement a bien été pris en compte.</span>
-          </div>';
-}
 
+$currentUser = $_SESSION['currentUser'];
+$type = $_SESSION["accountType"];
 $offers = new Offer();
 $employeeModel = new Employee();
 $company = new Company();
@@ -53,7 +49,7 @@ foreach ($applications as $application) {
 }
 
 $content = <<<HTML
-<div class="px-4 sm:px-6 md:px-8 lg:px-12 max-w-screen-lg mx-auto mt-6 bg-white shadow-lg rounded-lg p-8 transform transition-transform duration-500 hover:scale-105">
+<div class="px-4 sm:px-6 md:px-8 lg:px-12 max-w-screen-lg mx-auto mt-6  shadow-lg rounded-lg p-8 transform transition-transform duration-500 hover:scale-105">
     <h1 class="text-4xl font-bold mb-6 text-indigo-700 animate-pulse">{$jobTitle}</h1>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <p class="text-lg font-semibold">Companie: <span class="font-normal text-gray-700">{$companyName}</span></p>
@@ -95,12 +91,16 @@ if ($hasApplied) {
         </form>
     </div>
 HTML;
-} else {
+}if ($type === 'company') {
+    $content .= <<<HTML
+    none    
+HTML;
+}else {
     $content .= <<<HTML
     <div class="mt-8">
         <a href="apply.php?id={$offerId}" class="btn btn-neutral bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md transform transition-transform duration-500 hover:scale-110">Appliquer</a>
     </div>
-HTML;
+    HTML;
 }
 $ratingModel = new Rating();
 $ratings = $ratingModel->GetAllRating($offer['IdC']);

@@ -58,6 +58,7 @@ require_once 'Models/account.php';
                             <li><a>{$translations['headerHomepage']}</a></li>
                             <li><a href="myApplications.php">{$translations['headerApplications']}</a></li>
                             <li><a>{$translations['headerAbout']}</a></li>
+                            <li><a href="aide.php">{$translations['headerHelp']}</a></li>
                         </ul>
                     </div>
                     <a href="homepage.php" class="btn btn-ghost text-xl flex items-center gap-2">
@@ -86,6 +87,7 @@ require_once 'Models/account.php';
                     <li><a href="homepage.php">{$translations['headerHomepage']}</a></li>
                     <li><a href="myApplications.php">{$translations['headerApplications']}</a></li>
                     <li><a>{$translations['headerAbout']}</a></li>
+                    <li><a href="aide.php">{$translations['headerHelp']}</a></li>
                 </ul>
             </div>
             <div class="navbar-end flex items-center gap-4">

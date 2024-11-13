@@ -12,7 +12,12 @@ if(!isset($_SESSION['currentUser'])){
 }else{
     $allOffers = $offers->GetAllOffers('pond');
 }
-
+if (isset($_GET['report']) && $_GET['report'] === 'success') {
+    echo '<div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative animate-bounce" role="alert">
+            <strong class="font-bold">Signalement envoyé !</strong>
+            <span class="block sm:inline">Votre signalement a bien été pris en compte.</span>
+          </div>';
+}
 if(!isset($_SESSION['currentLanguage']))
     {
         $_SESSION['currentLanguage'] = "FR";
@@ -27,10 +32,10 @@ $translations = json_decode($jsonData, true);
 
 $content = <<<HTML
 <div id="mainContainer" class="flex flex-col lg:flex-row h-screen justify-center bg-gray-100">
-    <div id="detailsContainer" class="hidden lg:block w-full lg:w-1/2 px-4 sm:px-6 md:px-8 lg:px-12 max-w-screen-lg overflow-y-auto bg-white shadow-lg rounded-lg mx-auto">
+    <div id="detailsContainer" class="none lg:block w-full lg:w-1/2 px-4 sm:px-6 md:px-8 lg:px-12 max-w-screen-lg overflow-y-auto bg-rgb(240, 243, 248) shadow-lg rounded-lg mx-auto">
         <!-- Le contenu de la page de détails sera chargé ici -->
     </div>
-    <div id="offersContainer" class="w-full lg:w-1/2 px-4 sm:px-6 md:px-8 lg:px-12 max-w-screen-lg mx-auto">
+    <div id="offersContainer" class="w-full lg:w-1/2 max-w-screen-lg mx-auto">
         <div class="flex items-center gap-4 mb-8">
             <select id="searchCriteria" class="input input-bordered border-gray-300 rounded-lg p-2 shadow-sm focus:ring focus:ring-indigo-200" onchange="filterOffers()" aria-label="Select search criteria">
                 <option value="job-title">{$translations['offer']}</option>
@@ -74,10 +79,10 @@ foreach ($allOffers as $offer) {
 
     $content .= <<<HTML
     <div class="card bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-transform duration-200 job-offer relative hover:scale-105 w-full sm:w-[300px] h-[400px] p-[2rem] border-2 border-[#c3c6ce] transition-all duration-500 ease-out overflow-visible">
+        <div class="ponderation absolute bg-red-500 text-white rounded-full h-8 w-8 flex items-center justify-center text-xs font-bold shadow-md" style="top: -1rem; right: -1rem;">
+            <p>{$ponderation}</p>
+        </div>
         <div class="p-5">
-            <div class="absolute right-6 bg-red-500 text-white rounded-full h-8 w-8 flex items-center justify-center text-xs font-bold shadow-md">
-                <p>{$ponderation}</p>
-            </div>
             <h2 class="text-2xl font-semibold text-gray-800 job-title">{$jobTitle}</h2>
             <p class="text-sm font-medium text-gray-500 mt-1 company-name">{$companyName}</p>
             <p class="text-sm text-gray-500 location mt-1">{$location}</p>
@@ -172,37 +177,120 @@ $content .= <<<HTML
  opacity: 0;
  transition: 0.3s ease-out;
 }
-.card:hover {
- border-color: #008bf8;
- box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.25);
+.card {
+    width: 100%;
+    height: auto;
+    padding: 1rem;
+    border: 2px solid #c3c6ce;
+    border-radius: 1rem;
+    background-color: #fff;
+    box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
 }
-
+.card:hover {
+    border-color: #008bf8;
+    box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.25);
+    transform: scale(1.05);
+}
 .card:hover .card-button {
- transform: translate(-50%, 50%);
- opacity: 1;
+    transform: translate(-50%, 50%);
+    opacity: 1;
+}
+.card .p-5 {
+    padding: 1rem;
+}
+.card .job-title {
+    font-size: 1.5rem;
+}
+.card .company-name, .card .location, .card .salary, .card .hours, .card .description {
+    font-size: 0.875rem;
+}
+@media (max-width: 1024px) {
+    #mainContainer {
+        flex-direction: column;
+    }
+    #detailsContainer, #offersContainer {
+        width: 100%;
+        max-width: none;
+        padding: 1rem;
+    }
+}
+@media (max-width: 768px) {
+    .card {
+        width: 100%;
+        height: auto;
+        padding: 1rem;
+    }
+    .card .p-5 {
+        padding: 0.75rem;
+    }
+    .card .job-title {
+        font-size: 1.25rem;
+    }
+    .card .company-name, .card .location, .card .salary, .card .hours, .card .description {
+        font-size: 0.75rem;
+    }
+    .card-button {
+        width: 80%;
+        font-size: 0.875rem;
+    }
+}
+@media (max-width: 480px) {
+    .card {
+        padding: 0.5rem;
+    }
+    .card .p-5 {
+        padding: 0.5rem;
+    }
+    .card .job-title {
+        font-size: 1rem;
+    }
+    .card .company-name, .card .location, .card .salary, .card .hours, .card .description {
+        font-size: 0.625rem;
+    }
+    .card-button {
+        width: 100%;
+        font-size: 0.75rem;
+    }
 }
 #mainContainer {
     background-color: #f0f4f8;
 }
-#offersContainer {
-    background-color: #ffffff;
-    border-radius: 0.5rem;
-    padding: 2rem;
-    box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1);
-    margin: 0 auto;
-}
-#detailsContainer {
-    background-color: #ffffff;
-    border-radius: 0.5rem;
-    padding: 2rem;
-    box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1);
-    margin: 0 auto;
-}
-.hidden {
+.none {
     display: none;
 }
-.justify-between .hidden {
+.justify-between .none {
     display: block;
+}
+@media (max-width: 1024px) {
+    #mainContainer {
+        flex-direction: column;
+    }
+    #detailsContainer, #offersContainer {
+        width: 100%;
+        max-width: none;
+        padding: 1rem;
+    }
+}
+@media (max-width: 768px) {
+    .card {
+        width: 100%;
+        height: auto;
+        padding: 1rem;
+    }
+    .card-button {
+        width: 80%;
+        font-size: 0.875rem;
+    }
+}
+@media (max-width: 480px) {
+    .card {
+        padding: 0.5rem;
+    }
+    .card-button {
+        width: 100%;
+        font-size: 0.75rem;
+    }
 }
 </style>
 HTML;
