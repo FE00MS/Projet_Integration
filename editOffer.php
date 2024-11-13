@@ -38,52 +38,58 @@ if (isset($_GET['id'])) {
 }
 
 $content = <<<HTML
+    
     <div class="flex justify-between items-center pt-12">
-        <h1 class="text-4xl font-bold pl-56">{$translations['editOffer']}</h1>
+        <h1 class="text-4xl font-bold pl-56">{$translations['createOffer']}</h1>
         <button class="text-3xl pr-56">✕</button>
     </div>
 
-    <form id="offerForm" method="POST" action="updateOffer.php">
-        <input type="hidden" name="offerId" value="$offerId">
+    <form id="offerForm" method="POST" action="offerAction.php" class="border-2 border-blue-500 p-6 rounded-lg shadow-lg">
         <div class="flex justify-center items-start mt-8">
             <div class="w-1/3 space-y-4 border-r-4 pr-48 border-indigo-500">
-                    <div>
-                        <label class="block text-sm font-medium">{$translations['offerName']}</label>
-                        <input type="text" name="job" class="mt-1 w-full border border-gray-300 rounded p-2" value="$jobTitle" placeholder="Titre d'emploi" required>
+            <div>
+                    <label class="block text-sm font-medium">{$translations['offerName']}</label>
+                    <input type="text" name="job" class="mt-1 w-full border border-gray-300 rounded p-2" value="$jobTitle">
                     </div>
                     <div>
                         <label class="block text-sm font-medium">{$translations['location']}</label>
-                        <input type="text" name="location" class="mt-1 w-full border border-gray-300 rounded p-2" value="$location" placeholder="Emplacement" required>
+                        <input type="text" name="location" class="mt-1 w-full border border-gray-300 rounded p-2" value="$location">
                     </div>
+                   
                     <div>
-                        <label class="block text-sm font-medium">{$translations['salary']} (range)</label>
-                        <input type="number" name="salary" class="mt-1 w-full border border-gray-300 rounded p-2" value="$salary" placeholder="Salaire" required min="0">
+                        <label class="block text-sm font-medium">{$translations['salary']} </label>
+                        <input type="text" name="salary" class="mt-1 w-full border border-gray-300 rounded p-2" value="$salary">
                     </div>
                     <div>
                         <label class="block text-sm font-medium">Description</label>
-                        <textarea name="description" class="mt-1 w-full border border-gray-300 rounded p-2" placeholder="Description" required>$description</textarea>
+                        <textarea name="description" class="mt-1 w-full border border-gray-300 rounded p-2" value="$description"></textarea>
                     </div>
                     <div>
                         <label class="block text-sm font-medium">{$translations['hours']}</label>
-                        <input type="number" name="hours" class="mt-1 w-full border border-gray-300 rounded p-2" value="$hours" placeholder="Heures" required min="0">
+                        <input type="text" name="hours" class="mt-1 w-full border border-gray-300 rounded p-2" value="$hours">
                     </div>
-                    <button type="submit" class="btn btn-neutral w-full">{$translations['updateOffer']}</button>
+                    <button type="submit" class="btn btn-neutral w-full">{$translations['modify']}</button>
             </div>
-            <div id="dynamicForm" class="pl-16 border-indigo-500">
-            <p><button type="button" onclick="addField()">Ajouter</button></p>
+            <div id="FormDynam" class="pl-16 border-indigo-500 space-y-4">
+                <button type="button" onclick="addField()" class="bg-green-500 text-white py-2 px-4 rounded">Ajouter</button>
                 <div>Somme des cercles : <span id="sommeAffichee">0</span></div>
-                <div id="errorMessage" style="color: red; display: none;">La somme des cercles ne doit pas dépasser 100.</div>
-
+                <div class="dynamic-field form-group flex items-center space-x-4">
+            <div>
         
 HTML;
 
 foreach ($prerequisites as $index => $prerequisite) {
     $type = htmlspecialchars($prerequisite['Type']);
+    if($type == 'F'){
+        $type = "Formation";
+    }else{
+        $type = "Expérience";
+    }
     $duration = htmlspecialchars($prerequisite['Duration']);
     $ponderation = htmlspecialchars($prerequisite['Ponderation']);
     $content .= <<<HTML
                 <div class="form-group flex items-center space-x-4">
-                    <input type="text" name="textInput$index" value="$type" placeholder="Requis">
+                    <input type="text" name="textInput$index" value="$type" >
                     <input class="w-48" type="number" name="numberInput$index" value="$duration" placeholder="années d'expériences" min="0" max="50">
                     <svg id="svg$index" width="100" height="100">
                         <circle cx="50" cy="50" r="40" stroke-width="4" stroke="#e0e0e0" fill="none"/>

@@ -1,18 +1,19 @@
 <?php
 require_once 'BD/BD.php';
 
-class Offer{
+class Offer
+{
 
     private $conn;
-    
+
     function __construct()
     {
         $db = new Database();
         $this->conn = $db->getConnection();
-        
+
     }
 
-    
+
     public function CreateOffer($idc, $job, $location, $salary, $description, $hours)
     {
         try {
@@ -24,28 +25,55 @@ class Offer{
             $sql->bindParam(':description', $description, PDO::PARAM_STR);
             $sql->bindParam(':hours', $hours, PDO::PARAM_INT);
             $sql->execute();
-            
-            return "Création de l'offre réussi";
+
+            return $this->conn->lastInsertId();
         } catch (PDOException $e) {
             throw new Exception("Erreur lors de la création de l'offre : " . $e->getMessage());
         }
     }
+
+    function createPonderation($OId, $fieldsData)
+    {
+    
+            $stmt = $this->conn->prepare("EXEC dbo.createPonderation :OId, :Type, :FieldType, :Ponderation, :Duration, :Complete");
+
+            foreach ($fieldsData as $fieldData) {
+                $fieldType = '';
+                if ($fieldData['type'] === 'experience') {
+                    $fieldType = 'E';
+                } elseif ($fieldData['type'] === 'formation') {
+                    $fieldType = 'F';
+                }
+                $stmt->bindParam(':OId', $OId, PDO::PARAM_INT);
+                $stmt->bindParam(':Type', $fieldType, PDO::PARAM_STR); 
+                $stmt->bindParam(':FieldType', $fieldData['fieldType'], PDO::PARAM_STR);
+                $stmt->bindParam(':Ponderation', $fieldData['ponderation'], PDO::PARAM_INT);
+                $stmt->bindParam(':Duration', $fieldData['duration'], PDO::PARAM_INT); 
+                $stmt->bindParam(':Complete', $fieldData['complete'], PDO::PARAM_INT); 
+
+                if (!$stmt->execute()) {
+                    return false;
+                }
+            }
+            return true;
+      
+    }
     public function GetOfferByCompagny($idC)
     {
-        
+
         try {
             $sql = $this->conn->prepare("EXEC GetMyOffers @idc = :idC");
             $sql->bindParam(':idC', $idC, PDO::PARAM_INT);
             $sql->execute();
             $result = $sql->fetchAll(PDO::FETCH_ASSOC);
             if ($result) {
-                return $result; 
-            } 
+                return $result;
+            }
         } catch (PDOException $e) {
             throw new Exception("Erreur lors de la récupération des données : " . $e->getMessage());
         }
     }
-    public function EditOffer($id,$idc, $job, $location, $salary, $description, $hours)
+    public function EditOffer($id, $idc, $job, $location, $salary, $description, $hours)
     {
         try {
             $sql = $this->conn->prepare("EXEC EditOffer  @id = :id, @idc = :idc, @job = :job, @location = :location, @salary = :salary, @description = :description, @hours = :hours");
@@ -57,7 +85,7 @@ class Offer{
             $sql->bindParam(':description', $description, PDO::PARAM_STR);
             $sql->bindParam(':hours', $hours, PDO::PARAM_INT);
             $sql->execute();
-            
+
             return "Création de l'offre réussi";
         } catch (PDOException $e) {
             throw new Exception("Erreur lors de la création de l'offre : " . $e->getMessage());
@@ -71,19 +99,20 @@ class Offer{
             $sql->execute();
             $result = $sql->fetch(PDO::FETCH_ASSOC);
             if ($result) {
-                return $result; 
-            } 
+                return $result;
+            }
         } catch (PDOException $e) {
             throw new Exception("Erreur lors de la récupération des données : " . $e->getMessage());
         }
     }
-    
-    function getPrerequisites($OId) {
-      
+
+    function getPrerequisites($OId)
+    {
+
         $stmt = $this->conn->prepare("EXEC GetPrerequisite :OId");
         $stmt->bindParam(":OId", $OId, PDO::PARAM_INT);
         $stmt->execute();
-    
+
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -110,18 +139,18 @@ class Offer{
             $sql->execute();
             $offersLanguages = $sql->fetchAll(PDO::FETCH_ASSOC);
             if ($allOffers) {
-                if($critere == "pond"){
-                    foreach($allOffers as $offer){
+                if ($critere == "pond") {
+                    foreach ($allOffers as $offer) {
                         $offerPrerequisite = [];
                         $offerLanguage = [];
-                        foreach($allPrerequisite as $prerequisite){
-                            if($prerequisite['OId'] == $offer['Id']){
-                                $offerPrerequisite.array_push($prerequisite);
+                        foreach ($allPrerequisite as $prerequisite) {
+                            if ($prerequisite['OId'] == $offer['Id']) {
+                                $offerPrerequisite . array_push($prerequisite);
                             }
                         }
-                        foreach($offersLanguages as $language){
-                            if($language['OId'] == $offer['Id']){
-                                $offerPrerequisite.array_push($language);
+                        foreach ($offersLanguages as $language) {
+                            if ($language['OId'] == $offer['Id']) {
+                                $offerPrerequisite . array_push($language);
                             }
                         }
                         $offer['Ponderation'] = $this->ponderateOffer($offerPrerequisite, $myExperience, $myLanguage, $offerLanguage);
@@ -129,47 +158,47 @@ class Offer{
                     return $allOffers;
                 }
                 //possibilité d'ajouter des tri differents que pondéré
-                elseif($critere == "comp"){
+                elseif ($critere == "comp") {
                     return $allOffers;
                 }
-                
+
             }
         } catch (PDOException $e) {
             throw new Exception("Erreur lors de la récupération des données : " . $e->getMessage());
         }
     }
 
-    public function ponderateOffer($offerPrerequisite, $myExperience, $myLanguages, $offerLanguages){
+    public function ponderateOffer($offerPrerequisite, $myExperience, $myLanguages, $offerLanguages)
+    {
         $totalPonderation = 0.01;
         $actualPonderation = 0;
-        foreach($offerLanguages as $offerlanguage){
+        foreach ($offerLanguages as $offerlanguage) {
             $totalPonderation += 6;
-            foreach($myLanguages as $language){
-                if($offerlanguage['Lid'] == $language['Lid']){
-                    if($language['Niveau'] == 'Rudimentaire'){
+            foreach ($myLanguages as $language) {
+                if ($offerlanguage['Lid'] == $language['Lid']) {
+                    if ($language['Niveau'] == 'Rudimentaire') {
                         $actualPonderation += 2;
                     }
-                    if($language['Niveau'] == 'Moyen'){
+                    if ($language['Niveau'] == 'Moyen') {
                         $actualPonderation += 4;
                     }
-                    if($language['Niveau'] == 'Élevé'){
+                    if ($language['Niveau'] == 'Élevé') {
                         $actualPonderation += 6;
                     }
                 }
             }
         }
-        foreach($offerPrerequisite as $prerequisite){
+        foreach ($offerPrerequisite as $prerequisite) {
             $totalPonderation += $prerequisite['Ponderation'];
-            foreach($myExperience as $experience){
-                if($experience['Type'] == $prerequisite['Type']){
-                    if($experience['FieldType'] == $prerequisite['FieldType'] || $prerequisite['FieldType'] == 'Au'){
-                        if($experience['Complete'] == $prerequisite['Complete'] || $prerequisite['Complete'] != 1){
-                            if($experience['Duration'] >= $prerequisite['Duration']){
+            foreach ($myExperience as $experience) {
+                if ($experience['Type'] == $prerequisite['Type']) {
+                    if ($experience['FieldType'] == $prerequisite['FieldType'] || $prerequisite['FieldType'] == 'Au') {
+                        if ($experience['Complete'] == $prerequisite['Complete'] || $prerequisite['Complete'] != 1) {
+                            if ($experience['Duration'] >= $prerequisite['Duration']) {
                                 $actualPonderation += $prerequisite['Ponderation'];
-                            }
-                            else{
-                                $pourcentagePonderation = $experience['Duration'] /$prerequisite['Duration'];
-                                $actualPonderation += $prerequisite['Ponderation']*$pourcentagePonderation;
+                            } else {
+                                $pourcentagePonderation = $experience['Duration'] / $prerequisite['Duration'];
+                                $actualPonderation += $prerequisite['Ponderation'] * $pourcentagePonderation;
                             }
                         }
                     }
