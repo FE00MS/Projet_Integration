@@ -38,7 +38,7 @@ require_once 'Models/account.php';
                             <li><a href="myCandidates.php">{$translations['headerCandidate']}</a></li>
                         </ul>
                     </div>
-                    <a href="homepage.php" class="btn btn-ghost text-xl flex items-center gap-2">
+                    <a href="myOffers.php" class="btn btn-ghost text-xl flex items-center gap-2">
                         <img src="images/compass.png" alt="Compass Icon" class="h-6 w-6">
                         {$translations['headerName']}
                     </a>
@@ -75,7 +75,6 @@ require_once 'Models/account.php';
     if ($accountType === "company") {
         $header .= <<<HTML
         <ul class="menu menu-horizontal px-1">
-        <li><a href="homepage.php">{$translations['headerHomepage']}</a></li>
                     <li><a href="myOffers.php">{$translations['headerOffers']}</a></li>
                     <li><a href="createOffer.php">{$translations['headerCreate']}</a></li>
                     <li><a href="myCandidates.php">{$translations['headerCandidate']}</a></li>
