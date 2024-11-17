@@ -18,7 +18,7 @@ $Profile = New Profile();
 $Profile->CreateExperienceEmp($currentUserId,
 $Title,
 $LocationName,
-'Exp',
+'E',
 $FieldType,
 $Description,
 $Duration,

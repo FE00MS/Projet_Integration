@@ -34,7 +34,6 @@ function getExperiencesForProfile($userId) {
 
     $experiences = [];
     $formations = [];
-    $abilities = [];
     if ($experienceData != null) {
         foreach ($experienceData as $exp) {
             switch ($exp['TypeExp']) {
@@ -44,17 +43,14 @@ function getExperiencesForProfile($userId) {
                 case 'Exp':
                     $experiences[] = $exp;
                     break;
-                case 'Abi':
-                    $abilities[] = $exp;
-                    break;
+               
             }
         }
     }
 
     return [
         'experiences' => $experiences,
-        'formations' => $formations,
-        'abilities' => $abilities
+        'formations' => $formations
     ];
 }
 

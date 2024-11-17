@@ -4,7 +4,6 @@ require_once 'Models/field.php';
 
 require_once 'modals/experienceModal.php';
 require_once 'modals/formationModal.php';
-require_once 'modals/abilityModal.php';
 require_once 'modals/critereSalaireModal.php';
 require_once 'modals/languageModal.php';
 require_once 'modals/scheduleModal.php';
@@ -173,18 +172,15 @@ HTML;
 
         $experiences = [];
         $formations = [];
-        $abilities = [];
+
         if ($experienceData != null) {
             foreach ($experienceData as $exp) {
                 switch ($exp['TypeExp']) {
-                    case 'For':
+                    case 'F':
                         $formations[] = $exp;
                         break;
-                    case 'Exp':
+                    case 'E':
                         $experiences[] = $exp;
-                        break;
-                    case 'Abi':
-                        $abilities[] = $exp;
                         break;
                 }
             }
@@ -193,8 +189,7 @@ HTML;
 
         return [
             'experiences' => $experiences,
-            'formations' => $formations,
-            'abilities' => $abilities
+            'formations' => $formations
         ];
     }
 
@@ -358,86 +353,7 @@ HTML;
         }
     }
 
-    //ABility 
-    $abilitysdiv = '';
-    if ($data['abilities'] != null) {
-        foreach ($data['abilities'] as $ability) {
-            //Recup le nom du Field
-            $fieldType = $ability['FieldType'];
-            $fnni = 'Débutant';
-            if ($ability['Complete'] == 1) {
-                $fnni = 'Avancé';
-            }
-            $options = '';
-            foreach ($fields as $field) {
-                $fieldNames[$field['IdField']] = $field['FieldName'];
-                $selected = ($field['IdField'] == $fieldType) ? 'selected' : '';
-                $options .= '<option value="' . $field['IdField'] . '" ' . $selected . '>' . $field['FieldName'] . '</option>';
-            }
-            $abilitysdiv .=
-                '<div class="p-4 border rounded-lg  mb-8">
-        <p><strong>Titre d\'emploi: </strong>' . $ability['Title'] . ' </p>
-        <p><strong>Nom de la companie: </strong>' . $ability['LocationName'] . ' </p>
-        <p><strong>Domaine: </strong>' . $fieldNames[$fieldType]  . '</p>
-        <p><strong>Durée: </strong>' . $ability['Duration'] . ' mois</p>
-        <p><strong>Description: </strong>' . $ability['Description'] . '</p>
-        <p><strong>État: </strong>' . $fnni . '</p>
-        <br>
-        <form method="POST" action="deleteExperience.php" style="display:inline;">
-            <input type="hidden" name="ExperienceId" value="' . $ability['Id'] . '">
-            <button type="submit" class=" w-24 btn btn-danger" onclick="return confirm(\'Êtes-vous sûr de vouloir supprimer cette expérience ?\')">Supprimer</button>
-        </form>
-            <button class="my-3 w-24 btn btn-primary" onclick="document.getElementById(\'modal-edit-abi-' . $ability['Id'] . '\').showModal()">Modifier</button>
-        </div>
-
-        
-
-        <dialog id="modal-edit-abi-' . $ability['Id'] . '" class="modal">
-        <div class="modal-box">
-            <h3 class="text-lg font-bold">Modifier la compétence</h3>
-            <form method="POST" action="updateExperience.php">
-                <input type="hidden" name="ExperienceId" value="' . $ability['Id'] . '">
-                 <input type="hidden" name="TypeExp" value="' . $ability['TypeExp'] . '">
-                <label class="block mb-2">
-                    <span>Nom de la compétence</span>
-                    <input type="text" name="Title" value="' . $ability['Title'] . '" class="input input-bordered mt-1 block w-full" required>
-                </label>
-                <label class="block mb-2">
-                    <span>Nom de la companie</span>
-                    <input type="text" name="LocationName" value="' . $ability['LocationName'] . '" class="input input-bordered mt-1 block w-full" required>
-                </label>
-                <label class="block mb-2">
-                    <span>Domaine</span>
-                    <select name="FieldType" class="input input-bordered mt-1 block w-full" required>
-                        ' . $options . '
-                    </select>
-                </label>
-                <label class="block mb-2">
-                    <span>Durée d\'apprentissage (en mois)</span>
-                    <input type="number" name="Duration" value="' . $ability['Duration'] . '" class="input input-bordered mt-1 block w-full" required>
-                </label>
-                <label class="block mb-2">
-                    <span>Description de la compétence</span>
-                    <textarea name="Description" class="textarea textarea-bordered mt-1 block w-full" required>' . $ability['Description'] . '</textarea>
-                </label>
-                <label class="block mb-2">
-                    <span>Niveau de maîtrise</span>
-                    <select name="Complete" class="input input-bordered mt-1 block w-full" required>
-                        <option value="1" ' . ($ability['Complete'] == 1 ? 'selected' : '') . '>Avancé</option>
-                        <option value="0" ' . ($ability['Complete'] == 0 ? 'selected' : '') . '>Débutant</option>
-                    </select>
-                </label>
-                <div class="modal-action">
-                    <button type="submit" class="btn btn-primary">Mettre à jour</button>
-                    <button class="btn btn-default" type="button" onclick="document.getElementById(\'modal-edit-abi-' . $ability['Id'] . '\').close()">Annuler</button>
-                </div>
-            </form>
-        </div>
-    </dialog>
-
-        ';
-        }
-    }
+ 
 
 
     //LanguageEMp
@@ -691,14 +607,6 @@ HTML;
     </div>
 
     <div class="p-4 border rounded-lg shadow-md flex flex-col justify-between h-full">
-        <h2 class="text-xl font-semibold mb-2 flex justify-center items-center">{$translations['comp']}</h2>
-        <div class="grid grid-cols-2 gap-4">
-            $abilitysdiv
-        </div>
-        <button class="btn btn-neutral mt-auto" onclick="document.getElementById('modal-add-ability').showModal()">{$translations['addComp']}</button>
-    </div>
-
-    <div class="p-4 border rounded-lg shadow-md flex flex-col justify-between h-full">
         <h2 class="text-xl font-semibold mb-2 flex justify-center items-center">{$translations['lang']}</h2>
         <div class="grid grid-cols-2 gap-4">
             $languageEmpdiv
@@ -828,8 +736,6 @@ HTML;
     <!-- Model Formation -->
         $FormationModals
 
-      <!-- Model Ability -->
-        $AbilityModals
 
       <!-- Model language-->
         $LanguageModals
