@@ -58,7 +58,7 @@ require_once 'Models/account.php';
                         <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
                             <li><a>{$translations['headerHomepage']}</a></li>
                             <li><a href="myApplications.php">{$translations['headerApplications']}</a></li>
-                            <li><a>{$translations['headerAbout']}</a></li>
+                            <li><a href="about.php">{$translations['headerAbout']}</a></li>
                             <li><a href="aide.php">{$translations['headerHelp']}</a></li>
                         </ul>
                     </div>
@@ -87,7 +87,7 @@ require_once 'Models/account.php';
         <ul class="menu menu-horizontal px-1">
                     <li><a href="homepage.php">{$translations['headerHomepage']}</a></li>
                     <li><a href="myApplications.php">{$translations['headerApplications']}</a></li>
-                    <li><a>{$translations['headerAbout']}</a></li>
+                    <li><a href="about.php">{$translations['headerAbout']}</a></li>
                     <li><a href="aide.php">{$translations['headerHelp']}</a></li>
                 </ul>
             </div>
@@ -115,7 +115,7 @@ require_once 'Models/account.php';
         <ul class="menu menu-horizontal px-1">
                     <li><a href="homepage.php">{$translations['headerHomepage']}</a></li>
                     <li><a href="myApplications.php">{$translations['headerApplications']}</a></li>
-                    <li><a>{$translations['headerAbout']}</a></li>
+                    <li><a href="about.php">{$translations['headerAbout']}</a></li>
                 </ul>
             </div>
             <div class="navbar-end flex items-center gap-4">
