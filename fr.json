@@ -66,6 +66,7 @@
     "updateOffer": "Mettre à jour l'offre",
     "createOffer": "Création d'offre",
     "jobType": "Type d'emploi",
-    "create": "Créer une offre"
+    "create": "Créer une offre",
+    "deleteOffer": "Supprimer l'offre"
 
   }

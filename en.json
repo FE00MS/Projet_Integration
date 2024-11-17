@@ -66,5 +66,6 @@
     "updateOffer": "Update Job Offer",
     "createOffer": "Create Job Offer",
     "jobType": "Job type",
-    "create": "Create offer"
+    "create": "Create offer",
+    "deleteOffer": "Delete Job Offer"
 }

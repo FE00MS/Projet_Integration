@@ -21,6 +21,10 @@ foreach ($fields as $field) {
 }
 
 $content = <<<HTML
+<div id="loadingOverlay" class="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="spinner border-t-4 border-b-4 border-blue-500 w-16 h-16 rounded-full animate-spin"></div>
+</div>
+
     <div class="flex justify-between items-center pt-12">
         <h1 class="text-4xl font-bold pl-56">{$translations['createOffer']}</h1>
     </div>
@@ -267,6 +271,9 @@ include "Views/master.php";
     document.getElementById('offerForm').addEventListener('submit', function (e) {
         e.preventDefault();
 
+        const overlay = document.getElementById('loadingOverlay');
+        overlay.classList.remove('hidden');
+
         const formData = new FormData(this);
         const fieldsData = [];
 
@@ -277,7 +284,7 @@ include "Views/master.php";
             const fieldType = formData.get(`FieldType${fieldIndex}`);
             const ponderation = formData.get(`textInput${fieldIndex}`);
             const duration = formData.get(`year${fieldIndex}`);
-            const complete = formData.get(`complete${fieldIndex}`) ? 0 : 1;
+            const complete = formData.get(`complete${fieldIndex}`) ? 1 : 0;
 
             fieldsData.push({
                 type: type,
@@ -306,6 +313,8 @@ include "Views/master.php";
         })
             .then(response => response.json())
             .then(data => {
+                overlay.classList.add('hidden');
+
                 if (data.success) {
                     alert('Offre créée avec succès');
                     window.location.href = 'myOffers.php';
@@ -314,8 +323,18 @@ include "Views/master.php";
                 }
                 console.log(data)
             })
-            .catch(error => console.error('Erreur:', error));
+            .catch(error => {
+                console.error('Erreur:', error);
+                overlay.classList.add('hidden'); 
+                alert('Une erreur est survenue. Veuillez réessayer.');
+            } );
     });
 
 
 </script>
+<style>
+    .spinner {
+        border-top-color: #3498db;
+        /* Couleur du spinner */
+    }
+</style>

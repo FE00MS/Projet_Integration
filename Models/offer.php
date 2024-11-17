@@ -12,6 +12,37 @@ class Offer
         $this->conn = $db->getConnection();
 
     }
+    function deleteOffer($offerId) {
+        try {
+            $stmt = $this->conn->prepare("EXEC DeleteOffer @OId = :offerId");
+    
+            $stmt->bindParam(':offerId', $offerId, PDO::PARAM_INT);
+    
+            $stmt->execute();
+    
+            return true;
+    
+        } catch (PDOException $e) {
+            error_log("Erreur lors de l'exécution de DeleteOffer: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    function DeletePrerequisite($Id) {
+        try {
+            $stmt = $this->conn->prepare("EXEC DeletePrerequisite @Id = :Id");
+    
+            $stmt->bindParam(':Id', $Id, PDO::PARAM_INT);
+    
+            $stmt->execute();
+    
+            return true;
+    
+        } catch (PDOException $e) {
+            error_log("Erreur lors de l'exécution de DeletePrerequisite: " . $e->getMessage());
+            return false;
+        }
+    }
 
 
     public function CreateOffer($idc, $job, $location, $salary, $description, $hours)
@@ -31,7 +62,32 @@ class Offer
             throw new Exception("Erreur lors de la création de l'offre : " . $e->getMessage());
         }
     }
+    function editPonderation($field)
+    {
+    
+            $stmt = $this->conn->prepare("EXEC dbo.editPrerequisite :Id, :Type, :FieldType, :Ponderation, :Duration, :Complete");
 
+         
+                $fieldType = '';
+                if ($field['type'] === 'experience') {
+                    $fieldType = 'E';
+                } elseif ($field['type'] === 'formation') {
+                    $fieldType = 'F';
+                }
+                $stmt->bindParam(':Id', $field['id'], PDO::PARAM_INT);
+                $stmt->bindParam(':Type', $fieldType, PDO::PARAM_STR); 
+                $stmt->bindParam(':FieldType', $field['fieldType'], PDO::PARAM_STR);
+                $stmt->bindParam(':Ponderation', $field['ponderation'], PDO::PARAM_INT);
+                $stmt->bindParam(':Duration', $field['duration'], PDO::PARAM_INT); 
+                $stmt->bindParam(':Complete', $field['complete'], PDO::PARAM_INT); 
+
+                if (!$stmt->execute()) {
+                    return false;
+                }
+            
+            return true;
+      
+    }
     function createPonderation($OId, $fieldsData)
     {
     
@@ -58,6 +114,32 @@ class Offer
             return true;
       
     }
+    function createPonderation2($OId, $field)
+    {
+    
+            $stmt = $this->conn->prepare("EXEC dbo.createPonderation :OId, :Type, :FieldType, :Ponderation, :Duration, :Complete");
+
+     
+                $fieldType = '';
+                if ($field['type'] === 'experience') {
+                    $fieldType = 'E';
+                } elseif ($field['type'] === 'formation') {
+                    $fieldType = 'F';
+                }
+                $stmt->bindParam(':OId', $OId, PDO::PARAM_INT);
+                $stmt->bindParam(':Type', $fieldType, PDO::PARAM_STR); 
+                $stmt->bindParam(':FieldType', $field['fieldType'], PDO::PARAM_STR);
+                $stmt->bindParam(':Ponderation', $field['ponderation'], PDO::PARAM_INT);
+                $stmt->bindParam(':Duration', $field['duration'], PDO::PARAM_INT); 
+                $stmt->bindParam(':Complete', $field['complete'], PDO::PARAM_INT); 
+
+                if (!$stmt->execute()) {
+                    return false;
+                }
+            
+            return true;
+      
+    }
     public function GetOfferByCompagny($idC)
     {
 
@@ -73,12 +155,11 @@ class Offer
             throw new Exception("Erreur lors de la récupération des données : " . $e->getMessage());
         }
     }
-    public function EditOffer($id, $idc, $job, $location, $salary, $description, $hours)
+    public function EditOffer($id, $job, $location, $salary, $description, $hours)
     {
         try {
-            $sql = $this->conn->prepare("EXEC EditOffer  @id = :id, @idc = :idc, @job = :job, @location = :location, @salary = :salary, @description = :description, @hours = :hours");
+            $sql = $this->conn->prepare("EXEC EditOffer  @id = :id, @job = :job, @location = :location, @salary = :salary, @description = :description, @hours = :hours");
             $sql->bindParam(':id', $id, PDO::PARAM_INT);
-            $sql->bindParam(':idc', $idc, PDO::PARAM_INT);
             $sql->bindParam(':job', $job, PDO::PARAM_STR);
             $sql->bindParam(':location', $location, PDO::PARAM_STR);
             $sql->bindParam(':salary', $salary, PDO::PARAM_INT);

@@ -9,7 +9,7 @@ class Database
     {
 
         try {
-            $this->conn = new PDO("sqlsrv:server=tcp:serveurjobfinder.database.windows.net,1433;Database=dbjobfinder", "azureuser", "banane2005?");
+            $this->conn = new PDO("sqlsrv:server=tcp:svjobfinder.database.windows.net,1433;Database=dbjobfinder", "azureuser", "banane2005?");
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             print("Error connecting to SQL Server.");
