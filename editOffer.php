@@ -21,7 +21,7 @@ if (isset($_GET['id'])) {
 
     $offerModel = new Offer();
     $offerDetails = $offerModel->getOffer($offerId);
-    $prerequisites = $offerModel->getPrerequisites($offerId);
+    $prerequisites = $offerModel->getPrerequisitesWithRestrictions($offerId);
     if ($offerDetails) {
         $jobTitle = htmlspecialchars($offerDetails['Job']);
         $location = htmlspecialchars($offerDetails['Location']);
@@ -95,7 +95,7 @@ if ($prerequisites != null) {
 
                         <div class="font-semibold">Somme des cercles : <span id="sommeAffichee">0</span></div>
                         <div id="errorMessage" class="text-error hidden">La somme des cercles ne doit pas dépasser 100.</div>
-HTML;
+    HTML;
 
 $f = new Field();
 $fields = $f->GetAllFields();
@@ -124,9 +124,31 @@ foreach ($prerequisites as $index => $prerequisite) {
     $completeChecked = ($complete == 1) ? "checked" : "";
 
     $fieldTypeSelected = $fieldType ? "selected" : "";
-
-    $content .= <<<HTML
+    if($prerequisite['Validite'] == 1){
+        $content .= <<<HTML
         <div class="dynamic-field form-group p-4 border rounded-lg shadow-md space-y-4 bg-gray-100">
+        <div class="dot" style="background-color:#8B0000" title="Critere de recherche trop restrictif"></div>
+    HTML; 
+    }
+    elseif($prerequisite['Validite'] == 2){
+        $content .= <<<HTML
+        <div class="dynamic-field form-group p-4 border rounded-lg shadow-md space-y-4 bg-gray-100">
+        <div class="dot" style="background-color:#A35D03" title="Prerequis majoritairement restrictif"></div>
+    HTML; 
+    }
+    elseif($prerequisite['Validite'] == 3){
+        $content .= <<<HTML
+        <div class="dynamic-field form-group p-4 border rounded-lg shadow-md space-y-4 bg-gray-100">
+        <div class="dot" style="background-color:#FED000" title="Prerequis partiellement restrictif"></div>
+    HTML;
+    } 
+    elseif($prerequisite['Validite'] == 4){
+        $content .= <<<HTML
+        <div class="dynamic-field form-group p-4 border rounded-lg shadow-md space-y-4 bg-gray-100">
+        <div class="dot" style="background-color:#008000" title="Prerequis acceptable"></div>
+    HTML; 
+    }
+    $content .= <<<HTML
         <input type="hidden" name="PId$count" value="$PId">
                     <div class="flex gap-4 items-center">
                         <label class="flex items-center gap-2">
@@ -145,7 +167,7 @@ foreach ($prerequisites as $index => $prerequisite) {
                     <div class="flex gap-4">
                         <select name="FieldType$count" class="select select-bordered w-full">
                             <option value="" disabled>Select Field Type</option>
-HTML;
+    HTML;
 
 
     foreach ($fields as $field) {

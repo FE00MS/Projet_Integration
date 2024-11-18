@@ -193,8 +193,51 @@ class Offer
         $stmt = $this->conn->prepare("EXEC GetPrerequisite :OId");
         $stmt->bindParam(":OId", $OId, PDO::PARAM_INT);
         $stmt->execute();
-
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    function getPrerequisitesWithRestrictions($OId){
+        $myPrerequisites = $this->getPrerequisites($OId);
+        $stmt = $this->conn->prepare("EXEC getAllExperience");
+        $stmt->execute();
+        $allExp = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $compteurPrerequis = 0;
+        foreach($myPrerequisites as $prerequisite){
+            $compteurValide = 0;
+            $compteurPartiel = 0;
+            foreach($allExp as $experience){
+
+                if($prerequisite['Type'] == $experience['TypeExp']){
+                    if ($experience['FieldType'] == $prerequisite['FieldType'] || $prerequisite['FieldType'] == 'Au') {
+                        if ($experience['Complete'] == $prerequisite['Complete'] || $prerequisite['Complete'] != 1) {
+                            if ($experience['Duration'] >= $prerequisite['Duration']) {
+                                $compteurValide = $compteurValide + 1;    
+                            }
+                            else{
+                                $compteurPartiel = $compteurPartiel + 1;
+                            }
+                        }
+                        else{
+                            $compteurPartiel = $compteurPartiel + 1;
+                        }
+                    }
+                }
+            }
+            if($compteurValide == 0){
+                $myPrerequisites[$compteurPrerequis]['Validite'] = 1;
+            }
+            if($compteurPartiel > $compteurValide && $compteurValide == 0){
+                $myPrerequisites[$compteurPrerequis]['Validite'] = 2;
+            }
+            if($compteurPartiel >= $compteurValide && $compteurValide != 0){
+                $myPrerequisites[$compteurPrerequis]['Validite'] = 3;
+            }
+            if($compteurPartiel < $compteurValide){
+                $myPrerequisites[$compteurPrerequis]['Validite'] = 4;
+            }
+            $compteurPrerequis += 1;
+        }
+        return $myPrerequisites;
+        
     }
 
     public function GetAllOffers($critere = 'pond')
