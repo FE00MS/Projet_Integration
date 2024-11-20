@@ -4,8 +4,7 @@ require_once 'BD/BD.php';
 class Offer
 {
 
-    private $conn;
-
+    public $conn;
     function __construct()
     {
         $db = new Database();
@@ -56,7 +55,6 @@ class Offer
             $sql->bindParam(':description', $description, PDO::PARAM_STR);
             $sql->bindParam(':hours', $hours, PDO::PARAM_INT);
             $sql->execute();
-
             return $this->conn->lastInsertId();
         } catch (PDOException $e) {
             throw new Exception("Erreur lors de la création de l'offre : " . $e->getMessage());
@@ -139,6 +137,22 @@ class Offer
             
             return true;
       
+    }
+
+
+    public function AddOfferNotification($idS, $idR, $message){
+        $title = "Nouvelle offre pour vous";
+        try {
+            $sql = $this->conn->prepare("EXEC AddNotification @idS = :idS, @idR = :idR, @message = :message, @title = :title");
+            $sql->bindParam(':idS', $idS, PDO::PARAM_INT);
+            $sql->bindParam(':idR', $idR, PDO::PARAM_INT);
+            $sql->bindParam(':message', $message, PDO::PARAM_STR);
+            $sql->bindParam(':title', $title, PDO::PARAM_STR);
+            $sql->execute();
+            return "Notification added successfully.";
+        } catch (PDOException $e) {
+            throw new Exception("Erreur lors de l'ajout de la notification : " . $e->getMessage());
+        }
     }
     public function GetOfferByCompagny($idC)
     {
@@ -315,7 +329,7 @@ class Offer
         foreach ($offerPrerequisite as $prerequisite) {
             $totalPonderation += $prerequisite['Ponderation'];
             foreach ($myExperience as $experience) {
-                if ($experience['Type'] == $prerequisite['Type']) {
+                if ($experience['TypeExp'] == $prerequisite['Type']) {
                     if ($experience['FieldType'] == $prerequisite['FieldType'] || $prerequisite['FieldType'] == 'Au') {
                         if ($experience['Complete'] == $prerequisite['Complete'] || $prerequisite['Complete'] != 1) {
                             if ($experience['Duration'] >= $prerequisite['Duration']) {

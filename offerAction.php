@@ -30,6 +30,8 @@ if (!isset($data['offerId'])) {
     $hours = $data['hours'];
 
     $OId = $offer->createOffer($idc, $job, $location, $salary, $description, $hours);
+    
+
     if ($OId === false) {
         echo json_encode(["success" => false, "message" => "Erreur lors de la création de l'offre"]);
         exit();
@@ -39,8 +41,6 @@ if (!isset($data['offerId'])) {
         echo json_encode(["success" => false, "message" => "Erreur lors de l'ajout des pondérations"]);
         exit();
     }
-
-
     echo json_encode(["success" => true, "message" => "Offre créée avec succès"]);
 } else {
     //Edit offre

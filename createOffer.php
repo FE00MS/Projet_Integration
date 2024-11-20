@@ -317,7 +317,8 @@ include "Views/master.php";
 
                 if (data.success) {
                     alert('Offre créée avec succès');
-                    window.location.href = 'myOffers.php';
+
+                    window.location.href = 'offerNotificationAction.php';
                 } else {
                     alert('Erreur lors de la création de l\'offre');
                 }
