@@ -13,6 +13,7 @@ $admin = new Admin();
 $reports = $admin->getReport();
 $emp = new Employee();
 $of = new Offer();
+
 function getReportTypeLabel($type) {
     switch ($type) {
         case 'S':
@@ -25,6 +26,7 @@ function getReportTypeLabel($type) {
             return 'Type inconnu';
     }
 }
+
 $stats = $admin->getStatAdmin();
 $loginCounter = $stats['nombreConnexions'];
 $offerCounter = $stats['nombreOffresPubliees'];
@@ -59,13 +61,13 @@ if (!empty($reports)) {
     $content .= '<ul class="bg-white shadow rounded-lg divide-y divide-gray-200">';
     foreach ($reports as $report) {
         $reportId = $report['Id'];
-        $reportType =getReportTypeLabel(htmlspecialchars($report['ReportType']));
+        $reportType = getReportTypeLabel(htmlspecialchars($report['ReportType']));
         $reason = htmlspecialchars($report['Reason']);
-        $reportedName = htmlspecialchars($of->GetOffer($report['IdReported'])['Description'] );
+        $reportedName = htmlspecialchars($of->GetOffer($report['IdReported'])['Description']);
         $senderName = htmlspecialchars($emp->GetEmployeeByIds($report['IdSender'])[0]['Name']);
         $senderLastName = htmlspecialchars($emp->GetEmployeeByIds($report['IdSender'])[0]['LastName']);
         $isComplete = $report['isComplete'] ? 'Complété' : 'En attente';
-        
+        var_dump($reportId);
         $content .= <<<HTML
         <li class="p-4">
             <p><strong>Type de signalement:</strong> $reportType</p>
@@ -73,6 +75,17 @@ if (!empty($reports)) {
             <p><strong>Description du signalé:</strong> $reportedName</p>
             <p><strong>Nom de l'expéditeur:</strong> $senderName $senderLastName</p>
             <p><strong>Statut:</strong> $isComplete</p>
+            <div class="flex justify-start gap-4 mt-4">
+                <form method="post" action="deleteOfferAdmin.php">
+                    <input type="hidden" name="offer" value="{$reportId}">
+                    <input type="hidden" name="Sender" value="{$report['IdSender']}">
+                    <button type="submit" class="btn btn-error">Supprimer l'offre</button>
+                </form>
+                <form method="post" action="retireReport.php">
+                    <input type="hidden" name="reportId" value="{$reportId}">
+                    <button type="submit" class="btn btn-warning">Retire le signalement</button>
+                </form>
+            </div>
         </li>
 HTML;
     }
@@ -126,5 +139,4 @@ $content .= <<<HTML
 HTML;
 
 include "Views/master.php";
-
-
+?>

@@ -10,10 +10,9 @@ if (!isset($_SESSION['currentUser'])) {
     exit();
 }
 
-if(!isset($_SESSION['currentLanguage']))
-    {
-        $_SESSION['currentLanguage'] = "FR";
-    }
+if(!isset($_SESSION['currentLanguage'])) {
+    $_SESSION['currentLanguage'] = "FR";
+}
 $lang = $_SESSION['currentLanguage'];
 
 $jsonFile = ($lang === "FR") ? "fr.json" : "en.json";
@@ -53,32 +52,36 @@ HTML;
             $hours = htmlspecialchars($offer['Hours']);
             $shortDescription = htmlspecialchars(substr($offer['Description'], 0, 100)) . '...';
             $offerId = $offer['Id'];
-            $companyName = $companyModel->GetCompanyById($offer['Id'])['CName']; 
+            $company = $companyModel->GetCompanyById($offer['IdC']); 
 
-            $content .= <<<HTML
-            <div class="card bg-white shadow-xl rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-300 ease-in-out">
-                <div class="card-body">
-                    <h2 class="card-title text-xl font-semibold text-gray-800 mb-2">{$jobTitle}</h2>
-                    <p class="text-sm font-medium text-gray-500 mb-1">
-                        <span class="text-gray-700 font-semibold">{$translations['company']}:</span> {$companyName}
-                    </p>
-                    <p class="text-sm font-medium text-gray-500 mb-1">
-                        <span class="text-gray-700 font-semibold">{$translations['location']}:</span> {$location}
-                    </p>
-                    <p class="text-sm font-medium text-gray-500 mb-1">
-                        <span class="text-gray-700 font-semibold">{$translations['salary']}:</span> {$salary} $/hr
-                    </p>
-                    <p class="text-sm font-medium text-gray-500 mb-1">
-                        <span class="text-gray-700 font-semibold">{$translations['hours']}:</span> {$hours} hours/week
-                    </p>
-                    <p class="text-sm text-gray-600 mt-3">{$shortDescription}</p>
+            if ($company) {
+                $companyName = htmlspecialchars($company['CName']); 
 
-                    <div class="card-actions mt-4 flex justify-between">
-                        <button onclick="removeModal.showModal()" class="btn btn-error btn-sm">{$translations['removeApplication']}</button>
+                $content .= <<<HTML
+                <div class="card bg-white shadow-xl rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-300 ease-in-out">
+                    <div class="card-body">
+                        <h2 class="card-title text-xl font-semibold text-gray-800 mb-2">{$jobTitle}</h2>
+                        <p class="text-sm font-medium text-gray-500 mb-1">
+                            <span class="text-gray-700 font-semibold">{$translations['company']}:</span> {$companyName}
+                        </p>
+                        <p class="text-sm font-medium text-gray-500 mb-1">
+                            <span class="text-gray-700 font-semibold">{$translations['location']}:</span> {$location}
+                        </p>
+                        <p class="text-sm font-medium text-gray-500 mb-1">
+                            <span class="text-gray-700 font-semibold">{$translations['salary']}:</span> {$salary} $/hr
+                        </p>
+                        <p class="text-sm font-medium text-gray-500 mb-1">
+                            <span class="text-gray-700 font-semibold">{$translations['hours']}:</span> {$hours} hours/week
+                        </p>
+                        <p class="text-sm text-gray-600 mt-3">{$shortDescription}</p>
+
+                        <div class="card-actions mt-4 flex justify-between">
+                            <button onclick="removeModal.showModal()" class="btn btn-error btn-sm">{$translations['removeApplication']}</button>
+                        </div>
                     </div>
                 </div>
-            </div>
 HTML;
+            }
         }
     }
 
@@ -111,3 +114,4 @@ if ($applications) {
 }
 
 include "Views/master.php";
+?>

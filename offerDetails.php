@@ -15,12 +15,12 @@ if (isset($_GET['id'])) {
 // Récupération des données utilisateur
 $currentUser = $_SESSION['currentUser'];
 $type = $_SESSION["accountType"];
-$offers = new Offer();
-$employeeModel = new Employee();
-$company = new Company();
 
-// Récupérer l'offre d'emploi
-$offer = $offers->GetOffer($offerId);
+$company = new Company();
+$employeeModel = new Employee();
+$offerModel = new Offer();
+$offer = $offerModel->GetOffer($offerId);
+
 if (!$offer) {
     die("Offer not found.");
 }
@@ -72,58 +72,77 @@ if ($hasApplied) {
         </form>
 HTML;
 } else {
-    $content .= <<<HTML
+    if ($type === 'employee') {
+        $content .= <<<HTML
         <a href="apply.php?id={$offerId}" class="inline-block mt-6 bg-blue-500 text-white py-2 px-6 rounded-lg shadow hover:bg-blue-600 transition">Postuler Maintenant</a>
 HTML;
+    }
 }
 
 // Affichage des notes des utilisateurs
 $ratingModel = new Rating();
 $ratings = $ratingModel->GetAllRating($offer['IdC']);
 if ($ratings) {
-    $content .= '<h2 class="text-2xl font-semibold text-gray-800 mt-10 mb-4">Notes des Utilisateurs</h2><ul class="space-y-4">';
+    $content .= '<h2 class="text-3xl font-bold mt-10 mb-4 text-indigo-700 animate-pulse">Notes des utilisateurs sur cette companie</h2><ul class="space-y-4">';
     foreach ($ratings as $rating) {
-        $ratingValue = $rating['Rating'];
-        $authorName = "{$rating['Name']} {$rating['LastName']}";
-        $deleteButton = $rating['IdEmp'] == $employeeId ? <<<HTML
-        <form method="post" action="deleteRating.php" class="inline-block">
-            <input type="hidden" name="IdCompany" value="{$offer['IdC']}">
-            <input type="hidden" name="offerId" value="{$offerId}">
-            <button type="submit" class="text-red-500 hover:underline">Supprimer</button>
-        </form>
-HTML : '';
+        $ratingValue =   $rating['Rating'] ;
+        $ratingAuthorId =   $rating['IdEmp'] ;
+        $ratingAuthorName =   $rating['Name'] ;
+        $ratingAuthorLastName =   $rating['LastName'] ;
+
+        $deleteButton = '';
+        if ($ratingAuthorId == $employeeId) {
+            $deleteButton = <<<HTML
+            <form method="post" action="deleteRating.php" class="inline">
+                <input type="hidden" name="IdCompany" value="{$offer['IdC']}">
+                <input type="hidden" name="offerId" value="{$offerId}">
+
+                <button type="submit" class="text-red-500 ml-4">Supprimer</button>
+            </form>
+HTML;
+        }
+
         $content .= <<<HTML
-        <li class="border-b border-gray-300 py-2">
-            <span class="text-gray-700">Note: {$ratingValue}/5</span> - <span class="text-gray-600">Par: {$authorName}</span> {$deleteButton}
+        <li class="border-b border-gray-300 py-4">
+            <span class="font-semibold">Note:</span> {$ratingValue}/5
+            <span class="font-semibold">Par:</span> {$ratingAuthorName} {$ratingAuthorLastName}
+            {$deleteButton}
         </li>
 HTML;
     }
     $content .= '</ul>';
 } else {
-    $content .= '<p class="text-gray-500">Aucune note disponible.</p>';
+    $content .= '<br><p class="text-gray-700">Aucune note pour cette entreprise.</p>';
 }
 
-// Formulaire de signalement
-$content .= <<<HTML
-        <form method="post" action="addReport.php" class="bg-gray-50 mt-10 p-6 rounded-lg shadow">
-            <h3 class="text-lg font-semibold text-gray-800 mb-4">Signaler une Offre</h3>
-            <input type="hidden" name="IdReported" value="{$offer['IdC']}">
-            <input type="hidden" name="IdSender" value="{$employeeId}">
-            <input type="hidden" name="offerId" value="{$offerId}">
-            <label for="ReportType" class="block text-gray-700 font-semibold mb-2">Type de Signalement :</label>
-            <select name="ReportType" id="ReportType" required class="w-full border-gray-300 rounded-lg p-2 mb-4">
-                <option value="" disabled selected>Sélectionner</option>
-                <option value="Spam">Spam</option>
-                <option value="Fake">Fausse offre</option>
-                <option value="Inappropriate">Contenu inapproprié</option>
-            </select>
-            <label for="Reason" class="block text-gray-700 font-semibold mb-2">Raison :</label>
-            <textarea name="Reason" id="Reason" rows="3" class="w-full border-gray-300 rounded-lg p-2 mb-4" placeholder="Décrivez la raison..."></textarea>
-            <button type="submit" class="bg-red-500 text-white py-2 px-4 rounded-lg shadow hover:bg-red-600 transition">Signaler</button>
-        </form>
-    </div>
-</div>
+if ($type === 'employee') {
+    $content .= <<<HTML
+    <form method="post" action="addReport.php" class="bg-gray-100 p-6 rounded-lg shadow-md mt-10 transform transition-transform duration-500 hover:scale-105">
+        <input type="hidden" name="IdReported" value="{$offer['IdC']}">
+        <input type="hidden" name="IdSender" value="{$employeeId}">
+        <input type="hidden" name="offerId" value="{$offerId}">
+
+        <label for="ReportType" class="block text-lg font-semibold mt-4">Type de Signalement :</label>
+        <select name="ReportType" id="ReportType" required class="border border-gray-300 rounded px-3 py-2 mt-1 mb-4">
+            <option value="" disabled selected>Sélectionner le type de signalement</option>
+            <option value="Spam">Spam</option>
+            <option value="Fake">Fausse offre</option>
+            <option value="Inappropriate">Contenu inapproprié</option>
+        </select>
+
+        <label for="Reason" class="block text-lg font-semibold mt-4">Raison du signalement :</label>
+        <textarea name="Reason" id="Reason" required class="border border-gray-300 rounded px-3 py-2 w-full mt-1 mb-4" rows="3" placeholder="Décrivez la raison du signalement"></textarea>
+
+        <div class="flex justify-end">
+            <button type="submit" class="bg-red-500 text-white py-2 px-4 rounded-lg shadow-md transform transition-transform duration-500 hover:scale-110">
+                <span class="text-lg font-bold">Signaler</span>
+            </button>
+        </div>
+    </form>
 HTML;
+}
+
+$content .= '</div></div>';
 
 include "Views/master.php";
 ?>

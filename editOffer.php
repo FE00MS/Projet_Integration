@@ -424,23 +424,25 @@ include "Views/master.php";
                 'Content-Type': 'application/json'
             }
         })
-            .then(response => response.json())
+            .then(response => response.json().catch(() => {
+                throw new Error('Invalid JSON response');
+            }))
             .then(data => {
                 overlay.classList.add('hidden');
 
                 if (data.success) {
                     alert('Offre mise à jour avec succès');
-                    window.location.href = 'editOffer.php?id='+ formData.get('offerId');
+                    window.location.href = 'editOffer.php?id=' + formData.get('offerId');
                 } else {
                     alert('Erreur lors de la mise à jour de l\'offre');
                 }
-                console.log(data)
+                console.log(data);
             })
             .catch(error => {
                 console.error('Erreur:', error);
                 overlay.classList.add('hidden'); 
                 alert('Une erreur est survenue. Veuillez réessayer.');
-            } );
+            });
     });
 
 </script>
