@@ -1,6 +1,5 @@
 <?php
 require_once 'Models/account.php';
-
     $accountModel = new Account();
     $isLoggedIn = isset($_SESSION['currentUser']);
     if($isLoggedIn)
@@ -151,7 +150,9 @@ require_once 'Models/account.php';
                 $header .= <<<HTML
                     <div id="notification-$id" class="notification-item mb-3 p-2 border border-gray-400 rounded-lg">
                         <button onclick="deleteNotif($id)" class="btn btn-sm btn-circle btn-ghost">✕</button>
-                        <strong class="text-sm text-gray-800 btn btn-ghost">{$notification['Title']}</strong><br>
+                        <strong class="text-sm text-gray-800 btn btn-ghost">{$notification['Title']}</strong>
+                        <br>
+                        <span>{$notification['Message']}</span>
                     </div>
         HTML;
             }
