@@ -165,9 +165,9 @@ class Offer
             throw new Exception("Erreur lors de l'ajout de la notification : " . $e->getMessage());
         }
     }
-    public function NotificationFromDeleteAdmin($idS, $idR, $Oid){
+    public function NotificationFromReports($idS, $idR){
         $title = "Traitement du signalement";
-        $message = "Votre signalement a bien été traité par un administrateur. Merci de nous aider à améliorer l'experience de la boussole à emploi";
+        $message = "Votre signalement a bien été traité par un administrateur. Merci de nous aider à améliorer l'experience de la boussole à emploi";   
         try {
             $sql = $this->conn->prepare("EXEC AddNotification @idS = :idS, @idR = :idR, @message = :message, @title = :title");
             $sql->bindParam(':idS', $idS, PDO::PARAM_INT);
