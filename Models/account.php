@@ -93,5 +93,16 @@ class Account
             throw new Exception("Erreur lors de la suppression de la notification : " . $e->getMessage());
         }
     }
+    public function AddConnection(){
+        try{
+            $sql = $this->conn->prepare("EXEC DeleteNotification");
+            $sql->execute();
+            return 'Connection added';
+        }catch(PDOException $e){
+            throw new Exception("Erreur lors de la suppression de l'ajout d'une connection : " . $e->getMessage());
+        }
+        
+
+    }
 }
 

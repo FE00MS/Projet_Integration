@@ -142,7 +142,6 @@ class Offer
 
     public function AddOfferNotification($idS, $idR, $message, $Oid){
         $title = "Nouvelle offre pour vous";
-        var_dump($Oid);
         try {
             $sql = $this->conn->prepare("EXEC AddNotificationWithOffer @idS = :idS, @idR = :idR, @message = :message, @title = :title, @linkedOffer = :linkedoffer");
             $sql->bindParam(':idS', $idS, PDO::PARAM_INT);
