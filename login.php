@@ -19,7 +19,7 @@ $translations = json_decode($jsonData, true);
 
 $content = <<<HTML
 <div class="px-4 sm:px-6 md:px-8 lg:px-12 max-w-screen-md mx-auto min-h-screen flex flex-col mt-20">
-    <span style='font: size 1.5em; color:red; margin:0px auto 5px auto;'>$error</span>
+    <span style='font: size 1.5em; color:red; margin:0px auto 5px auto; max-width:300px'>$error</span>
     <form method="POST" action="loginAction.php" class="max-w-md mx-auto">
    
         <label class="input input-bordered flex items-center gap-2 max-w-md mx-auto mb-4">

@@ -14,7 +14,7 @@ try {
         $account = new Account();
         $account->AddConnection();
         $accountData = $account->GetAccount($email, $password);
-        if ($accountData["data"]["IsBlocked"] != 1) {
+        if ($accountData["data"]["IsBlocked"] == 0) {
             if (isset($accountData["type"])) {
 
                 if ($accountData["type"] === "Employee") {
@@ -40,6 +40,8 @@ try {
             }
         }else{
             $_SESSION['LoginError'] = "Votre compte est actuellement bloqué, veuillez contacter un administrateur pour plus de détails";
+            header('Location: login.php');
+            exit();
         }
 
         throw new Exception("Error Processing Request", 1);

@@ -8,21 +8,7 @@ $allAccounts = $admin->GetAllAccount();
 
 $content = <<<HTML
 <div class="px-4 sm:px-6 md:px-8 lg:px-12 max-w-screen-lg mx-auto">
-    <div class="flex items-center gap-2 mb-8">
-        <select id="searchCriteria" class="input input-bordered">
-            <option value="id">ID</option>
-            <option value="name">Nom</option>
-            <option value="email">Email</option>
-            <option value="account-type">Type de Compte</option>
-            <option value="is-blocked">Bloqué</option>
-        </select>
-        <input type="text" id="searchInput" class="input input-bordered grow" placeholder="Search" oninput="filterAccounts()" />
-        <button class="p-2 bg-blue-500 text-white rounded hover:bg-blue-600" onclick="clearSearch()">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="h-4 w-4 opacity-70">
-                <path fill-rule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0a3.5 3.5 0 0 1 7 0Z" clip-rule="evenodd" />
-            </svg>
-        </button>
-    </div>
+
 
     <h1 class="text-2xl font-bold mb-4">Gestion des Utilisateurs</h1>
 
@@ -69,11 +55,11 @@ foreach ($allAccounts as $account) {
         if ($isBlocked == 0) {
             $isBlockedText = <<<HTML
                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                    Débloquer
+                    Autorisé
                 </span>
             HTML;
             $BlockedAction = <<<HTML
-                <a href="#" onclick="BloquedAction($id,0)" class="ml-2 text-red-600 hover:text-red-900">Bloquer</a>
+                <a href="#" onclick="BloquedAction($id,1)" class="ml-2 text-red-600 hover:text-red-900">Bloquer</a>
             HTML;
         } else {
             $isBlockedText = <<<HTML
@@ -82,7 +68,7 @@ foreach ($allAccounts as $account) {
                 </span>
             HTML;
             $BlockedAction = <<<HTML
-                <a href="#" onclick="BloquedAction($id,1)" class="ml-2 text-red-600 hover:text-red-900">Débloquer</a>
+                <a href="#" onclick="BloquedAction($id,0)" class="ml-2 text-red-600 hover:text-red-900">Débloquer</a>
             HTML;
         }
 

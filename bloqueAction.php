@@ -7,12 +7,12 @@ if (!isset($_SESSION['currentUser'])) {
     exit();
 }
 
-$compteId = intval($_GET['Id']);
+$compteId = intval($_GET['id']);
 $action = intval($_GET['action']);
 
 $admin = new Admin();
-
-if($action == 0){
+var_dump($action,$compteId);
+if($action == 1){
     $admin->BlockSomeone($compteId);
 }else{
     $admin->UnBlockSomeone($compteId);

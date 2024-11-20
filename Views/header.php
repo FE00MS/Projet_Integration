@@ -95,7 +95,7 @@ require_once 'Models/account.php';
         HTML;
     }elseif ($accountType === "admin")  {
         $header = <<<HTML
-            <div class="navbar bg-base-100 w-full sticky top-0 shadow-md z-50">
+            <div class="navbar bg-base-100 w-full sticky top-0 shadow-md z-50  mb-6">
                 <div class="navbar-start">
                
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
