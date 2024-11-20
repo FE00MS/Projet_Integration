@@ -105,6 +105,7 @@ require_once 'Models/account.php';
                     <ul class="menu menu-horizontal px-1">
                     <li><a href="homepage.php">{$translations['headerHomepage']}</a></li>
                     <li> <a href="adminpage.php"> Signalements </a></li>
+                    <li> <a href="signupAdmin.php"> Création d'admin </a></li>
                     <li> <a href="gestionUser.php"> Gestion des usagers </a></li>
                     <li><a href="logout.php">Déconnexion</a></li>
                 </ul>
