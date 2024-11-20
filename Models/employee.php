@@ -39,10 +39,19 @@ class Employee
             $sql->bindParam(':idOffer', $idOffer, PDO::PARAM_INT);
             
             $sql->execute();
-            
+            $this->AddApplicationStat();
             return "Application added successfully.";
         } catch (PDOException $e) {
             throw new EmployeeException("Error adding application: " . $e->getMessage());
+        }
+    }
+    public function AddApplicationStat(){
+        try{
+            $sql = $this->conn->prepare("EXEC AddCandidatStat");
+            $sql->execute();
+            return 'Application stat added';
+        }catch(PDOException $e){
+            throw new Exception("Erreur lors de l'ajout d'une statistique d'application: " . $e->getMessage());
         }
     }
     public function getCandidates($offerId) {

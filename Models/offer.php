@@ -55,9 +55,19 @@ class Offer
             $sql->bindParam(':description', $description, PDO::PARAM_STR);
             $sql->bindParam(':hours', $hours, PDO::PARAM_INT);
             $sql->execute();
+            $this->AddOffreStat();
             return $this->conn->lastInsertId();
         } catch (PDOException $e) {
             throw new Exception("Erreur lors de la création de l'offre : " . $e->getMessage());
+        }
+    }
+    public function AddOffreStat(){
+        try{
+            $sql = $this->conn->prepare("EXEC AddOffreStat");
+            $sql->execute();
+            return 'Offer added';
+        }catch(PDOException $e){
+            throw new Exception("Erreur lors de l'ajout d'une statistique d'offre : " . $e->getMessage());
         }
     }
     function editPonderation($field)

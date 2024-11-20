@@ -95,14 +95,12 @@ class Account
     }
     public function AddConnection(){
         try{
-            $sql = $this->conn->prepare("EXEC DeleteNotification");
+            $sql = $this->conn->prepare("EXEC AddConnection");
             $sql->execute();
             return 'Connection added';
         }catch(PDOException $e){
-            throw new Exception("Erreur lors de la suppression de l'ajout d'une connection : " . $e->getMessage());
+            throw new Exception("Erreur lors de l'ajout d'une connection : " . $e->getMessage());
         }
-        
-
     }
 }
 
