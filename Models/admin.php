@@ -91,4 +91,6 @@ class Admin {
             throw new Exception("Erreur lors de la creation d'un administrateur : " . $e->getMessage());
         }
     }
+
+    
 }
