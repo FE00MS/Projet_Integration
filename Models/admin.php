@@ -69,20 +69,17 @@ class Admin {
             throw new Exception("Erreur lors de la récupération des signalements :  " . $e->getMessage());
         }
     }
-
-    
     public function GetStatAdmin()
     {
         try {
             $sql = $this->conn->prepare("EXEC GetStatAdmin");
             $sql->execute();
-            $stats = $sql->fetchAll(PDO::FETCH_ASSOC);
+            $stats = $sql->fetch(PDO::FETCH_ASSOC);
             return $stats;
         } catch (PDOException $e) {
             throw new Exception("Erreur lors de la récupération des notifications : " . $e->getMessage());
         }
     }
-
     public function CreateAdmin($email, $password){
         try {
             $sql = $this->conn->prepare("EXEC CreateAdmin @email = :email, @password = :password");

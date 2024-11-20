@@ -25,8 +25,30 @@ function getReportTypeLabel($type) {
             return 'Type inconnu';
     }
 }
+$stats = $admin->getStatAdmin();
+$loginCounter = $stats['nombreConnexions'];
+$offerCounter = $stats['nombreOffresPubliees'];
+$applicationCounter = $stats['nombreCandidatures'];
 
 $content = <<<HTML
+<link rel="stylesheet" href="styles/counters.css">
+<div class="counter-container">
+    <div class="counter">
+        <h3>Logins</h3>
+        <p class="text-4xl font-bold text-gray-800">{$loginCounter}</p>
+    </div>
+    <div class="counter">
+        <h3>Offres</h3>
+        <p class="text-4xl font-bold text-gray-800">{$offerCounter}</p>
+    </div>
+    <div class="counter">
+        <h3>Applications</h3>
+        <p class="text-4xl font-bold text-gray-800">{$applicationCounter}</p>
+    </div>
+</div>
+HTML;
+
+$content .= <<<HTML
 <div class="container mx-auto mt-10 p-5">
     <h1 class="text-3xl font-bold mb-6">Tableau de bord de l'administrateur</h1>
     
@@ -61,6 +83,48 @@ HTML;
 
 $content .= <<<HTML
 </div>
+<style>
+.counter-container {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+    background-color: #f0f4f8;
+    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 1200px;
+}
+
+.counter {
+    text-align: center;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    width: 30%;
+}
+
+.counter:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+.counter h3 {
+    font-size: 1.75rem;
+    color: #333333;
+    margin-bottom: 15px;
+}
+
+.counter p {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #1a202c;
+}
+
+</style>
 HTML;
 
 include "Views/master.php";
+
+

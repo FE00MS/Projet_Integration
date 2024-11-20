@@ -67,20 +67,5 @@
     "createOffer": "Création d'offre",
     "jobType": "Type d'emploi",
     "create": "Créer une offre",
-    "deleteOffer": "Supprimer l'offre",
-    "alreadyApplied": "Vous avez déjà postulé à cette offre.",
-    "note": "Votre note (1 à 5)",
-    "select": "Sélectionner",
-    "apply": "Postuler Maintenant",
-    "leaveNote": "Laisser une note",
-    "reportOffer": "Signaler une offre",
-    "reportType": "Type de signalement",
-    "fakeOffer": "Fausse offer",
-    "inappropriate": "Contenu inapproprié",
-    "reason": "Raison",
-    "report": "Signaler",
-    "reasonText": "Décrivez la raison...",
-    "noNotes": "Aucune note disponible",
-    "by": "Par",
-    "noNotifications": "Aucune notification"
+    "deleteOffer": "Supprimer l'offre"
   }

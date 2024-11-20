@@ -1,6 +1,7 @@
 <?php
 require_once 'Models/Account.php';
 require_once 'Models/Employee.php';
+require_once 'Models/Admin.php';
 require_once 'Models/Company.php';
 include 'Utilities/sessionManager.php';
 include 'Utilities/formUtilities.php';
@@ -54,6 +55,15 @@ try {
 
             } else {
                 throw new Exception();
+            }
+        }elseif ($type === 'admin') {
+            $admin = new Admin();
+            try {
+                $admin->CreateAdmin($email, $password);
+                header('Location: adminpage.php');
+            } catch (Exception $e) {
+                $_SESSION['signupError'] = "Probleme à la création de compte";
+                header('Location: signupAdmin.php');
             }
         }
         exit();

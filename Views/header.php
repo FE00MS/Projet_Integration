@@ -1,5 +1,6 @@
 <?php
 require_once 'Models/account.php';
+
     $accountModel = new Account();
     $isLoggedIn = isset($_SESSION['currentUser']);
     if($isLoggedIn)
@@ -147,31 +148,15 @@ require_once 'Models/account.php';
         if (!empty($notifications)) {
             foreach ($notifications as $notification) {
                 $id = $notification['Id'];
-                $offerId = $notification['LinkedOffer'];
                 $header .= <<<HTML
                     <div id="notification-$id" class="notification-item mb-3 p-2 border border-gray-400 rounded-lg">
                         <button onclick="deleteNotif($id)" class="btn btn-sm btn-circle btn-ghost">✕</button>
-                HTML;
-                if($offerId != null){
-                    $header.= <<<HTML
-                        <button onclick="loadDetails('offerDetails.php?id={$offerId}')" class="text-sm text-gray-800 btn btn-ghost">{$notification['Title']}</button>
-                    HTML;
-                }
-                else{
-                    $header.= <<<HTML
-                        <strong class="text-sm text-gray-800 btn btn-ghost">{$notification['Title']}</strong>
-                    HTML;
-                }
-                $header .= <<<HTML
-                    <br>
-                    <span>{$notification['Message']}</span>
-                </div>
-                HTML;
+                        <strong class="text-sm text-gray-800 btn btn-ghost">{$notification['Title']}</strong><br>
+                    </div>
+        HTML;
             }
         } else {
-            $header .= <<<HTML
-                <div>{$translations['noNotifications']}</div>
-            HTML;
+            $header .= "<div>Aucune notifications</div>";
         }
     
         $header .= <<<HTML

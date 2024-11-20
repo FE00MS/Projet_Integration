@@ -67,21 +67,5 @@
     "createOffer": "Create Job Offer",
     "jobType": "Job type",
     "create": "Create offer",
-    "deleteOffer": "Delete Job Offer",
-    "alreadyApplied": "You have already applied to this job offer.",
-    "note": "Rating (1 to 5)",
-    "select": "Select",
-    "apply": "Apply Now",
-    "leaveNote": "Leave a note",
-    "reportOffer": "Report Job Offer",
-    "reportType": "Type of Report",
-    "fakeOffer": "Fake Job Offer",
-    "inappropriate": "Inappropriate Offer",
-    "reason": "Reasoning",
-    "report": "Report",
-    "reasonText": "Describe reasoning...",
-    "noNotes": "No notes available",
-    "by": "By",
-    "noNotifications": "No notification available"
-
+    "deleteOffer": "Delete Job Offer"
 }

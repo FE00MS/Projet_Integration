@@ -6,10 +6,6 @@ include 'Utilities/formUtilities.php';
 $offer = new Offer();
 $idC = $_SESSION['currentUser']['Id'];
 
-$sql = $offer->conn->prepare("EXEC GetCompanyById @Id= :Id");
-$sql->bindParam(':Id', $idC, PDO::PARAM_INT);
-$sql->execute();
-$myCompany = $sql->fetch(PDO::FETCH_ASSOC);
 
 $sql = $offer->conn->prepare("EXEC GetLastNewOffer @IdC= :IdC");
 $sql->bindParam(':IdC', $idC, PDO::PARAM_INT);
@@ -65,9 +61,9 @@ foreach ($allEmployeeIds as $IdEmp) {
     }
     
 }
-$message = "L'offre pour le poste de ".  $job ." de la compagnie ". $myCompany['CName'] ." pourrait vous interesser!";
+$message = "L'offre pour le poste de ".  $job . " pourrait vous interesser!";
 foreach($empToNotify as $emp){
-    $offer->AddOfferNotification($idC, $emp['Id'], $message, $OId);
+    $offer->AddOfferNotification($idC, $emp['Id'], $message);
 }
 
 header('Location:myOffers.php');
