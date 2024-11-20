@@ -172,9 +172,15 @@ class Offer
             throw new Exception("Erreur lors de l'ajout de la notification : " . $e->getMessage());
         }
     }
-    public function NotificationFromReports($idS, $idR){
+    public function NotificationFromReports($idS, $idR, $target, $offerTitle){
         $title = "Traitement du signalement";
-        $message = "Votre signalement a bien été traité par un administrateur. Merci de nous aider à améliorer l'experience de la boussole à emploi";   
+        if($target == "C"){
+            $message = "Votre offre: {$offerTitle} a été supprimé par un administrateur";
+        }
+        elseif($target == "E"){
+            $message = "Votre signalement de l'offre: {$offerTitle} a bien été traité par un administrateur. Merci de nous aider à améliorer l'experience de la boussole à emploi";
+        }
+       
         try {
             $sql = $this->conn->prepare("EXEC AddNotification @idS = :idS, @idR = :idR, @message = :message, @title = :title");
             $sql->bindParam(':idS', $idS, PDO::PARAM_INT);
@@ -187,6 +193,15 @@ class Offer
             throw new Exception("Erreur lors de l'ajout de la notification : " . $e->getMessage());
         }
     }
+    public function DeleteNotificationWithOfferId($OId){
+        try{
+            $sql = $this->conn->prepare("EXEC DeleteNotificationWithOfferId @OId = :Oid");
+            $sql->bindParam(':Oid', $OId, PDO::PARAM_INT);
+            $sql->execute();
+        } catch (PDOException $e) {
+            throw new Exception("Erreur lors de l'ajout de la notification : " . $e->getMessage());
+        }
+    }
     public function GetOfferByCompagny($idC)
     {
 
@@ -195,6 +210,22 @@ class Offer
             $sql->bindParam(':idC', $idC, PDO::PARAM_INT);
             $sql->execute();
             $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+            if ($result) {
+                return $result;
+            }
+        } catch (PDOException $e) {
+            throw new Exception("Erreur lors de la récupération des données : " . $e->getMessage());
+        }
+    }
+    
+    public function GetCompanyByOffer($OId)
+    {
+
+        try {
+            $sql = $this->conn->prepare("EXEC GetCompanyIdByOfferId @OId = :Oid");
+            $sql->bindParam(':Oid', $OId, PDO::PARAM_INT);
+            $sql->execute();
+            $result = $sql->fetch(PDO::FETCH_ASSOC);
             if ($result) {
                 return $result;
             }
