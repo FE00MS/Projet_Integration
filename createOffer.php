@@ -63,8 +63,16 @@ $content = <<<HTML
 
                 <div id="FormDynam" class="w-full md:w-1/2 pl-0 md:pl-16 space-y-6">
                     
+                        
+                                 <div class="mt-8">
+                                    <h2 class="text-xl font-semibold mb-4">Langues requises</h2>
+                                    <div class="flex flex-wrap gap-2"></div>
+                                        <button type="button" onclick="addLanguage()" class="btn btn-success mt-4">Ajouter une langue</button>
+                            
+                                    </div>
+                                    <hr >
                 
-                        <button type="button" onclick="addField()" class="btn btn-success mb-4">Ajouter</button>
+                        <button type="button" onclick="addField()" class="btn btn-success mb-4">Ajouter une pondération</button>
 
                         <div class="font-semibold">Somme des cercles : <span id="sommeAffichee">0</span></div>
                         <div id="errorMessage" class="text-error hidden">La somme des cercles ne doit pas dépasser 100.</div>
@@ -110,13 +118,6 @@ $content = <<<HTML
                             </div>
                         </div>
 
-                        
-                                    <div class="mt-8">
-                                    <h2 class="text-xl font-semibold mb-4">Langues requises</h2>
-                                    <div class="flex flex-wrap gap-2"></div>
-                                        <button type="button" onclick="addLanguage()" class="btn btn-success mt-4">Ajouter une langue</button>
-                            
-                                    </div>
                     </div>
 
                 </div>
@@ -406,21 +407,18 @@ overlay.classList.add('hidden');
 
 
 function saveLanguage() {
-   // Récupère la langue sélectionnée et son nom
    const languageSelect = document.getElementById('languageSelect');
     const selectedLanguageId = languageSelect.value;
     const selectedLanguageName = languageSelect.options[languageSelect.selectedIndex].text;
 
-    // Vérifie si une langue a bien été sélectionnée
+    
     if (!selectedLanguageId) {
         alert('Veuillez sélectionner une langue.');
         return;
     }
 
-    // Conteneur des langues affichées
     const languagesContainer = document.querySelector('.flex.flex-wrap.gap-2');
 
-    // Vérifie si la langue est déjà ajoutée pour éviter les doublons
     if (document.getElementById(`badge-${selectedLanguageId}`)) {
         alert('Cette langue a déjà été ajoutée.');
         return;
@@ -456,6 +454,11 @@ function removeLanguage(languageId) {
 
 </script>
 <style>
+
+hr {
+  border: 3px solid ;
+  border-radius: 5px;
+}
     .spinner {
         border-top-color: #3498db;
         /* Couleur du spinner */

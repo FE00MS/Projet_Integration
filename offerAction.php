@@ -92,7 +92,7 @@ if (!isset($data['offerId'])) {
     
     foreach ($fieldsData as $field) {
         if (empty($field['id']) || $field['id'] === 'new') {
-            if (!$offer->createPonderation($offerId, $field)) {
+            if (!$offer->createPonderation2($offerId, $field)) {
                 echo json_encode(["success" => false, "message" => "Erreur lors de l'ajout d'un nouveau prérequis"]);
                 exit();
             }
