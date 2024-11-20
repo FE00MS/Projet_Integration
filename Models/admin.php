@@ -82,4 +82,16 @@ class Admin {
             throw new Exception("Erreur lors de la récupération des notifications : " . $e->getMessage());
         }
     }
+
+    public function CreateAdmin($email, $password){
+        try {
+            $sql = $this->conn->prepare("EXEC CreateAdmin @email = :email, @password = :password");
+            $sql->bindParam(':email', $email, PDO::PARAM_STR);
+            $sql->bindParam(':password', $password, PDO::PARAM_STR);
+            $sql->execute();
+            
+        } catch (PDOException $e) {
+            throw new Exception("Erreur lors de la creation d'un administrateur : " . $e->getMessage());
+        }
+    }
 }
