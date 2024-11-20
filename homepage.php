@@ -42,7 +42,7 @@ $content = <<<HTML
                 <option value="company-name">{$translations['offerName']}</option>
                 <option value="salary">{$translations['salary']}</option>
                 <option value="location">{$translations['location']}</option>
-                <option value="hours">{$translations['hours']}</option>
+                <option value="hours">Heures</option>
             </select>
             <input type="text" id="searchInput" class="input input-bordered border-gray-300 rounded-lg p-2 flex-grow shadow-sm focus:ring focus:ring-indigo-200" placeholder="Rechercher" oninput="filterOffers()" aria-label="Search input" />
             <button class="p-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors duration-200 shadow-md focus:ring focus:ring-indigo-200" aria-label="Search">
@@ -143,18 +143,7 @@ $content .= <<<HTML
         });
     }
     function loadDetails(url) {
-        const detailsContainer = document.getElementById('detailsContainer');
-        const mainContainer = document.getElementById('mainContainer');
-        const offersContainer = document.getElementById('offersContainer');
-        fetch(url)
-            .then(response => response.text())
-            .then(data => {
-                detailsContainer.innerHTML = data;
-                detailsContainer.classList.remove('hidden');
-                mainContainer.classList.add('justify-between');
-                offersContainer.classList.add('overflow-y-auto');
-            })
-            .catch(error => console.error('Error loading details:', error));
+        window.location.href = url;
     }
     document.getElementById('searchCriteria').addEventListener('change', () => {
         document.getElementById('searchInput').value = '';
