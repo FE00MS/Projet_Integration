@@ -140,14 +140,16 @@ class Offer
     }
 
 
-    public function AddOfferNotification($idS, $idR, $message){
+    public function AddOfferNotification($idS, $idR, $message, $Oid){
         $title = "Nouvelle offre pour vous";
+        var_dump($Oid);
         try {
-            $sql = $this->conn->prepare("EXEC AddNotification @idS = :idS, @idR = :idR, @message = :message, @title = :title");
+            $sql = $this->conn->prepare("EXEC AddNotificationWithOffer @idS = :idS, @idR = :idR, @message = :message, @title = :title, @linkedOffer = :linkedoffer");
             $sql->bindParam(':idS', $idS, PDO::PARAM_INT);
             $sql->bindParam(':idR', $idR, PDO::PARAM_INT);
             $sql->bindParam(':message', $message, PDO::PARAM_STR);
             $sql->bindParam(':title', $title, PDO::PARAM_STR);
+            $sql->bindParam(':linkedoffer', $Oid, PDO::PARAM_INT);
             $sql->execute();
             return "Notification added successfully.";
         } catch (PDOException $e) {
