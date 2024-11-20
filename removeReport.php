@@ -13,7 +13,6 @@ $IdReceiver = $_POST['Sender'];
 $offerId = $_POST['offerId'];
 
 
-$offerModel->deleteOffer($offerId);
 $offerModel->NotificationFromReports($IdSender, $IdReceiver);
 $offerModel->deleteReport($offerId);
 header('Location: adminpage.php');

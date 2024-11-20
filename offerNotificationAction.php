@@ -63,7 +63,7 @@ foreach ($allEmployeeIds as $IdEmp) {
 }
 $message = "L'offre pour le poste de ".  $job . " pourrait vous interesser!";
 foreach($empToNotify as $emp){
-    $offer->AddOfferNotification($idC, $emp['Id'], $message);
+    $offer->AddOfferNotification($idC, $emp['Id'], $message, $OId);
 }
 
 header('Location:myOffers.php');

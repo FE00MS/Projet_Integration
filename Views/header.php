@@ -151,9 +151,22 @@ require_once 'Models/account.php';
                 $header .= <<<HTML
                     <div id="notification-$id" class="notification-item mb-3 p-2 border border-gray-400 rounded-lg">
                         <button onclick="deleteNotif($id)" class="btn btn-sm btn-circle btn-ghost">✕</button>
-                        <strong class="text-sm text-gray-800 btn btn-ghost">{$notification['Title']}</strong><br>
+                HTML;
+                if($notification['LinkedOffer']==null){
+                    $header .= <<<HTML
+                        <strong class="text-sm text-gray-800 btn btn-ghost">{$notification['Title']}</strong>
+                    HTML;
+                }
+                else{
+                    $header .= <<<HTML
+                        <button onclick="loadDetails('offerDetails.php?id={$notification['LinkedOffer']}')" class="text-sm text-gray-800 btn btn-ghost">{$notification['Title']}</button>
+                    HTML;
+                }
+                $header .= <<<HTML
+                        <br>
+                        <span>{$notification['Message']}</span>
                     </div>
-        HTML;
+                HTML;
             }
         } else {
             $header .= "<div>Aucune notifications</div>";

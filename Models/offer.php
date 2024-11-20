@@ -14,15 +14,22 @@ class Offer
     function deleteOffer($offerId) {
         try {
             $stmt = $this->conn->prepare("EXEC DeleteOffer @OId = :offerId");
-    
             $stmt->bindParam(':offerId', $offerId, PDO::PARAM_INT);
-    
             $stmt->execute();
-    
-            return true;
     
         } catch (PDOException $e) {
             error_log("Erreur lors de l'exécution de DeleteOffer: " . $e->getMessage());
+            return false;
+        }
+    }
+    function deleteReport($offerId) {
+        try {
+            $stmt = $this->conn->prepare("EXEC DeleteReportById @RId = :offerId");
+            $stmt->bindParam(':offerId', $offerId, PDO::PARAM_INT);
+            $stmt->execute();
+    
+        } catch (PDOException $e) {
+            error_log("Erreur lors de l'exécution de DeleteReportById: " . $e->getMessage());
             return false;
         }
     }

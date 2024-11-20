@@ -118,7 +118,7 @@ HTML;
 if ($type === 'employee') {
     $content .= <<<HTML
     <form method="post" action="addReport.php" class="bg-gray-100 p-6 rounded-lg shadow-md mt-10 transform transition-transform duration-500 hover:scale-105">
-        <input type="hidden" name="IdReported" value="{$offer['IdC']}">
+        <input type="hidden" name="IdReported" value="{$offer['Id']}">
         <input type="hidden" name="IdSender" value="{$employeeId}">
         <input type="hidden" name="offerId" value="{$offerId}">
 
