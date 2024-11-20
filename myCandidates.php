@@ -10,10 +10,9 @@ if (!isset($_SESSION['currentUser'])) {
     exit();
 }
 
-if(!isset($_SESSION['currentLanguage']))
-    {
-        $_SESSION['currentLanguage'] = "FR";
-    }
+if(!isset($_SESSION['currentLanguage'])) {
+    $_SESSION['currentLanguage'] = "FR";
+}
 $lang = $_SESSION['currentLanguage'];
 
 $jsonFile = ($lang === "FR") ? "fr.json" : "en.json";
@@ -43,7 +42,6 @@ function getExperiencesForProfile($userId) {
                 case 'Exp':
                     $experiences[] = $exp;
                     break;
-               
             }
         }
     }
@@ -73,11 +71,12 @@ HTML;
         $salary = htmlspecialchars($offer['Salary']);
         $hours = htmlspecialchars($offer['Hours']);
 
+        // Use a card container with visual styles for each offer
         $content .= <<<HTML
-        <div class="mb-8">
-            <h2 class="text-2xl font-semibold">{$jobTitle}</h2>
-            <p class="text-lg text-gray-600">{$translations['location']}: {$location} | {$translations['salary']}: {$salary} $/hr | {$translations['hours']}: {$hours} hours/week</p>
-            <h3 class="text-xl font-bold mt-4 mb-2">{$translations['candidates']}</h3>
+        <div class="bg-white shadow-lg rounded-lg border border-gray-300 p-6 mb-10">
+            <h2 class="text-2xl font-semibold mb-4">{$jobTitle}</h2>
+            <p class="text-lg text-gray-600 mb-6">{$translations['location']}: {$location} | {$translations['salary']}: {$salary} $/hr | {$translations['hours']}: {$hours} hours/week</p>
+            <h3 class="text-xl font-bold mb-4">{$translations['candidates']}</h3>
 HTML;
 
         $offerCandidates = $employeeModel->getCandidates($offer['Id']);
@@ -96,7 +95,7 @@ HTML;
                 $data = getExperiencesForProfile($employeeId);
                             
                 $content .= <<<HTML
-                <div class="card bg-white shadow-lg rounded-lg border border-gray-200 p-4 mb-6">
+                <div class="card bg-gray-50 shadow-sm rounded-md border border-gray-200 p-4 mb-4">
                     <div class="flex flex-wrap md:flex-nowrap">
                         <div class="w-full md:w-1/4 pr-4 mb-4 md:mb-0">
                             <h4 class="text-lg font-semibold">{$candidateName} {$candidateLastName}</h4>
@@ -206,7 +205,6 @@ if(!empty($offers)) {
 HTML;
 }
 
-
 $content .= <<<HTML
     <dialog id="mailModal" class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
@@ -229,7 +227,8 @@ $content .= <<<HTML
             </form>
         </div>
     </dialog>
-    HTML;
+HTML;
+
 include "Views/master.php";
 ?>
 <script>
