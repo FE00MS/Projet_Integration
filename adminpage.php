@@ -71,6 +71,7 @@ if (!empty($reports)) {
         $isComplete = $report['isComplete'] ? 'Complété' : 'En attente';
 
         $reportedId = $report['IdReported'];
+        
         $content .= <<<HTML
         <li class="p-4">
             <p><strong>Type de signalement:</strong> $reportType</p>

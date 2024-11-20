@@ -11,4 +11,5 @@ $offerId = intval($_GET['Id']);
 
 $offerModel = new Offer();
 $offerModel->deleteOffer($offerId);
+$offerModel->DeleteNotificationWithOfferId($offerId);
 header('Location: myOffers.php');
