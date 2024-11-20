@@ -62,7 +62,17 @@ $content = <<<HTML
             </div>
 
                 <div id="FormDynam" class="w-full md:w-1/2 pl-0 md:pl-16 space-y-6">
-                        <button type="button" onclick="addField()" class="btn btn-success mb-4">Ajouter</button>
+                    
+                        
+                                 <div class="mt-8">
+                                    <h2 class="text-xl font-semibold mb-4">Langues requises</h2>
+                                    <div class="flex flex-wrap gap-2"></div>
+                                        <button type="button" onclick="addLanguage()" class="btn btn-success mt-4">Ajouter une langue</button>
+                            
+                                    </div>
+                                    <hr >
+                
+                        <button type="button" onclick="addField()" class="btn btn-success mb-4">Ajouter une pondération</button>
 
                         <div class="font-semibold">Somme des cercles : <span id="sommeAffichee">0</span></div>
                         <div id="errorMessage" class="text-error hidden">La somme des cercles ne doit pas dépasser 100.</div>
@@ -107,11 +117,33 @@ $content = <<<HTML
                                 <button type="button" onclick="removeField(this)" class="btn btn-error">Supprimer</button>
                             </div>
                         </div>
+
                     </div>
+
                 </div>
+
+
+
+
             </div>
         </div>
     </form>
+
+
+
+    
+<div id="languageOverlay" class="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+        <h2 class="text-xl font-semibold mb-4">Sélectionnez une langue</h2>
+        <select id="languageSelect" class="select select-bordered w-full">
+            
+        </select>
+        <div class="flex justify-between mt-4">
+            <button type="button" onclick="closeLanguageOverlay()" class="btn btn-neutral">Annuler</button>
+            <button type="button" onclick="saveLanguage()" class="btn btn-success">Sauvegarder</button>
+        </div>
+    </div>
+</div>
 HTML;
 
 include "Views/master.php";
@@ -297,6 +329,11 @@ include "Views/master.php";
             fieldIndex++;
         });
 
+        //Trouver langue ajout dyna
+        const languages = Array.from(document.querySelectorAll('.flex.flex-wrap.gap-2 span'))
+        .map(badge => badge.id.replace('badge-', ''));
+
+
         fetch('offerAction.php', {
             method: 'POST',
             body: JSON.stringify({
@@ -305,7 +342,8 @@ include "Views/master.php";
                 salary: formData.get('salary'),
                 description: formData.get('description'),
                 hours: formData.get('hours'),
-                fieldsData: fieldsData
+                fieldsData: fieldsData,
+                languages: languages // langue
             }),
             headers: {
                 'Content-Type': 'application/json'
@@ -332,10 +370,118 @@ include "Views/master.php";
     });
 
 
+    //Langue
+
+    
+function addLanguage() {
+
+ 
+fetch('getLanguages.php') 
+    .then(response => response.json())
+    .then(data => {
+
+        // Ajoute les options de langues au select
+        const languageSelect = document.getElementById('languageSelect');
+        languageSelect.innerHTML = '';  // Réinitialise les options
+        data.languages.forEach(language => {
+            const option = document.createElement('option');
+            option.value = language.LId;
+            option.textContent = language.LanguageName;
+            languageSelect.appendChild(option);
+        });
+
+        // Affiche l'overlay
+        const overlay = document.getElementById('languageOverlay');
+        overlay.classList.remove('hidden');
+    })
+    .catch(error => {
+        alert('Erreur lors du chargement des langues');
+    });
+}
+
+
+function closeLanguageOverlay() {
+const overlay = document.getElementById('languageOverlay');
+overlay.classList.add('hidden');
+}
+
+
+function saveLanguage() {
+   const languageSelect = document.getElementById('languageSelect');
+    const selectedLanguageId = languageSelect.value;
+    const selectedLanguageName = languageSelect.options[languageSelect.selectedIndex].text;
+
+    
+    if (!selectedLanguageId) {
+        alert('Veuillez sélectionner une langue.');
+        return;
+    }
+
+    const languagesContainer = document.querySelector('.flex.flex-wrap.gap-2');
+
+    if (document.getElementById(`badge-${selectedLanguageId}`)) {
+        alert('Cette langue a déjà été ajoutée.');
+        return;
+    }
+
+// Crée le badge pour la langue sélectionnée
+const badge = document.createElement('span');
+    badge.id = `badge-${selectedLanguageId}`;
+    badge.className = 'badge badge-primary px-4 py-2 text-white bg-blue-600 rounded-full shadow-sm';
+
+    // Contenu du badge
+    badge.innerHTML = `
+        <p id="${selectedLanguageId}" class="inline">${selectedLanguageName}</p>
+        <button type="button" onclick="removeLanguage('${selectedLanguageId}')" class="ml-2 text-white text-lg">x</button>
+    `;
+
+    // Ajoute le badge dans le conteneur
+    languagesContainer.appendChild(badge);
+
+    // Réinitialise la sélection du menu déroulant
+    languageSelect.value = '';
+
+
+    closeLanguageOverlay();
+}
+
+function removeLanguage(languageId) {
+    const badge = document.getElementById(`badge-${languageId}`);
+    if (badge) {
+        badge.remove();
+    }
+}
+
 </script>
 <style>
+
+hr {
+  border: 3px solid ;
+  border-radius: 5px;
+}
     .spinner {
         border-top-color: #3498db;
         /* Couleur du spinner */
     }
+
+    .badge {
+    display: inline-flex;
+    justify-content: center; 
+    align-items: center; 
+    padding: 0.5rem 1.5rem; 
+    color: white;
+    background-color: #3490dc;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-transform: capitalize;
+    white-space: nowrap;
+}
+
+.flex-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem; 
+}
 </style>

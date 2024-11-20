@@ -30,6 +30,31 @@ class Admin {
         }
     }
 
+    public function BlockSomeone($Id) {
+        try {
+            $sql = $this->conn->prepare("EXEC BlockSomeone 
+                @Id = :Id");
+
+            $sql->bindParam(':Id', $Id, PDO::PARAM_INT);
+
+            $sql->execute();
+        } catch (PDOException $e) {
+            throw new Exception("Erreur lors de l'exécution : " . $e->getMessage());
+        }
+    }
+
+    public function UnBlockSomeone($Id) {
+        try {
+            $sql = $this->conn->prepare("EXEC UnBlockSomeone 
+                @Id = :Id");
+
+            $sql->bindParam(':Id', $Id, PDO::PARAM_INT);
+
+            $sql->execute();
+        } catch (PDOException $e) {
+            throw new Exception("Erreur lors de l'exécution : " . $e->getMessage());
+        }
+    }
     
     public function GetAdmin($Email, $Password)
     {
@@ -52,7 +77,18 @@ class Admin {
             throw new Exception("Erreur lors de la récupération des données : " . $e->getMessage());
         }
     }
-
+    public function GetAllAccount()
+    {
+        try {
+            $sql = $this->conn->prepare("EXEC GetAllAccount");
+            $sql->execute();
+            $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        } catch (PDOException $e) {
+            throw new Exception("Erreur lors de la récupération de tous les comptes : " . $e->getMessage());
+        }
+    }
+    
     public function GetReport()
     {
         try {

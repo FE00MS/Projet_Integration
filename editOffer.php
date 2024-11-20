@@ -3,6 +3,7 @@ include 'Utilities/sessionManager.php';
 require_once 'BD/BD.php';
 include 'Models/offer.php';
 require_once 'Models/field.php';
+require_once 'Models/language.php';
 
 if (!isset($_SESSION['currentLanguage'])) {
     $_SESSION['currentLanguage'] = "FR";
@@ -19,8 +20,16 @@ $translations = json_decode($jsonData, true);
 if (isset($_GET['id'])) {
     $offerId = intval($_GET['id']);
 
+    $l = new Language();
+    $languages = $l->GetAllLanguages();
+    $languageMap = [];
+    foreach ($languages as $language) {
+        $languageMap[$language['LId']] = $language['LanguageName'];
+    }
+
     $offerModel = new Offer();
     $offerDetails = $offerModel->getOffer($offerId);
+    $offerLangue = $offerModel->getLangueByOfferId($offerId);
     $prerequisites = $offerModel->getPrerequisitesWithRestrictions($offerId);
     if ($offerDetails) {
         $jobTitle = htmlspecialchars($offerDetails['Job']);
@@ -87,11 +96,46 @@ $content = <<<HTML
             
         
 HTML;
-if ($prerequisites != null) {
 
-    $content .= <<<HTML
+
+$content .= <<<HTML
                 <div id="FormDynam" class="w-full md:w-1/2 pl-0 md:pl-16 space-y-6">
-                        <button type="button" onclick="addField()" class="btn btn-success mb-4">Ajouter</button>
+
+
+    HTML;
+
+//langue
+
+if ($offerLangue != null) {
+    $content .= <<<HTML
+ <div class="mt-8">
+        <h2 class="text-xl font-semibold mb-4">Langues requises</h2>
+        <div class="flex flex-wrap gap-2">
+HTML;
+    foreach ($offerLangue as $langue) {
+        $langueId = $langue["LId"];
+        $langueTxt = $languageMap[$langueId];
+        $content .= <<<HTML
+    <span id="badge-{$langueId}" class="badge badge-primary px-4 py-2 text-white bg-blue-600 rounded-full shadow-sm">
+            <p id=$langueId>$langueTxt</p>
+            <button type="button" onclick="removeLanguage('{$langueId}')" class="ml-2 text-white text-lg">x</button>
+        </span>
+
+HTML;
+    }
+}
+
+
+
+
+$content .= <<<HTML
+
+                    </div>
+                    <button type="button" onclick="addLanguage()" class="btn btn-success mt-4">Ajouter une langue</button>
+                    
+                    </div>
+                    <hr >
+                        <button type="button" onclick="addField()" class="btn btn-success mb-4">Ajouter une pondération</button>
 
                         <div class="font-semibold">Somme des cercles : <span id="sommeAffichee">0</span></div>
                         <div id="errorMessage" class="text-error hidden">La somme des cercles ne doit pas dépasser 100.</div>
@@ -124,32 +168,29 @@ foreach ($prerequisites as $index => $prerequisite) {
     $completeChecked = ($complete == 1) ? "checked" : "";
 
     $fieldTypeSelected = $fieldType ? "selected" : "";
-    if($prerequisite['Validite'] == 1){
+    if ($prerequisite['Validite'] == 1) {
         $content .= <<<HTML
         <div class="dynamic-field form-group p-4 border rounded-lg shadow-md space-y-4 bg-gray-100">
         <div class="dot" style="background-color:#8B0000" title="Critere de recherche trop restrictif"></div>
-    HTML; 
-    }
-    elseif($prerequisite['Validite'] == 2){
+    HTML;
+    } elseif ($prerequisite['Validite'] == 2) {
         $content .= <<<HTML
         <div class="dynamic-field form-group p-4 border rounded-lg shadow-md space-y-4 bg-gray-100">
         <div class="dot" style="background-color:#A35D03" title="Prerequis majoritairement restrictif"></div>
-    HTML; 
-    }
-    elseif($prerequisite['Validite'] == 3){
+    HTML;
+    } elseif ($prerequisite['Validite'] == 3) {
         $content .= <<<HTML
         <div class="dynamic-field form-group p-4 border rounded-lg shadow-md space-y-4 bg-gray-100">
         <div class="dot" style="background-color:#FED000" title="Prerequis partiellement restrictif"></div>
     HTML;
-    } 
-    elseif($prerequisite['Validite'] == 4){
+    } elseif ($prerequisite['Validite'] == 4) {
         $content .= <<<HTML
         <div class="dynamic-field form-group p-4 border rounded-lg shadow-md space-y-4 bg-gray-100">
         <div class="dot" style="background-color:#008000" title="Prerequis acceptable"></div>
-    HTML; 
+    HTML;
     }
     $content .= <<<HTML
-        <input type="hidden" name="PId$count" value="$PId">
+                    <input type="hidden" name="PId$count" value="$PId">
                     <div class="flex gap-4 items-center">
                         <label class="flex items-center gap-2">
                             <input type="radio" name="type$count" value="experience" class="radio radio-primary" $experienceChecked required> Expérience
@@ -202,17 +243,33 @@ HTML;
     $count++;
 }
 
-}
+
+
 
 
 $content .= <<<HTML
+
+
+
             </div>
                 </div>
             </div>
         </div>
     </form>
-   
 
+<div id="languageOverlay" class="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center hidden z-50">
+<div id="offerContainer" data-offer-id=$offerId></div>
+    <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+        <h2 class="text-xl font-semibold mb-4">Sélectionnez une langue</h2>
+        <select id="languageSelect" class="select select-bordered w-full">
+            
+        </select>
+        <div class="flex justify-between mt-4">
+            <button type="button" onclick="closeLanguageOverlay()" class="btn btn-neutral">Annuler</button>
+            <button type="button" onclick="saveLanguage()" class="btn btn-success">Sauvegarder</button>
+        </div>
+    </div>
+</div>
 HTML;
 
 include "Views/master.php";
@@ -220,6 +277,17 @@ include "Views/master.php";
 ?>
 
 <script>
+    //spinner
+    function showSpinner() {
+        const overlay = document.getElementById('loadingOverlay');
+        overlay.classList.remove('hidden');
+    }
+
+    function hideSpinner() {
+        const overlay = document.getElementById('loadingOverlay');
+        overlay.classList.add('hidden');
+    }
+
     function addField() {
         const form = document.getElementById('FormDynam');
         const fieldIndex = form.querySelectorAll('.dynamic-field').length + 1;
@@ -367,8 +435,13 @@ include "Views/master.php";
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-        updateCircle('circle1', document.getElementById('input1').value, 'hiddenText1');
-        calculerCercle();
+        const circle1 = document.getElementById('input1');
+
+        if (circle1 != null) {
+            updateCircle('circle1', document.getElementById('input1').value, 'hiddenText1');
+            calculerCercle();
+        }
+
     });
 
     function confirmDeletion(offerId) {
@@ -440,16 +513,148 @@ include "Views/master.php";
             })
             .catch(error => {
                 console.error('Erreur:', error);
-                overlay.classList.add('hidden'); 
+                overlay.classList.add('hidden');
                 alert('Une erreur est survenue. Veuillez réessayer.');
             });
     });
 
+
+    //Partie Langue
+
+    function addLanguage() {
+
+
+        fetch('getLanguages.php')
+            .then(response => response.json())
+            .then(data => {
+
+                // Ajoute les options de langues au select
+                const languageSelect = document.getElementById('languageSelect');
+                languageSelect.innerHTML = '';  // Réinitialise les options
+                data.languages.forEach(language => {
+                    const option = document.createElement('option');
+                    option.value = language.LId;
+                    option.textContent = language.LanguageName;
+                    languageSelect.appendChild(option);
+                });
+
+                // Affiche l'overlay
+                const overlay = document.getElementById('languageOverlay');
+                overlay.classList.remove('hidden');
+            })
+            .catch(error => {
+                alert('Erreur lors du chargement des langues');
+            });
+    }
+
+
+    function closeLanguageOverlay() {
+        const overlay = document.getElementById('languageOverlay');
+        overlay.classList.add('hidden');
+    }
+
+    function removeLanguage(id) {
+        const selectedLanguageId = id;
+
+        const offerContainer = document.getElementById('offerContainer');
+        const offerId = offerContainer.getAttribute('data-offer-id');
+        showSpinner();
+
+        fetch('deleteLanguageOffer.php', {
+            method: 'POST',
+            body: JSON.stringify({ LId: selectedLanguageId, offerId: offerId }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                hideSpinner();
+                if (data.success) {
+                    alert('Langue retirée avec succès');
+                    const languageBadge = document.getElementById(`badge-${selectedLanguageId}`);
+                    if (languageBadge) {
+                        languageBadge.remove();
+                    }
+                } else {
+                    alert('Erreur lors de la supression de la langue');
+                }
+            })
+            .catch(error => {
+                hideSpinner();
+                alert('Erreur lors de la supression de la langue');
+            });
+    }
+
+    function saveLanguage() {
+        const languageSelect = document.getElementById('languageSelect');
+        const selectedLanguageId = languageSelect.value;
+
+        const offerContainer = document.getElementById('offerContainer');
+        const offerId = offerContainer.getAttribute('data-offer-id');
+
+        if (!offerId || !selectedLanguageId) {
+            alert('Veuillez sélectionner une langue.');
+            return;
+        }
+        //verif
+        if (document.getElementById(`badge-${selectedLanguageId}`)) {
+            alert('Cette langue a déjà été ajoutée.');
+            return;
+        }
+        fetch('saveLanguage.php', {
+            method: 'POST',
+            body: JSON.stringify({ LId: selectedLanguageId, offerId: offerId }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Langue ajoutée avec succès');
+                    closeLanguageOverlay();
+                    location.reload()
+                } else {
+                    alert('Erreur lors de la sauvegarde de la langue');
+                }
+            })
+            .catch(error => {
+                alert('Erreur lors de la sauvegarde de la langue');
+            });
+    }
+
 </script>
 
 <style>
+    hr {
+        border: 3px solid;
+        border-radius: 5px;
+    }
+
     .spinner {
         border-top-color: #3498db;
-        /* Couleur du spinner */
+
+    }
+
+    .badge {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0.5rem 1.5rem;
+        color: white;
+        background-color: #3490dc;
+        border-radius: 9999px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-transform: capitalize;
+        white-space: nowrap;
+    }
+
+    .flex-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
     }
 </style>

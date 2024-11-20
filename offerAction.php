@@ -20,6 +20,13 @@ $offer = new Offer();
 $fieldsData = $data['fieldsData'];
 
 
+if (!isset($data['languages']) || !is_array($data['languages'])) {
+    $data['languages'] = []; 
+}
+
+$languages= $data['languages'];
+
+
 if (!isset($data['offerId'])) {
     // Création d'une nouvelle offre
     $idc = $_SESSION["currentUser"]["Id"];
@@ -30,8 +37,6 @@ if (!isset($data['offerId'])) {
     $hours = $data['hours'];
 
     $OId = $offer->createOffer($idc, $job, $location, $salary, $description, $hours);
-    
-
     if ($OId === false) {
         echo json_encode(["success" => false, "message" => "Erreur lors de la création de l'offre"]);
         exit();
@@ -41,6 +46,16 @@ if (!isset($data['offerId'])) {
         echo json_encode(["success" => false, "message" => "Erreur lors de l'ajout des pondérations"]);
         exit();
     }
+
+
+    foreach($languages as $languageId){
+       if( !$offer->Add_langageOffer($OId,$languageId)){
+        echo json_encode(["success" => false, "message" => "Erreur lors de l'ajout des langues"]);
+        exit();
+       }
+    }
+
+
     echo json_encode(["success" => true, "message" => "Offre créée avec succès"]);
 } else {
     //Edit offre
@@ -77,7 +92,7 @@ if (!isset($data['offerId'])) {
     
     foreach ($fieldsData as $field) {
         if (empty($field['id']) || $field['id'] === 'new') {
-            if (!$offer->createPonderation($offerId, $field)) {
+            if (!$offer->createPonderation2($offerId, $field)) {
                 echo json_encode(["success" => false, "message" => "Erreur lors de l'ajout d'un nouveau prérequis"]);
                 exit();
             }
