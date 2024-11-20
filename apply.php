@@ -22,7 +22,7 @@ $employeeModel = new Employee();
 try {
     $result = $employeeModel->addApplication($employeeId, $offerId);
 
-    header('Location: homepage.php');
+   redirect("offerDetails.php?id=" + $offerId);
     exit();
 } catch (Exception $e) {
     echo "Error applying for the job: " . $e->getMessage();

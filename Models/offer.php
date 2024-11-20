@@ -88,6 +88,24 @@ class Offer
             return true;
       
     }
+    function getLangueByOfferId($OId){
+        try {
+            $stmt = $this->conn->prepare("EXEC GetLangueByOfferId @OId = :OId");
+    
+            $stmt->bindParam(':OId', $OId, PDO::PARAM_INT);
+    
+            $stmt->execute();
+    
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if ($result) {
+                return $result;
+            }
+    
+        } catch (PDOException $e) {
+            error_log("Erreur lors de l'exécution de GetLangueByOfferId: " . $e->getMessage());
+
+        }
+    }
     function createPonderation($OId, $fieldsData)
     {
     
@@ -111,6 +129,37 @@ class Offer
                     return false;
                 }
             }
+            return true;
+      
+    }
+    function Add_langageOffer($Oid, $Lid)
+    {
+    
+            $stmt = $this->conn->prepare("EXEC dbo.Add_langageOffer :Oid, :Lid");
+
+                $stmt->bindParam(':Oid', $Oid, PDO::PARAM_INT); 
+                $stmt->bindParam(':Lid', $Lid, PDO::PARAM_INT); 
+
+                if (!$stmt->execute()) {
+                    return false;
+                }
+            
+            return true;
+      
+    }
+
+    function DeleteLangueoffer($Oid, $Lid)
+    {
+    
+            $stmt = $this->conn->prepare("EXEC dbo.DeleteLangueoffer :Oid, :Lid");
+
+                $stmt->bindParam(':Oid', $Oid, PDO::PARAM_INT); 
+                $stmt->bindParam(':Lid', $Lid, PDO::PARAM_INT); 
+
+                if (!$stmt->execute()) {
+                    return false;
+                }
+            
             return true;
       
     }

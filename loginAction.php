@@ -13,32 +13,36 @@ try {
 
         $account = new Account();
         $accountData = $account->GetAccount($email, $password);
-        if (isset($accountData["type"])) {
+        if ($accountData["data"]["IsBlocked"] != 1) {
+            if (isset($accountData["type"])) {
 
-            if ($accountData["type"] === "Employee") {
-                $employee = new Employee();
-                $_SESSION["currentUser"] = $employee->GetEmployee($email, $password);
-                $_SESSION["accountType"] = "employee";
-                header('Location: homepage.php');
-                exit();
-            } elseif ($accountData["type"] === "Company") {
-                $company = new Company();
-                $_SESSION["currentUser"] = $company->GetCompany($email, $password);
-                $_SESSION["accountType"] = "company";
-                header('Location: myOffers.php');
-                exit();
-            }
-            elseif ($accountData["type"] === "Admin") {
-                $admin = new Admin();
-                $_SESSION["currentUser"] = $admin->GetAdmin($email, $password);
-                $_SESSION["accountType"] = "admin";
-                header('Location: adminpage.php');
-                exit();
-            }
+                if ($accountData["type"] === "Employee") {
+                    $employee = new Employee();
+                    $_SESSION["currentUser"] = $employee->GetEmployee($email, $password);
+                    $_SESSION["accountType"] = "employee";
+                    header('Location: homepage.php');
+                    exit();
+                } elseif ($accountData["type"] === "Company") {
+                    $company = new Company();
+                    $_SESSION["currentUser"] = $company->GetCompany($email, $password);
+                    $_SESSION["accountType"] = "company";
+                    header('Location: myOffers.php');
+                    exit();
+                } elseif ($accountData["type"] === "Admin") {
+                    $admin = new Admin();
+                    $_SESSION["currentUser"] = $admin->GetAdmin($email, $password);
+                    $_SESSION["accountType"] = "admin";
+                    header('Location: adminpage.php');
+                    exit();
+                }
 
+            }
+        }else{
+            $_SESSION['LoginError'] = "Votre compte est actuellement bloqué, veuillez contacter un administrateur pour plus de détails";
         }
+
         throw new Exception("Error Processing Request", 1);
-        
+
 
 
     }
@@ -46,5 +50,5 @@ try {
     $_SESSION['LoginError'] = "Erreur dans le courriel ou dans le mot de passe. ";
     header('Location: login.php');
     exit();
-    
+
 }

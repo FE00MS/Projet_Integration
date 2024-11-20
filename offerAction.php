@@ -20,6 +20,13 @@ $offer = new Offer();
 $fieldsData = $data['fieldsData'];
 
 
+if (!isset($data['languages']) || !is_array($data['languages'])) {
+    $data['languages'] = []; 
+}
+
+$languages= $data['languages'];
+
+
 if (!isset($data['offerId'])) {
     // Création d'une nouvelle offre
     $idc = $_SESSION["currentUser"]["Id"];
@@ -38,6 +45,14 @@ if (!isset($data['offerId'])) {
     if (!$offer->createPonderation($OId, $fieldsData)) {
         echo json_encode(["success" => false, "message" => "Erreur lors de l'ajout des pondérations"]);
         exit();
+    }
+
+
+    foreach($languages as $languageId){
+       if( !$offer->Add_langageOffer($OId,$languageId)){
+        echo json_encode(["success" => false, "message" => "Erreur lors de l'ajout des langues"]);
+        exit();
+       }
     }
 
 
