@@ -12,6 +12,7 @@ try {
         $password = sanitizeString($_POST['password']);
 
         $account = new Account();
+        $account->AddConnection();
         $accountData = $account->GetAccount($email, $password);
         if (isset($accountData["type"])) {
 
