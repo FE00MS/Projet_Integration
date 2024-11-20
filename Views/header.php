@@ -169,7 +169,9 @@ require_once 'Models/account.php';
                 HTML;
             }
         } else {
-            $header .= "<div>Aucune notifications</div>";
+            $header .= <<<HTML
+                <div>{$translations['noNotifications']}</div>
+            HTML;
         }
     
         $header .= <<<HTML
