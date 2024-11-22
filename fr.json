@@ -92,5 +92,6 @@
     "noPre": "Aucun prerequis",
     "prerequisite": "Prerequis",
     "yes": "Oui",
-    "no": "Non"
+    "no": "Non",
+    "signupAdmin":"Créer un nouvel admin"
 }

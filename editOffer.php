@@ -106,12 +106,13 @@ $content .= <<<HTML
 
 //langue
 
-if ($offerLangue != null) {
+
     $content .= <<<HTML
  <div class="mt-8">
         <h2 class="text-xl font-semibold mb-4">Langues requises</h2>
         <div class="flex flex-wrap gap-2">
 HTML;
+if ($offerLangue != null) {
     foreach ($offerLangue as $langue) {
         $langueId = $langue["LId"];
         $langueTxt = $languageMap[$langueId];

@@ -50,7 +50,7 @@ $content = <<<HTML
         </label>
         <input type="hidden" name="type" value="admin">
         <div class="max-w-md mx-auto">
-            <button type="submit" class="btn btn-neutral w-full">{$translations['signup']}</button>
+            <button type="submit" class="btn btn-neutral w-full">{$translations['signupAdmin']}</button>
         </div>
     </form>
 </div>
