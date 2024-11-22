@@ -109,7 +109,7 @@ $content .= <<<HTML
 
     $content .= <<<HTML
  <div class="mt-8">
-        <h2 class="text-xl font-semibold mb-4">Langues requises</h2>
+        <h2 class="text-xl font-semibold mb-4">{$translations['lang']}</h2>
         <div class="flex flex-wrap gap-2">
 HTML;
 if ($offerLangue != null) {
@@ -132,14 +132,14 @@ HTML;
 $content .= <<<HTML
 
                     </div>
-                    <button type="button" onclick="addLanguage()" class="btn btn-success mt-4">Ajouter une langue</button>
+                    <button type="button" onclick="addLanguage()" class="btn btn-success mt-4">{$translations['addLang']}</button>
                     
                     </div>
                     <hr >
-                        <button type="button" onclick="addField()" class="btn btn-success mb-4">Ajouter une pondération</button>
+                        <button type="button" onclick="addField()" class="btn btn-success mb-4">{$translations['poderation']}</button>
 
-                        <div class="font-semibold">Somme des cercles : <span id="sommeAffichee">0</span></div>
-                        <div id="errorMessage" class="text-error hidden">La somme des cercles ne doit pas dépasser 100.</div>
+                        <div class="font-semibold">{$translations['total']} : <span id="sommeAffichee">0</span></div>
+                        <div id="errorMessage" class="text-error hidden">{$translations['sommeMsg']}</div>
     HTML;
 
 $f = new Field();
@@ -194,16 +194,16 @@ foreach ($prerequisites as $index => $prerequisite) {
                     <input type="hidden" name="PId$count" value="$PId">
                     <div class="flex gap-4 items-center">
                         <label class="flex items-center gap-2">
-                            <input type="radio" name="type$count" value="experience" class="radio radio-primary" $experienceChecked required> Expérience
+                            <input type="radio" name="type$count" value="experience" class="radio radio-primary" $experienceChecked required> {$translations['expOffer']}
                         </label>
                         <label class="flex items-center gap-2">
-                            <input type="radio" name="type$count" value="formation" class="radio radio-primary" $formationChecked> Formation
+                            <input type="radio" name="type$count" value="formation" class="radio radio-primary" $formationChecked> {$translations['formOffer']}
                         </label>
                     </div>
 
                     <div class="flex items-center gap-2">
                         <input type="checkbox" name="complete$count" class="checkbox checkbox-primary" $completeChecked>
-                        <label>Compléter</label>
+                        <label>{$translations['completed']}</label>
                     </div>
 
                     <div class="flex gap-4">
@@ -219,7 +219,7 @@ foreach ($prerequisites as $index => $prerequisite) {
 
     $content .= <<<HTML
                         </select>
-                        <input class="input input-bordered w-20 md:w-24" type="number" name="year$count" placeholder="Années" min="0" max="50" value="$duration" required>
+                        <input class="input input-bordered w-20 md:w-24" type="number" name="year$count" placeholder="{$translations['years']}" min="0" max="50" value="$duration" required>
                     </div>
 
                     <div class="flex items-center gap-4">
@@ -237,7 +237,7 @@ foreach ($prerequisites as $index => $prerequisite) {
                     </div>
 
                     <div class="flex justify-end">
-                        <button type="button" onclick="removeField(this)" class="btn btn-error">Supprimer</button>
+                        <button type="button" onclick="removeField(this)" class="btn btn-error">{$translations['delete']}</button>
                     </div>
                 </div>
 HTML;
@@ -261,13 +261,13 @@ $content .= <<<HTML
 <div id="languageOverlay" class="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center hidden z-50">
 <div id="offerContainer" data-offer-id=$offerId></div>
     <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-        <h2 class="text-xl font-semibold mb-4">Sélectionnez une langue</h2>
+        <h2 class="text-xl font-semibold mb-4">{$translations['addLang']}</h2>
         <select id="languageSelect" class="select select-bordered w-full">
             
         </select>
         <div class="flex justify-between mt-4">
-            <button type="button" onclick="closeLanguageOverlay()" class="btn btn-neutral">Annuler</button>
-            <button type="button" onclick="saveLanguage()" class="btn btn-success">Sauvegarder</button>
+            <button type="button" onclick="closeLanguageOverlay()" class="btn btn-neutral">{$translations['cancel']}</button>
+            <button type="button" onclick="saveLanguage()" class="btn btn-success">{$translations['save']}</button>
         </div>
     </div>
 </div>
@@ -418,7 +418,7 @@ include "Views/master.php";
 
         const moyenne = roundToTwo(temp)
 
-        document.getElementById('sommeAffichee').textContent = "Somme: " + somme;
+        document.getElementById('sommeAffichee').textContent = somme;
 
         return somme;
     }

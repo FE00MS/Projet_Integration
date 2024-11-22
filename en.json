@@ -93,5 +93,14 @@
     "prerequisite": "Prerequisites",
     "yes": "Yes",
     "no": "No",
-    "signupAdmin":"Create new admin"
+    "signupAdmin":"Create new admin",
+    "poderation": "Add a weighting",
+    "sommeMsg": "The total of the circles must not exceed 100.",
+    "completed": "Completed",
+    "expOffer": "Experience",
+    "formOffer": "Education",
+    "total": "Total",
+    "delete": "Delete",
+    "save": "Save"
+
 }

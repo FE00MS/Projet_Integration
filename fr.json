@@ -93,5 +93,15 @@
     "prerequisite": "Prerequis",
     "yes": "Oui",
     "no": "Non",
-    "signupAdmin":"Créer un nouvel admin"
+    "signupAdmin":"Créer un nouvel admin",
+    "poderation": "Ajouter une podération",
+    "sommeMsg": "La somme des cercles ne doit pas dépasser 100.",
+    "completed": "Completer",
+    "expOffer": "Expérience",
+    "formOffer": "Formation",
+    "total": "Somme",
+    "delete": "Supprimer",
+    "save": "Sauvegarder"
+    
+
 }

@@ -35,27 +35,27 @@ $content = <<<HTML
             <div class="w-full md:w-1/2 space-y-6 pr-8 md:pr-16">
                 <div class="form-control">
                     <label class="label font-semibold">{$translations['offerName']}</label>
-                    <input type="text" name="job" class="input input-bordered w-full" placeholder="Nom de l'offre" required>
+                    <input type="text" name="job" class="input input-bordered w-full" placeholder="{$translations['offerName']}" required>
                 </div>
 
                 <div class="form-control">
                     <label class="label font-semibold">{$translations['location']}</label>
-                    <input type="text" name="location" class="input input-bordered w-full" placeholder="Lieu du poste" required>
+                    <input type="text" name="location" class="input input-bordered w-full" placeholder="{$translations['location']}" required>
                 </div>
 
                 <div class="form-control">
                     <label class="label font-semibold">{$translations['salary']}</label>
-                    <input type="number" min="0" name="salary" class="input input-bordered w-full" placeholder="Salaire proposé" required>
+                    <input type="number" min="0" name="salary" class="input input-bordered w-full" placeholder="{$translations['salary']}" required>
                 </div>
 
                 <div class="form-control">
                     <label class="label font-semibold">Description</label>
-                    <textarea name="description" class="textarea textarea-bordered w-full" placeholder="Description du poste" required></textarea>
+                    <textarea name="description" class="textarea textarea-bordered w-full" placeholder="Description" required></textarea>
                 </div>
 
                 <div class="form-control">
                     <label class="label font-semibold">{$translations['hours']}</label>
-                    <input type="number" min="0" max="168" name="hours" class="input input-bordered w-full" placeholder="Heures de travail" required>
+                    <input type="number" min="0" max="168" name="hours" class="input input-bordered w-full" placeholder="{$translations['schedule']}" required>
                 </div>
 
                 <button type="submit" class="btn btn-neutral w-full">{$translations['create']}</button>
@@ -65,38 +65,38 @@ $content = <<<HTML
                     
                         
                                  <div class="mt-8">
-                                    <h2 class="text-xl font-semibold mb-4">Langues requises</h2>
+                                    <h2 class="text-xl font-semibold mb-4">{$translations['lang']}</h2>
                                     <div class="flex flex-wrap gap-2"></div>
-                                        <button type="button" onclick="addLanguage()" class="btn btn-success mt-4">Ajouter une langue</button>
+                                        <button type="button" onclick="addLanguage()" class="btn btn-success mt-4">{$translations['addLang']}</button>
                             
                                     </div>
                                     <hr >
                 
-                        <button type="button" onclick="addField()" class="btn btn-success mb-4">Ajouter une pondération</button>
+                        <button type="button" onclick="addField()" class="btn btn-success mb-4">{$translations['poderation']}</button>
 
-                        <div class="font-semibold">Somme des cercles : <span id="sommeAffichee">0</span></div>
-                        <div id="errorMessage" class="text-error hidden">La somme des cercles ne doit pas dépasser 100.</div>
+                        <div class="font-semibold">{$translations['total']} :<span id="sommeAffichee">0</span></div>
+                        <div id="errorMessage" class="text-error hidden">{$translations['sommeMsg']}</div>
 
                         <div class="dynamic-field form-group p-4 border rounded-lg shadow-md space-y-4 bg-gray-100">
                             <div class="flex gap-4 items-center">
                                 <label class="flex items-center gap-2">
-                                    <input type="radio" name="type1" value="experience" class="radio radio-primary" required> Expérience
+                                    <input type="radio" name="type1" value="experience" class="radio radio-primary" required> {$translations['expOffer']}
                                 </label>
                                 <label class="flex items-center gap-2">
-                                    <input type="radio" name="type1" value="formation" class="radio radio-primary"> Formation
+                                    <input type="radio" name="type1" value="formation" class="radio radio-primary"> {$translations['formOffer']}
                                 </label>
                             </div>
 
                             <div class="flex items-center gap-2">
                                 <input type="checkbox" name="complete1" class="checkbox checkbox-primary">
-                                <label>Compléter</label>
+                                <label>{$translations['completed']}</label>
                             </div>
 
                             <div class="flex gap-4">
                                 <select name="FieldType1" class="select select-bordered w-full">
                                     {$options}
                                 </select>
-                                <input class="input input-bordered w-20 md:w-24" type="number" name="year1" placeholder="Années" min="0" max="50" required>
+                                <input class="input input-bordered w-20 md:w-24" type="number" name="year1" placeholder="{$translations['years']}" min="0" max="50" required>
                             </div>
 
                             <div class="flex items-center gap-4">
@@ -114,7 +114,7 @@ $content = <<<HTML
                             </div>
 
                             <div class="flex justify-end">
-                                <button type="button" onclick="removeField(this)" class="btn btn-error">Supprimer</button>
+                                <button type="button" onclick="removeField(this)" class="btn btn-error">{$translations['delete']}</button>
                             </div>
                         </div>
 
@@ -134,13 +134,13 @@ $content = <<<HTML
     
 <div id="languageOverlay" class="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center hidden z-50">
     <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-        <h2 class="text-xl font-semibold mb-4">Sélectionnez une langue</h2>
+        <h2 class="text-xl font-semibold mb-4">{$translations['addLang']}</h2>
         <select id="languageSelect" class="select select-bordered w-full">
             
         </select>
         <div class="flex justify-between mt-4">
-            <button type="button" onclick="closeLanguageOverlay()" class="btn btn-neutral">Annuler</button>
-            <button type="button" onclick="saveLanguage()" class="btn btn-success">Sauvegarder</button>
+            <button type="button" onclick="closeLanguageOverlay()" class="btn btn-neutral">{$translations['cancel']}</button>
+            <button type="button" onclick="saveLanguage()" class="btn btn-success">{$translations['save']}</button>
         </div>
     </div>
 </div>
@@ -277,7 +277,7 @@ include "Views/master.php";
 
         const moyenne = roundToTwo(temp)
 
-        document.getElementById('sommeAffichee').textContent = "Somme: " + somme;
+        document.getElementById('sommeAffichee').textContent = somme;
 
         return somme;
     }
