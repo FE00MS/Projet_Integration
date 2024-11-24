@@ -88,8 +88,8 @@ $content = <<<HTML
                             </div>
 
                             <div class="flex items-center gap-2">
-                                <input type="checkbox" name="complete1" class="checkbox checkbox-primary">
-                                <label>{$translations['completed']}</label>
+                                <input type="checkbox"  id="complete1" name="complete1" class="checkbox checkbox-primary">
+                                <label  for="complete1">{$translations['completed']}</label>
                             </div>
 
                             <div class="flex gap-4">
@@ -177,8 +177,8 @@ include "Views/master.php";
 
         <!-- Checkbox for Completion -->
         <div class="flex items-center gap-2">
-            <input type="checkbox" name="complete${fieldIndex}" class="checkbox checkbox-primary">
-            <label>Compléter</label>
+            <input type="checkbox"  id="complete${fieldIndex}" name="complete${fieldIndex}" class="checkbox checkbox-primary">
+            <label  for="complete${fieldIndex}">Compléter</label>
         </div>
 
         <!-- Field Type and Years Input -->
@@ -224,6 +224,17 @@ include "Views/master.php";
             const somme = calculerCercle();
             validateSum(somme);
             adjustMaxValues(somme);
+
+            // Réindexer les champs dynamiques restants
+            const dynamicFields = document.querySelectorAll('.dynamic-field');
+            dynamicFields.forEach((field, index) => {
+                const newIndex = index + 1; // Les indices commencent à 1
+                field.querySelectorAll('[name]').forEach(input => {
+                    const originalName = input.getAttribute('name');
+                    const updatedName = originalName.replace(/\d+/, newIndex);
+                    input.setAttribute('name', updatedName);
+                });
+            });
         }
     }
 
@@ -309,9 +320,21 @@ include "Views/master.php";
         const formData = new FormData(this);
         const fieldsData = [];
 
+        // Réindexation des champs dynamiques
+        const dynamicFields = Array.from(document.querySelectorAll('.dynamic-field'));
+        dynamicFields.forEach((field, index) => {
+            const newIndex = index + 1;
+            // Réattribuer les noms des champs en fonction de leur nouvel index
+            field.querySelectorAll('[name]').forEach(input => {
+                const originalName = input.getAttribute('name');
+                const updatedName = originalName.replace(/\d+/, newIndex);
+                input.setAttribute('name', updatedName);
+            });
+        });
+
 
         let fieldIndex = 1;
-        document.querySelectorAll('.dynamic-field').forEach(function (field) {
+        dynamicFields.forEach(function (field) {
             const type = formData.get(`type${fieldIndex}`);
             const fieldType = formData.get(`FieldType${fieldIndex}`);
             const ponderation = formData.get(`textInput${fieldIndex}`);
@@ -331,7 +354,7 @@ include "Views/master.php";
 
         //Trouver langue ajout dyna
         const languages = Array.from(document.querySelectorAll('.flex.flex-wrap.gap-2 span'))
-        .map(badge => badge.id.replace('badge-', ''));
+            .map(badge => badge.id.replace('badge-', ''));
 
 
         fetch('offerAction.php', {
@@ -364,124 +387,124 @@ include "Views/master.php";
             })
             .catch(error => {
                 console.error('Erreur:', error);
-                overlay.classList.add('hidden'); 
+                overlay.classList.add('hidden');
                 alert('Une erreur est survenue. Veuillez réessayer.');
-            } );
+            });
     });
 
 
     //Langue
 
-    
-function addLanguage() {
 
- 
-fetch('getLanguages.php') 
-    .then(response => response.json())
-    .then(data => {
+    function addLanguage() {
 
-        // Ajoute les options de langues au select
-        const languageSelect = document.getElementById('languageSelect');
-        languageSelect.innerHTML = '';  // Réinitialise les options
-        data.languages.forEach(language => {
-            const option = document.createElement('option');
-            option.value = language.LId;
-            option.textContent = language.LanguageName;
-            languageSelect.appendChild(option);
-        });
 
-        // Affiche l'overlay
+        fetch('getLanguages.php')
+            .then(response => response.json())
+            .then(data => {
+
+                // Ajoute les options de langues au select
+                const languageSelect = document.getElementById('languageSelect');
+                languageSelect.innerHTML = '';  // Réinitialise les options
+                data.languages.forEach(language => {
+                    const option = document.createElement('option');
+                    option.value = language.LId;
+                    option.textContent = language.LanguageName;
+                    languageSelect.appendChild(option);
+                });
+
+                // Affiche l'overlay
+                const overlay = document.getElementById('languageOverlay');
+                overlay.classList.remove('hidden');
+            })
+            .catch(error => {
+                alert('Erreur lors du chargement des langues');
+            });
+    }
+
+
+    function closeLanguageOverlay() {
         const overlay = document.getElementById('languageOverlay');
-        overlay.classList.remove('hidden');
-    })
-    .catch(error => {
-        alert('Erreur lors du chargement des langues');
-    });
-}
-
-
-function closeLanguageOverlay() {
-const overlay = document.getElementById('languageOverlay');
-overlay.classList.add('hidden');
-}
-
-
-function saveLanguage() {
-   const languageSelect = document.getElementById('languageSelect');
-    const selectedLanguageId = languageSelect.value;
-    const selectedLanguageName = languageSelect.options[languageSelect.selectedIndex].text;
-
-    
-    if (!selectedLanguageId) {
-        alert('Veuillez sélectionner une langue.');
-        return;
+        overlay.classList.add('hidden');
     }
 
-    const languagesContainer = document.querySelector('.flex.flex-wrap.gap-2');
 
-    if (document.getElementById(`badge-${selectedLanguageId}`)) {
-        alert('Cette langue a déjà été ajoutée.');
-        return;
-    }
+    function saveLanguage() {
+        const languageSelect = document.getElementById('languageSelect');
+        const selectedLanguageId = languageSelect.value;
+        const selectedLanguageName = languageSelect.options[languageSelect.selectedIndex].text;
 
-// Crée le badge pour la langue sélectionnée
-const badge = document.createElement('span');
-    badge.id = `badge-${selectedLanguageId}`;
-    badge.className = 'badge badge-primary px-4 py-2 text-white bg-blue-600 rounded-full shadow-sm';
 
-    // Contenu du badge
-    badge.innerHTML = `
+        if (!selectedLanguageId) {
+            alert('Veuillez sélectionner une langue.');
+            return;
+        }
+
+        const languagesContainer = document.querySelector('.flex.flex-wrap.gap-2');
+
+        if (document.getElementById(`badge-${selectedLanguageId}`)) {
+            alert('Cette langue a déjà été ajoutée.');
+            return;
+        }
+
+        // Crée le badge pour la langue sélectionnée
+        const badge = document.createElement('span');
+        badge.id = `badge-${selectedLanguageId}`;
+        badge.className = 'badge badge-primary px-4 py-2 text-white bg-blue-600 rounded-full shadow-sm';
+
+        // Contenu du badge
+        badge.innerHTML = `
         <p id="${selectedLanguageId}" class="inline">${selectedLanguageName}</p>
         <button type="button" onclick="removeLanguage('${selectedLanguageId}')" class="ml-2 text-white text-lg">x</button>
     `;
 
-    // Ajoute le badge dans le conteneur
-    languagesContainer.appendChild(badge);
+        // Ajoute le badge dans le conteneur
+        languagesContainer.appendChild(badge);
 
-    // Réinitialise la sélection du menu déroulant
-    languageSelect.value = '';
+        // Réinitialise la sélection du menu déroulant
+        languageSelect.value = '';
 
 
-    closeLanguageOverlay();
-}
-
-function removeLanguage(languageId) {
-    const badge = document.getElementById(`badge-${languageId}`);
-    if (badge) {
-        badge.remove();
+        closeLanguageOverlay();
     }
-}
+
+    function removeLanguage(languageId) {
+        const badge = document.getElementById(`badge-${languageId}`);
+        if (badge) {
+            badge.remove();
+        }
+    }
 
 </script>
 <style>
+    hr {
+        border: 3px solid;
+        border-radius: 5px;
+    }
 
-hr {
-  border: 3px solid ;
-  border-radius: 5px;
-}
     .spinner {
         border-top-color: #3498db;
         /* Couleur du spinner */
     }
 
     .badge {
-    display: inline-flex;
-    justify-content: center; 
-    align-items: center; 
-    padding: 0.5rem 1.5rem; 
-    color: white;
-    background-color: #3490dc;
-    border-radius: 9999px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    text-transform: capitalize;
-    white-space: nowrap;
-}
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0.5rem 1.5rem;
+        color: white;
+        background-color: #3490dc;
+        border-radius: 9999px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-transform: capitalize;
+        white-space: nowrap;
+    }
 
-.flex-wrap {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem; 
-}
+    .flex-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
 </style>
