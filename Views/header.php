@@ -62,7 +62,7 @@ require_once 'Models/account.php';
                             <li><a href="aide.php">{$translations['headerHelp']}</a></li>
                         </ul>
                     </div>
-                    <a href="homepage.php" class="btn btn-ghost text-xl flex items-center gap-2">
+                    <a href="index.php" class="btn btn-ghost text-xl flex items-center gap-2">
                         <img src="images/compass.png" alt="Compass Icon" class="h-6 w-6">
                         {$translations['headerName']}
                     </a>
@@ -85,7 +85,7 @@ require_once 'Models/account.php';
     }elseif ($accountType === "employee") {
         $header .= <<<HTML
         <ul class="menu menu-horizontal px-1">
-                    <li><a href="homepage.php">{$translations['headerHomepage']}</a></li>
+                    <li><a href="index.php">{$translations['headerHomepage']}</a></li>
                     <li><a href="myApplications.php">{$translations['headerApplications']}</a></li>
                     <li><a href="about.php">{$translations['headerAbout']}</a></li>
                     <li><a href="aide.php">{$translations['headerHelp']}</a></li>
@@ -103,7 +103,7 @@ require_once 'Models/account.php';
                         </svg>      
                     
                     <ul class="menu menu-horizontal px-1">
-                    <li><a href="homepage.php">{$translations['headerHomepage']}</a></li>
+                    <li><a href="index.php">{$translations['headerHomepage']}</a></li>
                     <li> <a href="adminpage.php"> Signalements </a></li>
                     <li> <a href="signupAdmin.php"> Création d'admin </a></li>
                     <li> <a href="gestionUser.php"> Gestion des usagers </a></li>
@@ -116,7 +116,7 @@ require_once 'Models/account.php';
     }else{
         $header .= <<<HTML
         <ul class="menu menu-horizontal px-1">
-                    <li><a href="homepage.php">{$translations['headerHomepage']}</a></li>
+                    <li><a href="index.php">{$translations['headerHomepage']}</a></li>
                     <li><a href="myApplications.php">{$translations['headerApplications']}</a></li>
                     <li><a href="about.php">{$translations['headerAbout']}</a></li>
                 </ul>

@@ -10,7 +10,7 @@
             "request": "launch",
             "runtimeArgs": [
                 "-S",
-                "localhost:8080/Projet_Integration/homepage.php",
+                "localhost:8080/Projet_Integration/index.php",
                 "-t",
                 "."
             ],

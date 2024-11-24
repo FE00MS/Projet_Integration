@@ -1,5 +1,5 @@
 <?php
 include 'Utilities/sessionManager.php';
 delete_session();
-header('Location: homepage.php'); 
+header('Location: index.php'); 
 exit();

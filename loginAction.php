@@ -21,7 +21,7 @@ try {
                     $employee = new Employee();
                     $_SESSION["currentUser"] = $employee->GetEmployee($email, $password);
                     $_SESSION["accountType"] = "employee";
-                    header('Location: homepage.php');
+                    header('Location: index.php');
                     exit();
                 } elseif ($accountData["type"] === "Company") {
                     $company = new Company();

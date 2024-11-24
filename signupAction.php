@@ -25,7 +25,7 @@ try {
                     $employee->CreateEmployee($email, $password, $name, $lastname, $age, $expsalary, $hours);
                     $_SESSION["currentUser"] = $employee->GetEmployee($email, $password);
                     $_SESSION["accountType"] = "employee";
-                    header('Location: homepage.php');
+                    header('Location: index.php');
 
                 } catch (PDOException $e) {
                     $_SESSION['signupError'] = "Problème à la création de compte";
