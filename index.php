@@ -14,7 +14,7 @@ if (!isset($_SESSION['currentUser'])) {
 }
 
 if (isset($_GET['report']) && $_GET['report'] === 'success') {
-    echo '<div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative animate-bounce" role="alert">
+    echo '<div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative " role="alert">
             <strong class="font-bold">Signalement envoyé !</strong>
             <span class="block sm:inline">Votre signalement a bien été pris en compte.</span>
           </div>';
@@ -81,21 +81,25 @@ foreach ($allOffers as $offer) {
         : "signupChoices.php";
 
     $content .= <<<HTML
-        <div class="bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition duration-200 p-6 job-offer">
-            <div class="relative">
-            <div class="absolute top-0 right-0 {$ponderationClass} text-white text-sm font-bold rounded-full w-8 h-8 flex items-center justify-center shadow-md">
+
+<div class="bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition duration-200 p-6 flex flex-col justify-between h-full">
+            <div class="relative flex-grow">
+                <div class="absolute top-0 right-0 {$ponderationClass} text-white text-sm font-bold rounded-full w-8 h-8 flex items-center justify-center shadow-md">
                     {$ponderation}
                 </div>
-                <h2 class="text-xl font-semibold text-gray-800 mb-2 job-title">{$jobTitle}</h2>
+                <h2 class="text-xl font-semibold text-gray-800 mb-2 truncate job-title" style="max-width: calc(100% - 2.5rem);" title="{$jobTitle}">
+                    {$jobTitle}
+                </h2>
                 <p class="text-sm text-gray-600 mb-1 company-name">{$companyName}</p>
                 <p class="text-sm text-gray-500 mb-1 location">{$location}</p>
                 <p class="text-sm text-indigo-500 font-semibold mb-1 salary">{$salary} $/hr</p>
                 <p class="text-sm text-gray-500 mb-1 hours">{$hours} heures/semaine</p>
-                <p class="text-sm text-gray-600">{$shortDescription}</p>
+                <p class="text-sm text-gray-600 flex-grow">{$shortDescription}</p>
+
             </div>
-            <button onclick="loadDetails('{$offerLink}')" class="mt-4 w-full bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition duration-200">
-                Détails
-            </button>
+              <button onclick="loadDetails('{$offerLink}')" class="mt-4 bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition duration-200">
+                         Détails
+                     </button>
         </div>
 HTML;
 }
