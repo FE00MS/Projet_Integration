@@ -9,7 +9,9 @@ echo <<<HTML
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JobFinder</title>
+    <link rel="icon" href="images/compass.png" type="image/png">
+
+    <title>Boussole à emploi</title>
     $styles
     $scripts
 </head>
