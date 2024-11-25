@@ -9,7 +9,7 @@ echo <<<HTML
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JobFinder</title>
+    <title>Boussole à emploi</title>
     $styles
     $scripts
 </head>
@@ -18,3 +18,5 @@ echo <<<HTML
 </body>
 </html>
 HTML;
+
+

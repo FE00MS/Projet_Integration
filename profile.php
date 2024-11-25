@@ -530,14 +530,15 @@ HTML;
             $noteId = $note["ID"]; 
     
             $notesDiv .= <<<HTML
-            <div class="page">
-                <div class="margin"></div>
-                <p>$text</p>
-                <form method="post" action="deleteNote.php" class="delete-button">
+        <div class="note-container">
+            <div class="note">
+                <p class="note-text">$text</p>
+                <form method="post" action="deleteNote.php" class="delete-button-container">
                     <input type="hidden" name="noteId" value="$noteId">
                     <button type="submit" class="delete-button">🗑️</button>
                 </form>
             </div>
+        </div>
         HTML;
         
         
@@ -823,53 +824,90 @@ include "Views/master.php";
         display: none;
     }
     .page {
-  position: relative;
-  box-sizing: border-box;
-  max-width: 300px;
-  font-family: cursive;
-  font-size: 20px;
-  border-radius: 10px;
-  background: #fff;
-  background-image: linear-gradient(#f5f5f0 1.1rem, #ccc 1.2rem);
-  background-size: 100% 1.2rem;
-  line-height: 1.2rem;
-  padding: 1.4rem 0.5rem 0.3rem 3rem; /* Réduit le padding à gauche */
-  margin-bottom: 20px; /* Ajoute de l'espacement entre chaque note */
+    position: relative;
+    box-sizing: border-box;
+    max-width: 300px;
+    font-family: cursive;
+    font-size: 20px;
+    border-radius: 10px;
+    background: #fff;
+    background-image: linear-gradient(#f5f5f0 1.1rem, #ccc 1.2rem);
+    background-size: 100% 1.2rem;
+    line-height: 1.2rem;
+    padding: 1.4rem 0.5rem 0.3rem 3rem; /* Réduit le padding à gauche */
+    margin-bottom: 20px; /* Ajoute de l'espacement entre chaque note */
 }
 .link-blue {
     color: blue;
     text-decoration: underline;
 }
 .delete-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 1.2rem;
-  color: #e3342f;
-  cursor: pointer;
-  background: none;
-  border: none;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5rem;
+    color: #e3342f;
+    cursor: pointer;
+    background: none;
+    border: none;
+    z-index: 10;
 }
-
+.delete-button-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    margin-top: 10px;  
+}
+.delete-button-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5rem;
+    color: #e3342f;
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+.note-text {
+    margin: 0;
+    padding-right: 2rem; 
+    color: black;
+    line-height: 1.4rem;
+    word-wrap: break-word; 
+    word-break: break-word;  
+}
+.note-container {
+    position: relative;
+    max-width: 400px; 
+    font-family: cursive;
+    font-size: 18px;
+    border-radius: 10px;
+    background: #fff;
+    background-image: linear-gradient(#f5f5f0 1.1rem, #ccc 1.2rem);
+    background-size: 100% 1.2rem;
+    line-height: 1.4rem;
+    padding: 1.4rem 1rem 1rem 3rem;
+    margin-bottom: 20px;
+}
 .margin {
   position: absolute;
   border-left: 1px solid #d88;
   height: 100%;
-  left: 2.5rem; /* Aligne la marge avec le texte décalé */
+  left: 2.5rem; 
   top: 0;
 }
 
 .page p {
   margin: 0;
-  padding-right: 2rem; /* Ajoute de l'espace à droite pour éviter le bouton */
+  padding-right: 2rem; 
   padding-bottom: 1.2rem;
   color: black;
   line-height: 20px;
 }
 .note-form {
   width: 300px;
-  height: 300px; /* Fixez la largeur souhaitée */
-  flex-shrink: 0; /* Empêche le rétrécissement du conteneur */
+  height: 300px; 
+  flex-shrink: 0; 
 }
 
 </style>

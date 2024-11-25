@@ -8,6 +8,8 @@ include 'Utilities/formUtilities.php';
 
 try {
     if (isset($_POST['email']) && isset($_POST['password'])) {
+
+
         $email = sanitizeString($_POST['email']);
         $password = sanitizeString($_POST['password']);
         $type = sanitizeString($_POST['type']);
@@ -56,7 +58,7 @@ try {
             } else {
                 throw new Exception();
             }
-        }elseif ($type === 'admin') {
+        } elseif ($type === 'admin') {
             $admin = new Admin();
             try {
                 $admin->CreateAdmin($email, $password);
