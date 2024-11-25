@@ -4,31 +4,74 @@ $content= <<<HTML
 
     <div class="max-w-5xl mx-auto p-8 bg-white shadow-md rounded-lg mt-8">
 
-        <!-- Title -->
-        <h1 class="text-4xl font-bold text-center mb-8 text-gray-800">À propos du Projet</h1>
+      
+    <!-- Title -->
+    <h1 class="text-4xl font-bold text-center mb-8 text-gray-800">À propos du Projet</h1>
 
-        <!-- Video Section -->
-        <div class="flex justify-center mb-8">
-            <video controls class="w-full max-w-3xl rounded-lg shadow-lg">
-                <source src="votre_video.mp4" type="video/mp4">
-                Votre navigateur ne supporte pas la vidéo.
-            </video>
-        </div>
+<!-- Video Section -->
+<div class="flex justify-center mb-8">
+    <video controls class="w-full max-w-3xl rounded-lg shadow-lg">
+        <source src="votre_video.mp4" type="video/mp4">
+        Votre navigateur ne supporte pas la vidéo.
+    </video>
+</div>
 
-        <!-- Project Description -->
-        <div class="mb-12">
-            <h2 class="text-2xl font-semibold mb-4 text-gray-700">Description du Projet</h2>
-            <p class="text-gray-600 leading-relaxed mb-4">
-                La Boussole à Emploi est une plateforme web innovante qui vise à optimiser la recherche d'emploi pour les candidats et les recruteurs. Grâce à un algorithme sophistiqué, la plateforme permet aux employeurs de trouver les candidats idéaux en se basant sur des critères multiples et spécifiques, et aux chercheurs d'emploi de découvrir les opportunités qui correspondent vraiment à leurs compétences et aspirations. L'objectif principal de La Boussole à Emploi est de rendre la recherche d'emploi plus efficace et pertinente, en facilitant la mise en relation entre les deux parties.
-                Parmi les principales fonctionnalités, on trouve :
-            </p>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-                <li>1: </li>
-                <li>2:]</li>
-                <li>3:</li>
-                <li>4:</li>
-            </ul>
-        </div>
+<!-- Project Description -->
+<div class="mb-12">
+    <h2 class="text-2xl font-semibold mb-4 text-gray-700">Description du Projet</h2>
+    <p class="text-gray-600 leading-relaxed mb-4">
+    La Boussole à Emploi est une plateforme web innovante qui vise à optimiser la recherche d'emploi pour les candidats et les recruteurs. Grâce à un algorithme sophistiqué, la plateforme permet aux employeurs de trouver les candidats idéaux en se basant sur des critères multiples et spécifiques, et aux chercheurs d'emploi de découvrir les opportunités qui correspondent vraiment à leurs compétences et aspirations. L'objectif principal de La Boussole à Emploi est de rendre la recherche d'emploi plus efficace et pertinente, en facilitant la mise en relation entre les deux parties.
+</p>
+</div>
+
+
+<div class="p-6 bg-gray-50 rounded-lg shadow-lg mb-12">
+    <h2 class="text-3xl font-semibold text-gray-800 mb-6">Fonctionnalités principales</h2>
+    <ul class="space-y-4">
+        <li class="flex items-center">
+            <span class="text-blue-500 mr-4 text-xl"><i class="fas fa-user-circle"></i></span>
+            <p><strong>Création de profil :</strong> Les employeurs et chercheurs d'emploi peuvent personnaliser leur espace pour mieux refléter leurs besoins et compétences.</p>
+        </li>
+        <li class="flex items-center">
+            <span class="text-blue-500 mr-4 text-xl"><i class="fas fa-bell"></i></span>
+            <p><strong>Notifications personnalisées :</strong> Restez informé des opportunités qui vous correspondent le mieux.</p>
+        </li>
+        <li class="flex items-center">
+            <span class="text-blue-500 mr-4 text-xl"><i class="fas fa-search"></i></span>
+            <p><strong>Système de "match" :</strong> Simplifiez votre recherche d'emploi grâce à un algorithme intelligent qui identifie les meilleures offres pour vous.</p>
+        </li>
+        <li class="flex items-center">
+            <span class="text-blue-500 mr-4 text-xl"><i class="fas fa-clipboard-list"></i></span>
+            <p><strong>Suivi des candidatures :</strong> Gardez une trace de vos candidatures pour rester organisé et maximiser vos chances de succès.</p>
+        </li>
+        <li class="flex items-center">
+            <span class="text-blue-500 mr-4 text-xl"><i class="fas fa-edit"></i></span>
+            <p><strong>Gestion des offres :</strong> Créez, modifiez et publiez des offres rapidement et facilement.</p>
+        </li>
+        <li class="flex items-center">
+            <span class="text-blue-500 mr-4 text-xl"><i class="fas fa-sticky-note"></i></span>
+            <p><strong>Personnalisation et bloc-notes :</strong> Adaptez votre profil et utilisez un bloc-notes intégré pour conserver des informations importantes.</p>
+        </li>
+        <li class="flex items-center">
+            <span class="text-blue-500 mr-4 text-xl"><i class="fas fa-filter"></i></span>
+            <p><strong>Recherche avancée :</strong> Trouvez l'emploi idéal grâce à des filtres détaillés (intitulé du poste, entreprise, salaire, localisation, taux horaire).</p>
+        </li>
+        <li class="flex items-center">
+            <span class="text-blue-500 mr-4 text-xl"><i class="fas fa-language"></i></span>
+            <p><strong>Multilingue :</strong> Une plateforme entièrement disponible en deux langues pour une accessibilité maximale.</p>
+        </li>
+        <li class="flex items-center">
+            <span class="text-blue-500 mr-4 text-xl"><i class="fas fa-shield-alt"></i></span>
+            <p><strong>Modération efficace :</strong> Un système intégré pour signaler et gérer les contenus ou utilisateurs non conformes.</p>
+        </li>
+        <li class="flex items-center">
+            <span class="text-blue-500 mr-4 text-xl"><i class="fas fa-star"></i></span>
+            <p><strong>Évaluation des offres :</strong> Notez les offres d'emploi pour aider les autres utilisateurs à faire des choix éclairés.</p>
+        </li>
+    </ul>
+</div>
+
+
 
         <!-- Screenshots Section -->
         <div class="mb-12">

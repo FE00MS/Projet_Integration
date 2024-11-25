@@ -1,7 +1,7 @@
 <?php
 require_once 'Models/company.php';
 require_once 'BD/BD.php';
-include 'Utilities/sessionManager.php';  
+include 'Utilities/sessionManager.php';
 
 $offers = new Database();
 $allOffers;
@@ -52,38 +52,51 @@ $content = <<<HTML
 
         <div id="offersGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 HTML;
+function getPonderationClass($ponderation) {
+    if ($ponderation >= 90) {
+        return 'bg-green-500';
+    } elseif ($ponderation >= 70) {
+        return 'bg-yellow-500';
+    } elseif ($ponderation >= 50) {
+        return 'bg-orange-500';
+    } else {
+        return 'bg-red-500';
+    }
+}
 
 foreach ($allOffers as $offer) {
     $ponderation = htmlspecialchars($offer['Ponderation'] ?? 'Na');
+    $ponderationClass = getPonderationClass((int)$ponderation); 
+
     $jobTitle = htmlspecialchars($offer['Job']);
-    $companyName = htmlspecialchars($offer['CName']); 
+    $companyName = htmlspecialchars($offer['CName']);
     $location = htmlspecialchars($offer['Location']);
     $hours = htmlspecialchars($offer['Hours']);
     $salary = htmlspecialchars($offer['Salary']);
     $description = htmlspecialchars($offer['Description']);
-    $shortDescription = substr($description, 0, 100) . '...'; 
-    $offerId = htmlspecialchars($offer['Id']); 
-    $offerLink = isset($_SESSION['currentUser']) 
-        ? "offerDetails.php?id={$offerId}" 
-        : "signupChoices.php"; 
+    $shortDescription = substr($description, 0, 100) . '...';
+    $offerId = htmlspecialchars($offer['Id']);
+    $offerLink = isset($_SESSION['currentUser'])
+        ? "offerDetails.php?id={$offerId}"
+        : "signupChoices.php";
 
     $content .= <<<HTML
-    <div class="bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition duration-200 p-6">
-        <div class="relative">
-            <div class="absolute top-0 right-0 bg-red-500 text-white text-sm font-bold rounded-full w-8 h-8 flex items-center justify-center shadow-md">
-                {$ponderation}
+        <div class="bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition duration-200 p-6 job-offer">
+            <div class="relative">
+            <div class="absolute top-0 right-0 {$ponderationClass} text-white text-sm font-bold rounded-full w-8 h-8 flex items-center justify-center shadow-md">
+                    {$ponderation}
+                </div>
+                <h2 class="text-xl font-semibold text-gray-800 mb-2 job-title">{$jobTitle}</h2>
+                <p class="text-sm text-gray-600 mb-1 company-name">{$companyName}</p>
+                <p class="text-sm text-gray-500 mb-1 location">{$location}</p>
+                <p class="text-sm text-indigo-500 font-semibold mb-1 salary">{$salary} $/hr</p>
+                <p class="text-sm text-gray-500 mb-1 hours">{$hours} heures/semaine</p>
+                <p class="text-sm text-gray-600">{$shortDescription}</p>
             </div>
-            <h2 class="text-xl font-semibold text-gray-800 mb-2">{$jobTitle}</h2>
-            <p class="text-sm text-gray-600 mb-1">{$companyName}</p>
-            <p class="text-sm text-gray-500 mb-1">{$location}</p>
-            <p class="text-sm text-indigo-500 font-semibold mb-1">{$salary} $/hr</p>
-            <p class="text-sm text-gray-500 mb-1">{$hours} heures/semaine</p>
-            <p class="text-sm text-gray-600">{$shortDescription}</p>
+            <button onclick="loadDetails('{$offerLink}')" class="mt-4 w-full bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition duration-200">
+                Détails
+            </button>
         </div>
-        <button onclick="loadDetails('{$offerLink}')" class="mt-4 w-full bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition duration-200">
-            Détails
-        </button>
-    </div>
 HTML;
 }
 
@@ -104,26 +117,34 @@ $content .= <<<HTML
 
             if (searchInput === '' || searchCriteria === '') {
                 showOffer = true;
-            } else if (searchCriteria === 'job-title') {
-                textToSearch = offer.querySelector('.job-title').textContent.toLowerCase();
-                showOffer = textToSearch.startsWith(searchInput);
-            } else if (searchCriteria === 'salary') {
-                textToSearch = offer.querySelector('.salary').textContent.toLowerCase();
-                const salaryValue = parseFloat(textToSearch.replace(/[^0-9.]/g, ''));
-                const searchValue = parseFloat(searchInput);
-                showOffer = !isNaN(salaryValue) && !isNaN(searchValue) && salaryValue >= searchValue;
-            } else if (searchCriteria === 'location') {
-                textToSearch = offer.querySelector('.location').textContent.toLowerCase();
-                showOffer = textToSearch.startsWith(searchInput);
-            } else if (searchCriteria === 'hours') {
-                textToSearch = offer.querySelector('.hours').textContent.toLowerCase();
-                const hoursValue = parseFloat(textToSearch.replace(/[^0-9.]/g, ''));
-                const searchValue = parseFloat(searchInput);
-                showOffer = !isNaN(hoursValue) && !isNaN(searchValue) && hoursValue >= searchValue;
-            } else if (searchCriteria === 'company-name') {
-                textToSearch = offer.querySelector('.company-name').textContent.toLowerCase();
-                showOffer = textToSearch.startsWith(searchInput);
+            } else  {
+            switch (searchCriteria) {
+                case 'job-title':
+                    textToSearch = offer.querySelector('.job-title')?.textContent.toLowerCase() || '';
+                    showOffer = textToSearch.includes(searchInput);
+                    break;
+                case 'company-name':
+                    textToSearch = offer.querySelector('.company-name')?.textContent.toLowerCase() || '';
+                    showOffer = textToSearch.includes(searchInput);
+                    break;
+                case 'location':
+                    textToSearch = offer.querySelector('.location')?.textContent.toLowerCase() || '';
+                    showOffer = textToSearch.includes(searchInput);
+                    break;
+                case 'salary':
+                    const salaryValue = parseFloat(offer.querySelector('.salary')?.textContent.replace(/[^0-9.]/g, '') || 0);
+                    const searchValue = parseFloat(searchInput);
+                    showOffer = !isNaN(salaryValue) && !isNaN(searchValue) && salaryValue >= searchValue;
+                    break;
+                case 'hours':
+                    const hoursValue = parseFloat(offer.querySelector('.hours')?.textContent.replace(/[^0-9.]/g, '') || 0);
+                    const searchValueHours = parseFloat(searchInput);
+                    showOffer = !isNaN(hoursValue) && !isNaN(searchValueHours) && hoursValue >= searchValueHours;
+                    break;
+                default:
+                    break;
             }
+        }
 
             offer.style.display = showOffer ? 'block' : 'none';
         });
