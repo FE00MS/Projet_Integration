@@ -204,12 +204,11 @@ HTML;
             <p class="text-lg text-gray-700">{$translations['noNotes']}</p>
 HTML;
 }
-
 // Formulaire de signalement
 $content .= <<<HTML
         <form method="post" action="addReport.php" class="bg-gray-50 mt-10 p-6 rounded-lg shadow">
             <h3 class="text-lg font-semibold text-gray-800 mb-4">{$translations['reportOffer']}</h3>
-            <input type="hidden" name="IdReported" value="{$offer['IdC']}">
+            <input type="hidden" name="IdReported" value="{$offer['Id']}">
             <input type="hidden" name="IdSender" value="{$employeeId}">
             <input type="hidden" name="offerId" value="{$offerId}">
             <label for="ReportType" class="block text-gray-700 font-semibold mb-2">{$translations['reportType']} :</label>

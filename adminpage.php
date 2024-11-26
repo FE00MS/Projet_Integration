@@ -60,7 +60,7 @@ HTML;
 if (!empty($reports)) {
     $content .= '<ul class="bg-white shadow rounded-lg divide-y divide-gray-200">';
     foreach ($reports as $report) {
-
+        var_dump($report);
         $reportId = $report['Id'];
         $reportType = getReportTypeLabel(htmlspecialchars($report['ReportType']));
         $reason = htmlspecialchars($report['Reason']);
