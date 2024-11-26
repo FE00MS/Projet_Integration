@@ -2,29 +2,28 @@
 require_once 'Models/account.php';
 require_once 'Models/employee.php';
 
-    $accountModel = new Account();
-    $isLoggedIn = isset($_SESSION['currentUser']);
-    $Name ;
-    if($isLoggedIn)
-    {
-        $userId = $_SESSION['currentUser']['Id'];
-        $account = new Employee();
+$accountModel = new Account();
+$isLoggedIn = isset($_SESSION['currentUser']);
+$Name;
+if ($isLoggedIn) {
+    $userId = $_SESSION['currentUser']['Id'];
+    $account = new Employee();
 
+    if ($_SESSION["accountType"] == "employee") {
         $accountData = $account->GetEmployeeByIds($userId);
-        $Name = $accountData[0]['Name']. " ". $accountData[0]['LastName'];
+        $Name = $accountData[0]['Name'] . " " . $accountData[0]['LastName'];
 
-        $notifications = $accountModel->GetNotifications($userId);
     }
-    $accountType = $_SESSION["accountType"] ?? null;
-    if(!isset($_SESSION['currentLanguage']))
-    {
-        $_SESSION['currentLanguage'] = "FR";
-    }
-    $lang = $_SESSION['currentLanguage'];
 
-    $jsonFile = ($lang === "FR") ? "fr.json" : "en.json";
+    $notifications = $accountModel->GetNotifications($userId);
+}
+$accountType = $_SESSION["accountType"] ?? null;
+if (!isset($_SESSION['currentLanguage'])) {
+    $_SESSION['currentLanguage'] = "FR";
+}
+$lang = $_SESSION['currentLanguage'];
 
-    $jsonData = file_get_contents($jsonFile);
+$jsonFile = ($lang === "FR") ? "fr.json" : "en.json";
 
     $translations = json_decode($jsonData, true);
     if ($isLoggedIn && $accountType != "admin") {
@@ -125,11 +124,11 @@ require_once 'Models/employee.php';
                 </div>
                 <div class="navbar-center hidden lg:flex">
         HTML;
-    }
+}
 
-    //Affichage milieu
-    if ($accountType === "company") {
-        $header .= <<<HTML
+//Affichage milieu
+if ($accountType === "company") {
+    $header .= <<<HTML
         <ul class="menu menu-horizontal px-1">
                     <li><a href="myOffers.php">{$translations['headerOffers']}</a></li>
                     <li><a href="createOffer.php">{$translations['headerCreate']}</a></li>
@@ -138,8 +137,8 @@ require_once 'Models/employee.php';
             </div>
             <div class="navbar-end flex items-center gap-4">
         HTML;
-    }elseif ($accountType === "employee") {
-        $header .= <<<HTML
+} elseif ($accountType === "employee") {
+    $header .= <<<HTML
         <ul class="menu menu-horizontal px-1">
                     <li><a href="index.php">{$translations['headerHomepage']}</a></li>
                     <li><a href="myApplications.php">{$translations['headerApplications']}</a></li>
@@ -149,8 +148,8 @@ require_once 'Models/employee.php';
             </div>
             <div class="navbar-end flex items-center gap-4">
         HTML;
-    }elseif ($accountType === "admin")  {
-        $header = <<<HTML
+} elseif ($accountType === "admin") {
+    $header = <<<HTML
             <div class="navbar bg-base-100 w-full sticky top-0 shadow-md z-50  mb-6">
                 <div class="navbar-start">
                
@@ -169,8 +168,8 @@ require_once 'Models/employee.php';
                 
             </div>
         HTML;
-    }else{
-        $header .= <<<HTML
+} else {
+    $header .= <<<HTML
         <ul class="menu menu-horizontal px-1">
                     <li><a href="index.php">{$translations['headerHomepage']}</a></li>
                     <li><a href="myApplications.php">{$translations['headerApplications']}</a></li>
@@ -179,7 +178,7 @@ require_once 'Models/employee.php';
             </div>
             <div class="navbar-end flex items-center gap-4">
         HTML;
-    }
+}
 
     if ($isLoggedIn && $accountType != "admin") {
         $header .= <<<HTML
@@ -205,32 +204,28 @@ require_once 'Models/employee.php';
                     <h3 class="font-bold text-lg mb-2">Notifications</h3>
                     <div id="notificationsContent" class="text-sm text-gray-600">
         HTML;
-    
-        if (!empty($notifications)) {
-            foreach ($notifications as $notification) {
-                $id = $notification['Id'];
-                $header .= <<<HTML
+
+    if (!empty($notifications)) {
+        foreach ($notifications as $notification) {
+            $id = $notification['Id'];
+            $header .= <<<HTML
                     <div id="notification-$id" class="notification-item mb-3 p-2 border border-gray-400 rounded-lg">
                         <button onclick="deleteNotif($id)" class="btn btn-sm btn-circle btn-ghost">✕</button>
                 HTML;
-                if($notification['LinkedOffer']==null){
-                    $header .= <<<HTML
+            if ($notification['LinkedOffer'] == null) {
+                $header .= <<<HTML
                         <strong class="text-sm text-gray-800 btn btn-ghost">{$notification['Title']}</strong>
                     HTML;
-                }
-                else{
-                    $header .= <<<HTML
+            } else {
+                $header .= <<<HTML
                         <button onclick="loadDetails('offerDetails.php?id={$notification['LinkedOffer']}')" class="text-sm text-gray-800 btn btn-ghost">{$notification['Title']}</button>
                     HTML;
-                }
-                $header .= <<<HTML
+            }
+            $header .= <<<HTML
                         <br>
                         <span>{$notification['Message']}</span>
                     </div>
                 HTML;
-            }
-        } else {
-            $header .= "<div>Aucune notifications</div>";
         }
     
         $header .= <<<HTML
@@ -248,8 +243,8 @@ require_once 'Models/employee.php';
             </div>
         </div>
         HTML;
-    } elseif (!$isLoggedIn ){
-        $header .= <<<HTML
+} elseif (!$isLoggedIn) {
+    $header .= <<<HTML
                 <a onclick="changeLanguage('$lang')" class="btn btn-ghost"> $lang
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
@@ -260,31 +255,31 @@ require_once 'Models/employee.php';
             </div>
         </div>
     HTML;
+}
+?>
+<script>
+    function changeLanguage(lang) {
+        const newLang = lang === 'FR' ? 'EN' : 'FR';
+        window.location.href = `changeLanguage.php?lang=${newLang}`;
     }
-    ?>
-     <script>
-        function changeLanguage(lang) {
-            const newLang = lang === 'FR' ? 'EN' : 'FR';
-            window.location.href = `changeLanguage.php?lang=${newLang}`;
-        }
-        function toggleNotifications() {
-            var notifBox = document.getElementById("notificationsBox");
-            notifBox.classList.toggle("hidden");
-        }
-        function deleteNotif(id) {
-            console.log(id);
-            
-            $.ajax({
-                url: 'deleteNotification.php',
-                type: 'POST',
-                data: { id: id },
-                success: function(response) {
-                    console.log(response);
-                    $('#notification-' + id).remove();
-                },
-                error: function(xhr, status, error) {
-                    console.error("Error deleting notification:", error);
-                }
-            });
-        }
-    </script>
+    function toggleNotifications() {
+        var notifBox = document.getElementById("notificationsBox");
+        notifBox.classList.toggle("hidden");
+    }
+    function deleteNotif(id) {
+        console.log(id);
+
+        $.ajax({
+            url: 'deleteNotification.php',
+            type: 'POST',
+            data: { id: id },
+            success: function (response) {
+                console.log(response);
+                $('#notification-' + id).remove();
+            },
+            error: function (xhr, status, error) {
+                console.error("Error deleting notification:", error);
+            }
+        });
+    }
+</script>
