@@ -25,10 +25,10 @@ $lang = $_SESSION['currentLanguage'];
 
 $jsonFile = ($lang === "FR") ? "fr.json" : "en.json";
 
-    $translations = json_decode($jsonData, true);
-    if ($isLoggedIn && $accountType != "admin") {
-        if($accountType === "company"){
-            $header = <<< HTML
+$translations = json_decode($jsonData, true);
+if ($isLoggedIn && $accountType != "admin") {
+    if ($accountType === "company") {
+        $header = <<<HTML
                 <div class="navbar bg-base-100 w-full sticky top-0 shadow-md z-50 mb-6">
                     <div class="navbar-start">
                         <div class="dropdown">
@@ -63,8 +63,9 @@ $jsonFile = ($lang === "FR") ? "fr.json" : "en.json";
                     </div>
                     <div class="navbar-center hidden lg:flex">
             HTML;
-        } if($accountType === "employee") {
-            $header = <<< HTML
+    }
+    if ($accountType === "employee") {
+        $header = <<<HTML
                 <div class="navbar bg-base-100 w-full sticky top-0 shadow-md z-50 mb-6">
                     <div class="navbar-start">
                         <div class="dropdown">
@@ -100,8 +101,9 @@ $jsonFile = ($lang === "FR") ? "fr.json" : "en.json";
                     </div>
                     <div class="navbar-center hidden lg:flex">
             HTML;
-    }else {
-        $header = <<< HTML
+    }
+} else {
+    $header = <<<HTML
             <div class="navbar bg-base-100 w-full sticky top-0 shadow-md z-50 mb-6">
                 <div class="navbar-start">
                     <div class="dropdown">
@@ -180,8 +182,8 @@ if ($accountType === "company") {
         HTML;
 }
 
-    if ($isLoggedIn && $accountType != "admin") {
-        $header .= <<<HTML
+if ($isLoggedIn && $accountType != "admin") {
+    $header .= <<<HTML
             <div class="btn btn-ghost hidden lg:flex">
             <a onclick="changeLanguage('$lang')" class="btn btn-ghost"> $lang
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -204,31 +206,31 @@ if ($accountType === "company") {
                     <h3 class="font-bold text-lg mb-2">Notifications</h3>
                     <div id="notificationsContent" class="text-sm text-gray-600">
         HTML;
-
-    if (!empty($notifications)) {
-        foreach ($notifications as $notification) {
-            $id = $notification['Id'];
-            $header .= <<<HTML
+}
+if (!empty($notifications)) {
+    foreach ($notifications as $notification) {
+        $id = $notification['Id'];
+        $header .= <<<HTML
                     <div id="notification-$id" class="notification-item mb-3 p-2 border border-gray-400 rounded-lg">
                         <button onclick="deleteNotif($id)" class="btn btn-sm btn-circle btn-ghost">✕</button>
                 HTML;
-            if ($notification['LinkedOffer'] == null) {
-                $header .= <<<HTML
+        if ($notification['LinkedOffer'] == null) {
+            $header .= <<<HTML
                         <strong class="text-sm text-gray-800 btn btn-ghost">{$notification['Title']}</strong>
                     HTML;
-            } else {
-                $header .= <<<HTML
+        } else {
+            $header .= <<<HTML
                         <button onclick="loadDetails('offerDetails.php?id={$notification['LinkedOffer']}')" class="text-sm text-gray-800 btn btn-ghost">{$notification['Title']}</button>
                     HTML;
-            }
-            $header .= <<<HTML
+        }
+        $header .= <<<HTML
                         <br>
                         <span>{$notification['Message']}</span>
                     </div>
                 HTML;
-        }
-    
-        $header .= <<<HTML
+    }
+
+    $header .= <<<HTML
                             </div>
                         </div>
                     </div>
