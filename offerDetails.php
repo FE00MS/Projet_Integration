@@ -5,17 +5,16 @@ require_once 'Models/offer.php';
 require_once 'Models/field.php';
 require_once 'Models/language.php';
 include 'Models/rating.php';
-require_once 'Models/employee.php';  
-include 'Utilities/sessionManager.php';  
+require_once 'Models/employee.php';
+include 'Utilities/sessionManager.php';
 
 if (isset($_GET['id'])) {
-    $offerId = htmlspecialchars($_GET['id']); 
+    $offerId = htmlspecialchars($_GET['id']);
 } else {
     die("Offer ID is missing.");
 }
 
-if(!isset($_SESSION['currentLanguage']))
-{
+if (!isset($_SESSION['currentLanguage'])) {
     $_SESSION['currentLanguage'] = "FR";
 }
 $lang = $_SESSION['currentLanguage'];
@@ -46,11 +45,11 @@ foreach ($languages as $language) {
 }
 
 $offerLanguages = [];
-if(!empty($langue)){
+if (!empty($langue)) {
     foreach ($langue as $lang) {
         $languageId = $lang['LId'];
         $offerLanguages[] = isset($languageNames[$languageId]) ? $languageNames[$languageId] : 'Unknown';
-    }    
+    }
 }
 
 $f = new Field();
@@ -70,7 +69,7 @@ if (!$offer) {
 }
 
 $jobTitle = htmlspecialchars($offer['Job']);
-$companyName = $company->GetCompanyById($offer['IdC'])['CName'];  
+$companyName = $company->GetCompanyById($offer['IdC'])['CName'];
 $location = htmlspecialchars($offer['Location']);
 $hours = htmlspecialchars($offer['Hours']);
 $salary = htmlspecialchars($offer['Salary']);
@@ -101,22 +100,22 @@ $content .= <<<HTML
  HTML;
 $content .= '<div class="prerequisites-list">';
 
-if(empty($prerequisites)){
+if (empty($prerequisites)) {
     $content .= <<<HTML
     <div class="border p-4 rounded mb-4">
         <strong>{$translations['noPre']}</strong>
     </div>
     HTML;
-}else{
+} else {
     foreach ($prerequisites as $prerequisite) {
         $type = htmlspecialchars($prerequisite['Type']) === 'F' ? 'Formation' : 'Exprerience';
         $fieldTypeId = $prerequisite['FieldType'];
         $ponderation = htmlspecialchars($prerequisite['Ponderation']);
         $duration = htmlspecialchars($prerequisite['Duration']);
         $complete = htmlspecialchars($prerequisite['Complete']) === '1' ? "{$translations['yes']}" : "{$translations['no']}";
-    
+
         $fieldTypeName = isset($fieldNames[$fieldTypeId]) ? $fieldNames[$fieldTypeId] : 'Unknown';
-    
+
         $content .= <<<HTML
         <div class="prerequisite-item border p-4 rounded mb-4">
             <p><strong>{$translations['prerequisiteType']}:</strong> $type</p>
@@ -126,7 +125,7 @@ if(empty($prerequisites)){
             <p><strong>{$translations['finished']}:</strong> $complete</p>
         </div>
     HTML;
-    }    
+    }
 }
 
 $content .= '</div>';
@@ -152,9 +151,44 @@ if (empty($offerLanguages)) {
 }
 
 
+$ratingModel = new Rating();
+$ratings = $ratingModel->GetAllRating($offer['IdC']);
+
 
 if ($hasApplied) {
-    $content .= <<<HTML
+    $hasEmployeeRating = false;
+
+    if ($ratings) {
+        foreach ($ratings as $rating) {
+            if ($rating['IdEmp'] == $employeeId) {
+                $hasEmployeeRating = true;
+                break;
+            }
+        }
+    }
+
+
+    if ($hasEmployeeRating) {
+        $content .= <<<HTML
+        <p class="text-green-600 font-semibold">{$translations['alreadyApplied']}</p>
+        <form method="post" action="editRating.php" class="mt-6">
+            <input type="hidden" name="IdCompany" value="{$offer['IdC']}">
+            <input type="hidden" name="offerId" value="{$offerId}">
+            <label for="rating" class="block mb-2 text-lg font-semibold text-gray-800">{$translations['note']} :</label>
+            <select name="rating" id="rating" class="block w-full border-gray-300 rounded-lg p-2 mb-4" required>
+                <option value="" disabled selected>{$translations['select']}</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-600 transition">{$translations['note']}</button>
+        </form>
+HTML;
+    } else {
+
+        $content .= <<<HTML
         <p class="text-green-600 font-semibold">{$translations['alreadyApplied']}</p>
         <form method="post" action="addRating.php" class="mt-6">
             <input type="hidden" name="IdCompany" value="{$offer['IdC']}">
@@ -171,6 +205,7 @@ if ($hasApplied) {
             <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-600 transition">{$translations['note']}</button>
         </form>
 HTML;
+    }
 } else {
     $content .= <<<HTML
         <a href="apply.php?id={$offerId}" class="inline-block mt-6 bg-blue-500 text-white py-2 px-6 rounded-lg shadow hover:bg-blue-600 transition">{$translations['apply']}</a>
@@ -178,8 +213,7 @@ HTML;
 }
 
 // Affichage des notes des utilisateurs
-$ratingModel = new Rating();
-$ratings = $ratingModel->GetAllRating($offer['IdC']);
+
 if ($ratings) {
     $content .= '<h2 class="text-2xl font-semibold text-gray-800 mt-10 mb-4">Notes des Utilisateurs</h2><ul class="space-y-4">';
     foreach ($ratings as $rating) {

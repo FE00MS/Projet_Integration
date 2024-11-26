@@ -82,7 +82,7 @@ foreach ($allOffers as $offer) {
 
     $content .= <<<HTML
 
-<div class="bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition duration-200 p-6 flex flex-col justify-between h-full">
+<div class="bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition duration-200 p-6 flex flex-col justify-between h-full job-offer">
             <div class="relative flex-grow">
                 <div class="absolute top-0 right-0 {$ponderationClass} text-white text-sm font-bold rounded-full w-8 h-8 flex items-center justify-center shadow-md">
                     {$ponderation}

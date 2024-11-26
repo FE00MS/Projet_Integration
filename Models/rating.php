@@ -29,7 +29,25 @@ class Rating{
             throw new Exception("Erreur lors de l'ajout de la note : " . $e->getMessage());
         }
     }
+    public function editRating($IdEmp, $Name, $LastName, $IdCompany, $Rate) {
+        try {
+            $sql = $this->conn->prepare("EXEC EditRating 
+                @IdEmp = :IdEmp,
+                @Name = :Name,
+                @LastName = :LastName,
+                @IdCompany = :IdCompany,
+                @Rate = :Rate");
+            $sql->bindParam(':IdEmp', $IdEmp, PDO::PARAM_INT);
+            $sql->bindParam(':Name', $Name, PDO::PARAM_STR);
+            $sql->bindParam(':LastName', $LastName, PDO::PARAM_STR);
+            $sql->bindParam(':IdCompany', $IdCompany, PDO::PARAM_INT);
+            $sql->bindParam(':Rate', $Rate, PDO::PARAM_INT);
     
+            $sql->execute();
+        } catch (PDOException $e) {
+            throw new Exception("Erreur lors de l'ajout de la note : " . $e->getMessage());
+        }
+    }
 
     public function DeleteRating($IdEmp, $IdCompany) {
         try {
