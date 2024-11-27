@@ -108,7 +108,7 @@ $content= <<<HTML
                 
                 <div class="p-6 bg-gray-50 rounded-lg shadow-md">
                     <h3 class="text-xl font-bold text-gray-800">Mathieu Roy</h3>
-                    <p class="text-gray-600">Rôle: </p>
+                    <p class="text-gray-600">Rôle: HTML, PHP, Javascript, CSS </p>
                     <a class="lien" href="https://ca.linkedin.com/in/mathieu-roy-25111233b" alt="Lien LinkedIn" target="_blank"><u>Lien vers ma page Github</u></a>
 
                 </div>
