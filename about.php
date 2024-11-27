@@ -11,8 +11,8 @@ $content= <<<HTML
 <!-- Video Section -->
 <div class="flex justify-center mb-8">
     <video controls class="w-full max-w-3xl rounded-lg shadow-lg">
-        <source src="votre_video.mp4" type="video/mp4">
-        Votre navigateur ne supporte pas la vidéo.
+        <source src="images/video.mkv" type="video/mp4">
+       
     </video>
 </div>
 
