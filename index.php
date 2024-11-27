@@ -32,7 +32,7 @@ $translations = json_decode($jsonData, true);
 $content = <<<HTML
 <div id="mainContainer" class="flex flex-col items-center justify-center bg-gray-100 p-6">
     <div class="w-full max-w-screen-lg mx-auto">
-        <div class="flex items-center gap-4 mb-6">
+        <div class="flex items-center  gap-4 mb-6">
             <select id="searchCriteria" class="border border-gray-300 rounded-lg p-2 shadow-sm focus:ring focus:ring-indigo-200" onchange="filterOffers()" aria-label="Select search criteria">
                 <option value="job-title">{$translations['offer']}</option>
                 <option value="company-name">{$translations['offerName']}</option>

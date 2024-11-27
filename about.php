@@ -1,5 +1,5 @@
 <?php 
-
+include 'Utilities/sessionManager.php';
 $content= <<<HTML
 
     <div class="max-w-5xl mx-auto p-8 bg-white shadow-md rounded-lg mt-8">
@@ -95,23 +95,38 @@ $content= <<<HTML
             <div class="space-y-8">
                 <div class="p-6 bg-gray-50 rounded-lg shadow-md">
                     <h3 class="text-xl font-bold text-gray-800">Jacob Lebel-Frenette</h3>
-                    <p class="text-gray-600">Brève biographie et rôle dans le projet.</p>
+                    <p class="text-gray-600">Rôle: PHP, HTML, CSS, Javascript </p>
+                    <a class="lien" href="https://github.com/jacoblf314" alt="Lien Github" target="_blank"><u>Lien vers ma page Github</u></a>
+                    <br>
+                    <a class="lien" href="https://www.linkedin.com/in/jacob-lebel-frenette-851b15324/" alt="Lien LinkedIn" target="_blank"><u>Lien vers ma page LinkedIn</u></a>
                 </div>
                 <div class="p-6 bg-gray-50 rounded-lg shadow-md">
-                    <h3 class="text-xl font-bold text-gray-800">Loic Lompo</h3>
-                    <p class="text-gray-600">Brève biographie et rôle dans le projet.</p>
+                    <h3 class="text-xl font-bold text-gray-800">Loïc Lompo</h3>
+                    <p class="text-gray-600">Rôle: SQL Server, PHP </p>
+                    <a class="lien" href="https://github.com/FE00MS" alt="Lien Github" target="_blank"><u>Lien vers ma page Github</u></a>
                 </div>
+                
                 <div class="p-6 bg-gray-50 rounded-lg shadow-md">
                     <h3 class="text-xl font-bold text-gray-800">Mathieu Roy</h3>
-                    <p class="text-gray-600">Brève biographie et rôle dans le projet.</p>
+                    <p class="text-gray-600">Rôle: </p>
+                    <a class="lien" href="https://ca.linkedin.com/in/mathieu-roy-25111233b" alt="Lien LinkedIn" target="_blank"><u>Lien vers ma page Github</u></a>
+
                 </div>
+                
                 <div class="p-6 bg-gray-50 rounded-lg shadow-md">
                     <h3 class="text-xl font-bold text-gray-800">Dereck Desjardins</h3>
-                    <p class="text-gray-600">Brève biographie et rôle dans le projet.</p>
+                    <p class="text-gray-600">Rôle: SQL Server, PHP, JavaScript</p>
+                    <a class="lien" href="https://github.com/Dereck-Desjardins" alt="Lien Github" target="_blank"><u>Lien vers ma page Github</u></a>
                 </div>
             </div>
         </div>
     </div>
 HTML;
 include 'Views/master.php';
+?>
 
+<style>
+    .lien{
+        color: blue;
+    }
+</style>

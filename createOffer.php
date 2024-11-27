@@ -25,11 +25,8 @@ $content = <<<HTML
     <div class="spinner border-t-4 border-b-4 border-blue-500 w-16 h-16 rounded-full animate-spin"></div>
 </div>
 
-    <div class="flex justify-between items-center pt-12">
-        <h1 class="text-4xl font-bold pl-56">{$translations['createOffer']}</h1>
-    </div>
-
     <form id="offerForm" method="POST" action="offerAction.php" class="border-2 p-6 rounded-lg shadow-lg w-full max-w-5xl mx-auto mt-8 space-y-8">
+    <h1 class="text-4xl font-bold ">{$translations['createOffer']}</h1>
 
         <div class="flex flex-col md:flex-row justify-between items-start gap-8">
             <div class="w-full md:w-1/2 space-y-6 pr-8 md:pr-16">
