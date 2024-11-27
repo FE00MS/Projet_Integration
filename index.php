@@ -95,7 +95,7 @@ foreach ($allOffers as $offer) {
 
     $content .= <<<HTML
 
-<div class="bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition duration-200 p-6 flex flex-col justify-between h-full job-offer">
+        <div class="bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition duration-200 p-6 flex flex-col justify-between h-full job-offer relative">
             <div class="relative flex-grow">
                 <div class="absolute top-0 right-0 {$ponderationClass} text-white text-sm font-bold rounded-full w-8 h-8 flex items-center justify-center shadow-md">
                     {$ponderation}
@@ -107,13 +107,15 @@ foreach ($allOffers as $offer) {
                 <p class="text-sm text-gray-500 mb-1 location">{$location}</p>
                 <p class="text-sm text-indigo-500 font-semibold mb-1 salary">{$salary} $/hr</p>
                 <p class="text-sm text-gray-500 mb-1 hours">{$hours} heures/semaine</p>
-                <p class="text-sm text-gray-600 flex-grow">{$shortDescription}</p>
-
+                <p class="text-sm text-gray-600 flex-grow mb-6">{$shortDescription}</p> <!-- Ajout de la marge inférieure plus grande -->
             </div>
-              <button onclick="loadDetails('{$offerLink}')" class="mt-4 bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition duration-200">
-                         Détails
-                     </button>
+            <div class="flex justify-center w-full absolute bottom-0 left-0 p-6 pt-10"> <!-- Augmentation du padding-top ici -->
+                <button onclick="loadDetails('{$offerLink}')" class="details-button bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition duration-200 w-full">
+                    Détails
+                </button>
+            </div>
         </div>
+
         
 HTML;
 }
