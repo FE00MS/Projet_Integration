@@ -37,10 +37,10 @@ function getExperiencesForProfile($userId) {
     if ($experienceData != null) {
         foreach ($experienceData as $exp) {
             switch ($exp['TypeExp']) {
-                case 'For':
+                case 'F':
                     $formations[] = $exp;
                     break;
-                case 'Exp':
+                case 'E':
                     $experiences[] = $exp;
                     break;
                

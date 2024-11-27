@@ -32,27 +32,40 @@ $translations = json_decode($jsonData, true);
 $content = <<<HTML
 <div id="mainContainer" class="flex flex-col items-center justify-center bg-gray-100 p-6">
     <div class="w-full max-w-screen-lg mx-auto">
-        <div class="flex items-center  gap-4 mb-6">
-            <select id="searchCriteria" class="border border-gray-300 rounded-lg p-2 shadow-sm focus:ring focus:ring-indigo-200" onchange="filterOffers()" aria-label="Select search criteria">
+        <div class="flex flex-col md:flex-row items-center gap-4 mb-6">
+            <select id="searchCriteria" 
+                    class="w-full md:w-auto border border-gray-300 rounded-lg p-2 shadow-sm focus:ring focus:ring-indigo-200" 
+                    onchange="filterOffers()" 
+                    aria-label="Select search criteria">
                 <option value="job-title">{$translations['offer']}</option>
                 <option value="company-name">{$translations['offerName']}</option>
                 <option value="salary">{$translations['salary']}</option>
                 <option value="location">{$translations['location']}</option>
                 <option value="hours">Heures</option>
             </select>
-            <input type="text" id="searchInput" class="border border-gray-300 rounded-lg p-2 flex-grow shadow-sm focus:ring focus:ring-indigo-200" placeholder="Rechercher" oninput="filterOffers()" aria-label="Search input" />
-            <button class="p-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition duration-200 shadow-md focus:ring focus:ring-indigo-200" aria-label="Search">
+
+            <input type="text" 
+                id="searchInput" 
+                class="w-full flex-grow border border-gray-300 rounded-lg p-2 shadow-sm focus:ring focus:ring-indigo-200" 
+                placeholder="Rechercher" 
+                oninput="filterOffers()" 
+                aria-label="Search input" />
+
+            <button class="hidden md:block p-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition duration-200 shadow-md focus:ring focus:ring-indigo-200" 
+                    aria-label="Search">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="h-5 w-5" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0a3.5 a3.5 0 0 1-7 0Z" clip-rule="evenodd" />
                 </svg>
             </button>
         </div>
 
+
         <h1 class="text-3xl font-bold text-gray-800 mb-6">{$translations['jobOffers']}</h1>
 
         <div id="offersGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 HTML;
-function getPonderationClass($ponderation) {
+function getPonderationClass($ponderation)
+{
     if ($ponderation >= 90) {
         return 'bg-green-500';
     } elseif ($ponderation >= 70) {
@@ -66,7 +79,7 @@ function getPonderationClass($ponderation) {
 
 foreach ($allOffers as $offer) {
     $ponderation = htmlspecialchars($offer['Ponderation'] ?? 'Na');
-    $ponderationClass = getPonderationClass((int)$ponderation); 
+    $ponderationClass = getPonderationClass((int) $ponderation);
 
     $jobTitle = htmlspecialchars($offer['Job']);
     $companyName = htmlspecialchars($offer['CName']);
