@@ -48,7 +48,7 @@ try {
                     $company->CreateCompany($email, $password, $location, $companyName, '', '', '');
                     $_SESSION['currentUser'] = $company->GetCompany($email, $password);
                     $_SESSION["accountType"] = "company";
-                    header('Location: createOffer.php');
+                    header('Location: myOffers.php');
 
                 } catch (Exception $e) {
                     $_SESSION['signupError'] = "Probleme à la création de compte";
