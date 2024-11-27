@@ -566,7 +566,7 @@ HTML;
 
 
     <div class="tab-content" id="note" style="display: none;">
-        <div class="flex gap-8">
+        <div class="grid grid-cols-1  md:grid-cols-2  gap-8">
             <div class="note-form p-4 border rounded-lg mb-8 max-w-sm" style="margin-left: 10px;">
                 <form method="post" action="addNote.php">
                     <h2 class="text-xl font-semibold mb-2 flex justify-center items-center">Ajout d'une note</h2>
@@ -590,11 +590,10 @@ HTML;
 
     
 <div class="tab-content" id="profile" style="display: none;">
-
-<div class="grid grid-cols-3 gap-4 mb-8 mx-auto">
+<div class=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8 mx-auto">
     <div class="p-4 border rounded-lg shadow-md flex flex-col justify-between h-full">
         <h2 class="text-xl font-semibold mb-2 flex justify-center items-center">{$translations['exp']}</h2>
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4">
             $experiencesDiv
         </div>
         <button class="btn btn-neutral mt-auto" onclick="document.getElementById('modal-add-exp').showModal()">{$translations['addExp']}</button>
@@ -602,7 +601,7 @@ HTML;
 
     <div class="p-4 border rounded-lg shadow-md flex flex-col justify-between h-full">
         <h2 class="text-xl font-semibold mb-2 flex justify-center items-center">{$translations['formation']}</h2>
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4">
             $formationsDiv
         </div>
         <button class="btn btn-neutral mt-auto" onclick="document.getElementById('modal-add-formation').showModal()">{$translations['addFormation']}</button>
@@ -610,7 +609,7 @@ HTML;
 
     <div class="p-4 border rounded-lg shadow-md flex flex-col justify-between h-full">
         <h2 class="text-xl font-semibold mb-2 flex justify-center items-center">{$translations['lang']}</h2>
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4">
             $languageEmpdiv
         </div>
         <button class="btn btn-neutral mt-auto" onclick="document.getElementById('modal-add-language').showModal()">{$translations['addLang']}</button>
@@ -634,12 +633,13 @@ HTML;
 
     <div class="p-4 border rounded-lg shadow-md flex flex-col justify-between h-full">
         <h2 class="text-xl font-semibold mb-2 flex justify-center items-center">{$translations['links']}</h2>
-        <div class="grid grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4">
             $attachemntDiv
         </div>
         <button class="btn btn-neutral mt-auto" onclick="document.getElementById('modal-add-link').showModal()">{$translations['addLinks']}</button>
     </div>
 </div>
+
 </div>
 
 

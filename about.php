@@ -75,13 +75,19 @@ $content= <<<HTML
 
         <!-- Screenshots Section -->
         <div class="mb-12">
-            <h2 class="text-2xl font-semibold mb-6 text-gray-700">Captures d'écran du Projet</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <img src="screenshot1.png" alt="Screenshot 1" class="w-full rounded-lg shadow-md hover:shadow-lg">
-                <img src="screenshot2.png" alt="Screenshot 2" class="w-full rounded-lg shadow-md hover:shadow-lg">
-                <img src="screenshot3.png" alt="Screenshot 3" class="w-full rounded-lg shadow-md hover:shadow-lg">
-            </div>
+        <h2 class="text-2xl font-semibold mb-6 text-gray-700">Captures d'écran du Projet</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <a href="images/S1.png" data-lightbox="project-screenshots" data-title="Page d'accueil">
+                <img src="images/S1.png" alt="Page d'accueil" class="w-full rounded-lg shadow-md hover:shadow-lg">
+            </a>
+            <a href="images/S2.png" data-lightbox="project-screenshots" data-title="Détails d'une offre">
+                <img src="images/S2.png" alt="Détails d'une offre" class="w-full rounded-lg shadow-md hover:shadow-lg">
+            </a>
+            <a href="images/S3.png" data-lightbox="project-screenshots" data-title="Création d'une offre">
+                <img src="images/S3.png" alt="Création d'une offre" class="w-full rounded-lg shadow-md hover:shadow-lg">
+            </a>
         </div>
+    </div>
 
         <!-- Team Presentation (Optional) -->
         <div class="mt-12">
@@ -108,3 +114,4 @@ $content= <<<HTML
     </div>
 HTML;
 include 'Views/master.php';
+

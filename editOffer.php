@@ -53,7 +53,7 @@ $content = <<<HTML
 
     
     <div class="flex justify-between items-center pt-12">
-        <h1 class="text-4xl font-bold pl-56">{$translations['createOffer']}</h1>
+        <h1 class="text-4xl font-bold pl-56">{$translations['editOffer']}</h1>
     </div>
 
     <form id="offerForm" method="POST" action="offerAction.php" class="border-2 p-6 rounded-lg shadow-lg w-full max-w-5xl mx-auto mt-8 space-y-8">
