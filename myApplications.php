@@ -39,7 +39,7 @@ if (!$applications) {
 HTML;
 } else {
     $content .= <<<HTML
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 HTML;
 
     foreach ($applications as $application) {
@@ -76,7 +76,7 @@ HTML;
                         <p class="text-sm text-gray-600 mt-3">{$shortDescription}</p>
 
                         <div class="card-actions mt-4 flex justify-between">
-                            <button onclick="removeModal.showModal()" class="btn btn-error btn-sm">{$translations['removeApplication']}</button>
+                            <button onclick="removeModal.showModal()" class="m-auto btn btn-error btn-sm">{$translations['removeApplication']}</button>
                         </div>
                     </div>
                 </div>

@@ -1,5 +1,5 @@
 <?php 
-include 'Utilities/sessionManager.php';
+
 $content= <<<HTML
 
     <div class="max-w-5xl mx-auto p-8 bg-white shadow-md rounded-lg mt-8">

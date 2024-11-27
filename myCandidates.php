@@ -74,7 +74,7 @@ HTML;
         $hours = htmlspecialchars($offer['Hours']);
 
         $content .= <<<HTML
-        <div class="mb-8">
+        <div class="mb-8  test shadow-lg rounded-lg border-2 border-gray-200 mb-6 p-4">
             <h2 class="text-2xl font-semibold">{$jobTitle}</h2>
             <p class="text-lg text-gray-600">{$translations['location']}: {$location} | {$translations['salary']}: {$salary} $/hr | {$translations['hours']}: {$hours} hours/week</p>
             <h3 class="text-xl font-bold mt-4 mb-2">{$translations['candidates']}</h3>
@@ -251,3 +251,8 @@ include "Views/master.php";
     }
     
 </script>
+<style>
+    .test{
+        background-color: #E9EEF4;
+    }
+</style>

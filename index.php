@@ -101,6 +101,7 @@ foreach ($allOffers as $offer) {
                          Détails
                      </button>
         </div>
+        
 HTML;
 }
 

@@ -586,8 +586,9 @@ HTML;
                 </div>
             </div>
         </div>
-    </div>
+    </div> 
 
+    
 <div class="tab-content" id="profile" style="display: none;">
 
 <div class="grid grid-cols-3 gap-4 mb-8 mx-auto">
